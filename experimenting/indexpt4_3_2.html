@@ -1,0 +1,251 @@
+<!-- an edit on the arc (showing 3 full, 2 peeps). but the upper div is penyek-ed -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>7 Stages Carousel Prototype</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      background-color: #ffffff;
+      overflow: hidden;
+      padding-top: 30px;
+    }
+
+    .header-container {
+      text-align: left;
+      width: 100%;
+      max-width: 800px;
+      padding-left: 120px;
+      margin-bottom: 25px;
+    }
+
+    .sub-title {
+      font-size: 1.2rem;
+      color: #222;
+      margin-bottom: 8px;
+    }
+
+    .main-title {
+      font-size: 4.5rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #000;
+      text-transform: uppercase;
+    }
+
+    .controls {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 15px;
+      z-index: 20;
+    }
+
+    .btn {
+      background-color: #737373;
+      color: #ffffff;
+      border: none;
+      padding: 10px 28px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s;
+    }
+
+    .btn:hover {
+      background-color: #555555;
+    }
+
+    .btn:active {
+      transform: scale(0.96);
+    }
+
+    /* Container fills remaining screen height and hides bottom overflow */
+    .carousel-wrapper {
+      position: relative;
+      width: 100vw;
+      height: calc(100vh - 220px);
+      display: flex;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Fixed Arc - Pushed down to top: 100px so active node doesn't clip */
+    .arc-line {
+      position: absolute;
+      width: 900px;
+      height: 900px;
+      border: 5px solid #c4c4c4;
+      border-radius: 50%;
+      top: 100px;
+      pointer-events: none;
+    }
+
+    /* Wheel positioned identically to the arc line */
+    .wheel {
+      position: absolute;
+      width: 900px;
+      height: 900px;
+      top: 100px;
+      border-radius: 50%;
+      transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .node {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 130px;
+      height: 130px;
+      margin-top: -65px;
+      margin-left: -65px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-container">
+    <p class="sub-title">the stage of</p>
+    <h1 class="main-title" id="stageTitle">FIRST STAGE</h1>
+  </div>
+
+  <div class="controls">
+    <button class="btn" id="prevBtn">&lt;</button>
+    <button class="btn" id="enterBtn">enter</button>
+    <button class="btn" id="randomBtn">Random</button>
+    <button class="btn" id="nextBtn">&gt;</button>
+  </div>
+
+  <div class="carousel-wrapper">
+    <div class="arc-line"></div>
+    <div class="wheel" id="wheel"></div>
+  </div>
+
+  <script>
+    const stages = [
+      { name: "FIRST STAGE", color: "#ff3b30", circleUrl: "stage1-circle.html", enterUrl: "stage1-enter.html" },
+      { name: "SECOND STAGE", color: "#a8ff53", circleUrl: "stage2-circle.html", enterUrl: "stage2-enter.html" },
+      { name: "THIRD STAGE", color: "#ffdc53", circleUrl: "stage3-circle.html", enterUrl: "stage3-enter.html" },
+      { name: "FOURTH STAGE", color: "#1e00be", circleUrl: "stage4-circle.html", enterUrl: "stage4-enter.html" },
+      { name: "FIFTH STAGE", color: "#d06aff", circleUrl: "stage5-circle.html", enterUrl: "stage5-enter.html" },
+      { name: "SIXTH STAGE", color: "#53e2f3", circleUrl: "stage6-circle.html", enterUrl: "stage6-enter.html" },
+      { name: "SEVENTH STAGE", color: "#ff9500", circleUrl: "stage7-circle.html", enterUrl: "stage7-enter.html" }
+    ];
+
+    const radius = 450; 
+    const total = stages.length;
+    let currentStep = 0; 
+
+    const stageTitle = document.getElementById('stageTitle');
+    const wheel = document.getElementById('wheel');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const enterBtn = document.getElementById('enterBtn');
+    const randomBtn = document.getElementById('randomBtn');
+
+    stages.forEach((stage, index) => {
+      const node = document.createElement('div');
+      node.className = 'node';
+      node.style.backgroundColor = stage.color;
+
+      const angleDeg = (index * (360 / total)) - 90;
+      const angleRad = (angleDeg * Math.PI) / 180;
+
+      const x = radius * Math.cos(angleRad);
+      const y = radius * Math.sin(angleRad);
+
+      node.dataset.x = x;
+      node.dataset.y = y;
+
+      node.addEventListener('click', () => {
+        const activeIndex = ((currentStep % total) + total) % total;
+        if (index === activeIndex) {
+          window.location.href = stages[index].circleUrl;
+        } else {
+          goToStage(index);
+        }
+      });
+
+      wheel.appendChild(node);
+    });
+
+    function updateCarousel() {
+      const targetAngle = -(currentStep * (360 / total));
+      wheel.style.transform = `rotate(${targetAngle}deg)`;
+
+      const activeIndex = ((currentStep % total) + total) % total;
+
+      const nodes = wheel.querySelectorAll('.node');
+      nodes.forEach((node, index) => {
+        const x = parseFloat(node.dataset.x);
+        const y = parseFloat(node.dataset.y);
+
+        if (index === activeIndex) {
+          node.style.transform = `translate(${x}px, ${y}px) rotate(${-targetAngle}deg) scale(1.35)`;
+          node.style.zIndex = "10";
+        } else {
+          node.style.transform = `translate(${x}px, ${y}px) rotate(${-targetAngle}deg) scale(0.85)`;
+          node.style.zIndex = "1";
+        }
+      });
+
+      stageTitle.textContent = stages[activeIndex].name;
+    }
+
+    function goToStage(targetIndex) {
+      const activeIndex = ((currentStep % total) + total) % total;
+      let diff = targetIndex - activeIndex;
+
+      if (diff > total / 2) diff -= total;
+      if (diff < -total / 2) diff += total;
+
+      currentStep += diff;
+      updateCarousel();
+    }
+
+    enterBtn.addEventListener('click', () => {
+      const activeIndex = ((currentStep % total) + total) % total;
+      window.location.href = stages[activeIndex].enterUrl;
+    });
+
+    prevBtn.addEventListener('click', () => {
+      currentStep--;
+      updateCarousel();
+    });
+
+    nextBtn.addEventListener('click', () => {
+      currentStep++;
+      updateCarousel();
+    });
+
+    randomBtn.addEventListener('click', () => {
+      const activeIndex = ((currentStep % total) + total) % total;
+      let rand;
+      do {
+        rand = Math.floor(Math.random() * total);
+      } while (rand === activeIndex);
+      
+      goToStage(rand);
+    });
+
+    // Initial render
+    updateCarousel();
+  </script>
+</body>
+</html>

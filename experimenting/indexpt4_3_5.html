@@ -1,0 +1,371 @@
+<!-- trying some accessories (basic one) -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>7 Stages Carousel Prototype</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      background-color: #0d0d11;
+      color: #ffffff;
+      overflow-x: hidden; /* Prevents side-scrolling while letting glows bleed vertically */
+      padding-top: 20px;
+    }
+
+    .header-container {
+      text-align: center;
+      width: 100%;
+      max-width: 800px;
+      padding: 0 20px;
+      margin-bottom: 15px;
+    }
+
+    .sub-title {
+      font-size: 1rem;
+      color: #aaa;
+      margin-bottom: 4px;
+    }
+
+    .main-title {
+      font-size: clamp(2rem, 8vw, 4.5rem);
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #fff;
+      text-transform: uppercase;
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      z-index: 20;
+    }
+
+    .btn {
+      background-color: #22222a;
+      color: #ffffff;
+      border: 1px solid #444455;
+      padding: 8px 20px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn:hover {
+      background-color: #333344;
+      border-color: #666688;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    }
+
+    .btn:active {
+      transform: scale(0.96);
+    }
+
+    .carousel-wrapper {
+      position: relative;
+      width: 100vw;
+      height: calc(100vh - 180px);
+      display: flex;
+      justify-content: center;
+      /* Removed overflow: hidden here so the glow isn't sliced on top */
+    }
+
+    .arc-line, .wheel {
+      position: absolute;
+      width: min(85vw, 900px);
+      height: min(85vw, 900px);
+      top: 90px; /* Lowered slightly to give active orb headroom */
+      border-radius: 50%;
+    }
+
+    .arc-line {
+      border: 3px dashed rgba(255, 255, 255, 0.25);
+      pointer-events: none;
+    }
+
+    .wheel {
+      transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    /* 3D Orb Styling */
+    .node {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: min(18vw, 130px);
+      height: min(18vw, 130px);
+      margin-top: calc(min(18vw, 130px) / -2);
+      margin-left: calc(min(18vw, 130px) / -2);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease;
+      
+      background: radial-gradient(circle at 35% 30%, #ffffff 0%, rgba(255,255,255,0.6) 18%, var(--node-color) 60%, #000000 100%);
+      box-shadow: 
+        inset -4px -4px 10px rgba(0, 0, 0, 0.6),
+        inset 4px 4px 10px rgba(255, 255, 255, 0.8),
+        0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Active Glowing Orb Effect */
+    .node.active {
+      box-shadow: 
+        inset -4px -4px 10px rgba(0, 0, 0, 0.4),
+        inset 4px 4px 12px rgba(255, 255, 255, 0.9),
+        0 0 30px var(--node-color),
+        0 0 60px var(--node-color);
+      animation: orbPulse 2s infinite alternate ease-in-out;
+    }
+
+    @keyframes orbPulse {
+      0% {
+        filter: drop-shadow(0 0 8px var(--node-color));
+      }
+      100% {
+        filter: drop-shadow(0 0 20px var(--node-color));
+      }
+    }
+
+    /* Toast notification */
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 40px;
+      transform: translateX(-50%) translateY(12px);
+      background: rgba(20, 20, 30, 0.95);
+      border: 1px solid #444;
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 10px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+      opacity: 0;
+      transition: opacity 250ms ease, transform 250ms ease;
+      z-index: 9999;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (min-width: 768px) {
+      .header-container {
+        text-align: left;
+        padding-left: 120px;
+      }
+      .sub-title {
+        font-size: 1.2rem;
+      }
+      .btn {
+        padding: 10px 28px;
+        font-size: 1.1rem;
+      }
+      .arc-line, .wheel {
+        top: 130px; /* Roomy headroom for desktop scaling */
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header-container">
+    <p class="sub-title">the stage of</p>
+    <h1 class="main-title" id="stageTitle">FIRST STAGE</h1>
+  </div>
+
+  <div class="controls">
+    <button class="btn" id="prevBtn">&lt;</button>
+    <button class="btn" id="enterBtn">enter</button>
+    <button class="btn" id="randomBtn">Random</button>
+    <button class="btn" id="nextBtn">&gt;</button>
+  </div>
+
+  <div class="carousel-wrapper">
+    <div class="arc-line"></div>
+    <div class="wheel" id="wheel"></div>
+  </div>
+
+  <script>
+    const stages = [
+      { name: "FIRST STAGE", color: "#ff3b30", circleUrl: "stage1-circle.html", enterUrl: "stage1-enter.html" },
+      { name: "SECOND STAGE", color: "#a8ff53", circleUrl: "stage2-circle.html", enterUrl: "stage2-enter.html" },
+      { name: "THIRD STAGE", color: "#ffdc53", circleUrl: "stage3-circle.html", enterUrl: "stage3-enter.html" },
+      { name: "FOURTH STAGE", color: "#3a65ff", circleUrl: "stage4-circle.html", enterUrl: "stage4-enter.html" },
+      { name: "FIFTH STAGE", color: "#d06aff", circleUrl: "stage5-circle.html", enterUrl: "stage5-enter.html" },
+      { name: "SIXTH STAGE", color: "#53e2f3", circleUrl: "stage6-circle.html", enterUrl: "stage6-enter.html" },
+      { name: "SEVENTH STAGE", color: "#ff9500", circleUrl: "stage7-circle.html", enterUrl: "stage7-enter.html" }
+    ];
+
+    const total = stages.length;
+    let currentStep = 0;
+
+    const stageTitle = document.getElementById('stageTitle');
+    const wheel = document.getElementById('wheel');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const enterBtn = document.getElementById('enterBtn');
+    const randomBtn = document.getElementById('randomBtn');
+
+    let isRedirecting = false;
+
+    function showToast(message, duration = 3000) {
+      let toast = document.getElementById('globalToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'globalToast';
+        toast.className = 'toast';
+        document.body.appendChild(toast);
+      }
+      toast.textContent = message;
+      toast.classList.add('show');
+      if (toast._hideTimer) clearTimeout(toast._hideTimer);
+      toast._hideTimer = setTimeout(() => {
+        toast.classList.remove('show');
+      }, duration);
+    }
+
+    function createNodes() {
+      wheel.innerHTML = ''; 
+      const radius = wheel.offsetWidth / 2;
+
+      stages.forEach((stage, index) => {
+        const node = document.createElement('div');
+        node.className = 'node';
+        node.style.setProperty('--node-color', stage.color);
+
+        const angleDeg = (index * (360 / total)) - 90;
+        const angleRad = (angleDeg * Math.PI) / 180;
+
+        const x = radius * Math.cos(angleRad);
+        const y = radius * Math.sin(angleRad);
+
+        node.dataset.x = x;
+        node.dataset.y = y;
+
+        node.addEventListener('click', () => {
+          const activeIndex = ((currentStep % total) + total) % total;
+          if (index === activeIndex) {
+            window.location.href = stages[index].circleUrl;
+          } else {
+            goToStage(index);
+          }
+        });
+
+        wheel.appendChild(node);
+      });
+      updateCarousel();
+    }
+
+    function updateCarousel() {
+      const targetAngle = -(currentStep * (360 / total));
+      wheel.style.transform = `rotate(${targetAngle}deg)`;
+
+      const activeIndex = ((currentStep % total) + total) % total;
+
+      const nodes = wheel.querySelectorAll('.node');
+      nodes.forEach((node, index) => {
+        const x = parseFloat(node.dataset.x);
+        const y = parseFloat(node.dataset.y);
+
+        if (index === activeIndex) {
+          node.classList.add('active');
+          node.style.transform = `translate(${x}px, ${y}px) rotate(${-targetAngle}deg) scale(1.35)`;
+          node.style.zIndex = "10";
+        } else {
+          node.classList.remove('active');
+          node.style.transform = `translate(${x}px, ${y}px) rotate(${-targetAngle}deg) scale(0.85)`;
+          node.style.zIndex = "1";
+        }
+      });
+
+      stageTitle.textContent = stages[activeIndex].name;
+    }
+
+    function goToStage(targetIndex) {
+      const activeIndex = ((currentStep % total) + total) % total;
+      let diff = targetIndex - activeIndex;
+
+      if (diff > total / 2) diff -= total;
+      if (diff < -total / 2) diff += total;
+
+      currentStep += diff;
+      updateCarousel();
+    }
+
+    enterBtn.addEventListener('click', () => {
+      const activeIndex = ((currentStep % total) + total) % total;
+      window.location.href = stages[activeIndex].enterUrl;
+    });
+
+    prevBtn.addEventListener('click', () => {
+      currentStep--;
+      updateCarousel();
+    });
+
+    nextBtn.addEventListener('click', () => {
+      currentStep++;
+      updateCarousel();
+    });
+
+    randomBtn.addEventListener('click', () => {
+      const activeIndex = ((currentStep % total) + total) % total;
+      let rand;
+      do {
+        rand = Math.floor(Math.random() * total);
+      } while (rand === activeIndex);
+
+      goToStage(rand);
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (['ArrowLeft', 'ArrowRight'].includes(event.key)) {
+        event.preventDefault();
+      }
+
+      switch (event.key) {
+        case 'ArrowLeft':
+          prevBtn.click();
+          break;
+        case 'ArrowRight':
+          nextBtn.click();
+          break;
+        case 'q':
+        case 'Q':
+          if (isRedirecting) break;
+          isRedirecting = true;
+          showToast("whoops, hang on tight!!!", 3000);
+          setTimeout(() => {
+            window.location.href = "secret-room.html";
+          }, 3000);
+          break;
+        case 'Enter':
+          enterBtn.click();
+          break;
+      }
+    });
+
+    window.addEventListener('resize', createNodes);
+    createNodes();
+  </script>
+</body>
+
+</html>

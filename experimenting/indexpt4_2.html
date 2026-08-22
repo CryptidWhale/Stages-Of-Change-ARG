@@ -1,0 +1,256 @@
+<!-- both button and circle can be clicked. but the enter and circle will go same page -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>7 Stages Carousel Prototype</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      background-color: #ffffff;
+      overflow: hidden;
+      padding-top: 50px;
+    }
+
+    .header-container {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .sub-title {
+      font-size: 1.2rem;
+      color: #222;
+      margin-bottom: 8px;
+    }
+
+    .main-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #000;
+      text-transform: uppercase;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 50px;
+      z-index: 20;
+    }
+
+    .btn {
+      background-color: #737373;
+      color: #ffffff;
+      border: none;
+      padding: 10px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s;
+    }
+
+    .btn:hover {
+      background-color: #555555;
+    }
+
+    .btn:active {
+      transform: scale(0.96);
+    }
+
+    .carousel-wrapper {
+      position: relative;
+      width: 700px;
+      height: 350px;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* Fixed Gray Arc Line */
+    .arc-line {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border: 5px solid #c4c4c4;
+      border-radius: 50%;
+      top: 50px;
+      pointer-events: none;
+    }
+
+    /* Continuous Rotating Wheel */
+    .wheel {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      top: 50px;
+      border-radius: 50%;
+      transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .node {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 90px;
+      height: 90px;
+      margin-top: -45px;
+      margin-left: -45px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-container">
+    <p class="sub-title">the stage of</p>
+    <h1 class="main-title" id="stageTitle">FIRST STAGE</h1>
+  </div>
+
+  <div class="controls">
+    <button class="btn" id="prevBtn">&lt;</button>
+    <button class="btn" id="enterBtn">enter</button>
+    <button class="btn" id="randomBtn">Random</button>
+    <button class="btn" id="nextBtn">&gt;</button>
+  </div>
+
+  <div class="carousel-wrapper">
+    <div class="arc-line"></div>
+    <div class="wheel" id="wheel"></div>
+  </div>
+
+  <script>
+    // Added 'url' property for each stage destination
+    const stages = [
+      { name: "FIRST STAGE", color: "#ff3b30", url: "stage1.html" },
+      { name: "SECOND STAGE", color: "#a8ff53", url: "stage2.html" },
+      { name: "THIRD STAGE", color: "#ffdc53", url: "stage3.html" },
+      { name: "FOURTH STAGE", color: "#1e00be", url: "stage4.html" },
+      { name: "FIFTH STAGE", color: "#d06aff", url: "stage5.html" },
+      { name: "SIXTH STAGE", color: "#53e2f3", url: "stage6.html" },
+      { name: "SEVENTH STAGE", color: "#ff9500", url: "stage7.html" }
+    ];
+
+    const radius = 300; 
+    const total = stages.length;
+    let currentStep = 0; // Tracks cumulative rotational steps infinitely
+
+    const stageTitle = document.getElementById('stageTitle');
+    const wheel = document.getElementById('wheel');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const enterBtn = document.getElementById('enterBtn');
+    const randomBtn = document.getElementById('randomBtn');
+
+    // Build the 7 circular nodes along the wheel perimeter
+    stages.forEach((stage, index) => {
+      const node = document.createElement('div');
+      node.className = 'node';
+      node.style.backgroundColor = stage.color;
+
+      const angleDeg = (index * (360 / total)) - 90;
+      const angleRad = (angleDeg * Math.PI) / 180;
+
+      const x = radius * Math.cos(angleRad);
+      const y = radius * Math.sin(angleRad);
+
+      node.dataset.x = x;
+      node.dataset.y = y;
+
+      // Handle node clicking: rotates if inactive, redirects if already active
+      node.addEventListener('click', () => {
+        const activeIndex = ((currentStep % total) + total) % total;
+        if (index === activeIndex) {
+          redirectToStage(index);
+        } else {
+          goToStage(index);
+        }
+      });
+
+      wheel.appendChild(node);
+    });
+
+    function updateCarousel() {
+      const targetAngle = -(currentStep * (360 / total));
+      wheel.style.transform = `rotate(${targetAngle}deg)`;
+
+      const activeIndex = ((currentStep % total) + total) % total;
+
+      const nodes = wheel.querySelectorAll('.node');
+      nodes.forEach((node, index) => {
+        const x = parseFloat(node.dataset.x);
+        const y = parseFloat(node.dataset.y);
+
+        if (index === activeIndex) {
+          node.style.transform = `translate(${x}px, ${y}px) rotate(${-targetAngle}deg) scale(1.6)`;
+          node.style.zIndex = "10";
+        } else {
+          node.style.transform = `translate(${x}px, ${y}px) rotate(${-targetAngle}deg) scale(1)`;
+          node.style.zIndex = "1";
+        }
+      });
+
+      stageTitle.textContent = stages[activeIndex].name;
+    }
+
+    function goToStage(targetIndex) {
+      const activeIndex = ((currentStep % total) + total) % total;
+      let diff = targetIndex - activeIndex;
+
+      if (diff > total / 2) diff -= total;
+      if (diff < -total / 2) diff += total;
+
+      currentStep += diff;
+      updateCarousel();
+    }
+
+    function redirectToStage(index) {
+      const targetUrl = stages[index].url;
+      // Triggers navigation to the target URL
+      window.location.href = targetUrl;
+    }
+
+    // Enter button redirects to whichever stage is currently active
+    enterBtn.addEventListener('click', () => {
+      const activeIndex = ((currentStep % total) + total) % total;
+      redirectToStage(activeIndex);
+    });
+
+    prevBtn.addEventListener('click', () => {
+      currentStep--;
+      updateCarousel();
+    });
+
+    nextBtn.addEventListener('click', () => {
+      currentStep++;
+      updateCarousel();
+    });
+
+    randomBtn.addEventListener('click', () => {
+      const activeIndex = ((currentStep % total) + total) % total;
+      let rand;
+      do {
+        rand = Math.floor(Math.random() * total);
+      } while (rand === activeIndex);
+      
+      goToStage(rand);
+    });
+
+    // Initial render
+    updateCarousel();
+  </script>
+</body>
+</html>
