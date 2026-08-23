@@ -1,0 +1,106 @@
+body {
+    /* display: grid;
+    min-height: 100vh;
+    margin: 0;
+    place-items: center; */
+    background: #1C1C1C;
+    color: #F8F0E3;
+    font-family: "Share Tech", sans-serif;
+}
+
+.see-fonts {
+    position: fixed;
+    margin: 0;
+    place-items: center;
+    padding: 1rem;
+    font-size: 2rem;
+    color: #fff;
+    text-decoration: none;
+}
+
+.landing-page-h1 {
+    font-size: clamp(2rem, 8vw, 5rem);
+    font-weight: 500;
+    text-align: center;
+}
+
+.cont-land-page {
+    display: grid;
+    margin: 0;
+    place-items: center;
+    text-align: center;
+}
+
+.cont-land-page-bottom {
+    display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* Pushes content to the bottom */
+    margin: 0;
+    place-items: center;
+    text-align: center;
+    bottom: 0;
+    min-height: 300px;
+    
+}
+
+.black-font{
+    color: #1C1C1C;
+}
+
+.white-font{
+    color: #F8F0E3;
+}
+
+.font-tech{
+    font-family: "Share Tech", sans-serif;
+}
+
+.font-handjet{
+    font-family: "Handjet", sans-serif;
+}
+
+.font-elite{
+    font-family: "Special Elite", system-ui;
+}
+
+.font-prime{
+    font-family: "Courier Prime", monospace;
+}
+
+.font-syne{
+    font-family: "Syne Mono", monospace;
+}
+
+.font-redacted{
+    font-family: "Redacted Script", cursive;
+}
+
+.font-cutive{
+    font-family: "Cutive Mono", monospace;
+}
+
+.font-raleway{
+    font-family: "Raleway", sans-serif;
+}
+
+/* Toast notification */
+.toast {
+    position: fixed;
+    left: 50%;
+    bottom: 40px;
+    transform: translateX(-50%) translateY(12px);
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: opacity 250ms ease, transform 250ms ease;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
