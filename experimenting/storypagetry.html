@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Story Container</title>
+  <style>
+    /* Reset & Page Setup */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #000000; /* Dark background visible on the sides */
+      font-family: Arial, sans-serif;
+      color: #ffffff;
+      padding: 20px 0;
+    }
+
+    /* Outer Container (Centers everything & controls maximum width) */
+    .cont-story {
+      max-width: 800px; /* Adjust this to control how wide the center block gets on desktop */
+      width: 90%;      /* Creates the mobile gap on smaller screens */
+      margin: 0 auto;   /* Centers the container horizontally */
+      display: flex;
+      flex-direction: column;
+      gap: 16px;        /* Spacing between item-story blocks */
+    }
+
+    /* Inner Story Item */
+    .item-story {
+      background-color: #808080; /* Grey block matched from reference image */
+      color: #111111;
+      padding: 24px;             /* Internal padding for content */
+      border-radius: 4px;        /* Optional slight rounding */
+      
+      /* Height expands dynamically based on content length */
+      height: auto; 
+      word-wrap: break-word;
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 600px) {
+      .cont-story {
+        width: 92%; /* Reduces side gaps on mobile so text has plenty of room */
+        gap: 12px;
+      }
+
+      .item-story {
+        padding: 16px; /* Slightly tighter padding on smaller screens */
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cont-story">
+    <div class="item-story">
+      <p>This is a short block. Its height expands strictly based on the text inside.</p>
+    </div>
+
+    <div class="item-story">
+      <p>This is a taller block with more content. As you add more text, paragraphs, or encrypted story fragments, the division naturally grows longer downward while maintaining consistent padding and side margins.</p>
+    </div>
+
+    <div class="item-story">
+      <p>Another item block in the stack.</p>
+    </div>
+
+    <div class="item-story">
+      <p>Final section. On desktop, you get prominent black side bars. On mobile, it automatically shrinks the side spacing down to a thin, clean gutter.</p>
+    </div>
+  </div>
+
+</body>
+</html>

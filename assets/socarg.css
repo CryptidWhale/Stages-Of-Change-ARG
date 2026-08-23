@@ -1,4 +1,4 @@
-body {
+.landing-page-body {
     /* display: grid;
     min-height: 100vh;
     margin: 0;
@@ -6,6 +6,22 @@ body {
     background: #1C1C1C;
     color: #F8F0E3;
     font-family: "Share Tech", sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.body {
+    background: #1C1C1C;
+    color: #F8F0E3;
+    font-family: "Share Tech", sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.error {
+    background: #1f0000;
 }
 
 .see-fonts {
@@ -33,53 +49,54 @@ body {
 
 .cont-land-page-bottom {
     display: flex;
-  flex-direction: column;
-  justify-content: flex-end; /* Pushes content to the bottom */
+    flex-direction: column;
+    justify-content: flex-end;
+    /* Pushes content to the bottom */
     margin: 0;
     place-items: center;
     text-align: center;
     bottom: 0;
     min-height: 300px;
-    
+
 }
 
-.black-font{
+.black-font {
     color: #1C1C1C;
 }
 
-.white-font{
+.white-font {
     color: #F8F0E3;
 }
 
-.font-tech{
+.font-tech {
     font-family: "Share Tech", sans-serif;
 }
 
-.font-handjet{
+.font-handjet {
     font-family: "Handjet", sans-serif;
 }
 
-.font-elite{
+.font-elite {
     font-family: "Special Elite", system-ui;
 }
 
-.font-prime{
+.font-prime {
     font-family: "Courier Prime", monospace;
 }
 
-.font-syne{
+.font-syne {
     font-family: "Syne Mono", monospace;
 }
 
-.font-redacted{
+.font-redacted {
     font-family: "Redacted Script", cursive;
 }
 
-.font-cutive{
+.font-cutive {
     font-family: "Cutive Mono", monospace;
 }
 
-.font-raleway{
+.font-raleway {
     font-family: "Raleway", sans-serif;
 }
 
@@ -103,4 +120,254 @@ body {
 .toast.show {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
+}
+
+@media (max-width: 600px) {
+    .body {
+        padding: 1.25rem;
+    }
+
+    .see-fonts {
+        position: static;
+        padding: 1rem 0;
+        font-size: clamp(1.25rem, 7vw, 2rem);
+        line-height: 1.35;
+        text-align: center;
+    }
+
+    .landing-page-h1 {
+        margin: 1rem 0;
+        font-size: clamp(2rem, 11vw, 3.5rem);
+        line-height: 1.05;
+        overflow-wrap: anywhere;
+    }
+
+    .cont-land-page,
+    .cont-land-page-bottom {
+        width: 100%;
+        padding: 0 0.5rem;
+        line-height: 1.5;
+    }
+
+    .cont-land-page-bottom {
+        min-height: 0;
+        margin-top: 2rem;
+        padding-bottom: 1rem;
+    }
+
+    .toast {
+        right: 1rem;
+        bottom: 1rem;
+        width: auto;
+        max-width: calc(100% - 2rem);
+        text-align: center;
+    }
+}
+
+/* the passage part */
+
+.body-story {
+    background: #1C1C1C;
+    color: #F8F0E3;
+    font-family: "Special Elite", system-ui;
+    margin: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+    padding: 20px 0;
+    font-size: 1.6rem;
+}
+
+/* Outer Container (Centers everything & controls maximum width) */
+.cont-story {
+    max-width: 800px;
+    /* Adjust this to control how wide the center block gets on desktop */
+    width: 90%;
+    /* Creates the mobile gap on smaller screens */
+    margin: 0 auto;
+    /* Centers the container horizontally */
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    /* Spacing between item-story blocks */
+}
+
+/* Inner Story Item */
+.item-story {
+    background-color: #808080;
+    /* Grey block matched from reference image */
+    color: #111111;
+    padding: 24px;
+    /* Internal padding for content */
+    border-radius: 4px;
+    /* Optional slight rounding */
+
+    /* Height expands dynamically based on content length */
+    height: auto;
+    word-wrap: break-word;
+}
+
+.story-end {
+    display: flex;
+    justify-content: center;
+    width: min(90%, 800px);
+    margin: 28px auto 8px;
+}
+
+.story-end-button {
+    background: transparent;
+    border: 1px solid #F8F0E3;
+    color: #F8F0E3;
+    cursor: pointer;
+    padding: 10px 18px;
+    font-family: "Cutive Mono", monospace;
+    font-size: 1rem;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    transition: background-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
+}
+
+.story-end-button:hover,
+.story-end-button:focus-visible {
+    background-color: #F8F0E3;
+    color: #1C1C1C;
+    box-shadow: 4px 4px 0 #808080;
+}
+
+.story-end-button:focus-visible {
+    outline: 2px solid #F8F0E3;
+    outline-offset: 4px;
+}
+
+.letter-modal[hidden] {
+    display: none;
+}
+
+.letter-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    background: rgba(28, 28, 28, 0.88);
+}
+
+.letter-modal-panel {
+    position: relative;
+    width: min(100%, 460px);
+    padding: 32px;
+    border: 1px solid #F8F0E3;
+    background: #808080;
+    color: #111111;
+    box-shadow: 8px 8px 0 #111111;
+}
+
+.letter-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    border: 0;
+    background: transparent;
+    color: #111111;
+    cursor: pointer;
+    font: inherit;
+    font-size: 1.4rem;
+    line-height: 1;
+}
+
+.letter-modal-title,
+.letter-modal-question {
+    margin: 0;
+}
+
+.letter-modal-title {
+    font-size: 1.35rem;
+}
+
+.letter-modal-question {
+    margin-top: 8px;
+}
+
+#letter-form {
+    display: flex;
+    align-items: end;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+#letter-form label {
+    display: grid;
+    gap: 6px;
+    flex: 1;
+    font-size: 0.9rem;
+}
+
+#letter-answer {
+    width: 100%;
+    min-width: 0;
+    border: 1px solid #111111;
+    border-radius: 0;
+    background: #F8F0E3;
+    color: #111111;
+    padding: 8px;
+    font: inherit;
+    text-transform: uppercase;
+}
+
+#letter-answer:focus-visible {
+    outline: 2px solid #F8F0E3;
+    outline-offset: 2px;
+}
+
+.letter-submit {
+    border: 1px solid #111111;
+    background: #1C1C1C;
+    color: #F8F0E3;
+    cursor: pointer;
+    padding: 8px 14px;
+    font: inherit;
+}
+
+.letter-submit:hover,
+.letter-submit:focus-visible {
+    background: #F8F0E3;
+    color: #1C1C1C;
+}
+
+.letter-feedback {
+    min-height: 3.2em;
+    margin: 18px 0 0;
+    font-size: 0.95rem;
+}
+
+/* Mobile adjustments */
+@media (max-width: 600px) {
+    .body-story {
+        
+        font-size: 1.2rem;
+    }
+
+    .cont-story {
+        width: 92%;
+        /* Reduces side gaps on mobile so text has plenty of room */
+        gap: 12px;
+    }
+
+    .item-story {
+        padding: 16px;
+        /* Slightly tighter padding on smaller screens */
+    }
+
+    .story-end {
+        margin-top: 24px;
+    }
+
+    .letter-modal-panel {
+        padding: 28px 20px 20px;
+    }
+
+    #letter-form {
+        align-items: stretch;
+        flex-direction: column;
+    }
 }
