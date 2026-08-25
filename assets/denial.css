@@ -1,0 +1,299 @@
+/* 3D Orb Styling */
+.node {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: min(18vw, 130px);
+    height: min(18vw, 130px);
+    margin-top: calc(min(18vw, 130px) / -2);
+    margin-left: calc(min(18vw, 130px) / -2);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease;
+
+    background: radial-gradient(circle at 35% 30%, #ffffff 0%, rgba(255, 255, 255, 0.6) 18%, var(--node-color) 60%, #000000 100%);
+    box-shadow:
+        inset -4px -4px 10px rgba(0, 0, 0, 0.6),
+        inset 4px 4px 10px rgba(255, 255, 255, 0.8),
+        0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Active Glowing Orb Effect */
+.node.active {
+    box-shadow:
+        inset -4px -4px 10px rgba(0, 0, 0, 0.4),
+        inset 4px 4px 12px rgba(255, 255, 255, 0.9),
+        0 0 30px var(--node-color),
+        0 0 60px var(--node-color);
+    animation: orbPulse 2s infinite alternate ease-in-out;
+}
+
+@keyframes orbPulse {
+    0% {
+        filter: drop-shadow(0 0 8px var(--node-color));
+    }
+
+    100% {
+        filter: drop-shadow(0 0 20px var(--node-color));
+    }
+}
+
+/* ==========================================
+       UNIQUE GLITCH EFFECTS FOR ALL 7 STAGES
+    ========================================== */
+
+/* Shared Pseudo-Element Setup for Glitches */
+.node.active::before,
+.node.active::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+/* STAGE 1: Analog TV Static Glitch */
+.node.active[data-stage="6"]::before {
+    background: inherit;
+    box-shadow: -5px 0 #ff0000, 5px 0 #0000ff;
+    animation: analogGlitch 0.2s infinite steps(2);
+    opacity: 0.8;
+}
+
+@keyframes analogGlitch {
+    0% {
+        clip-path: inset(10% 0 80% 0);
+        transform: translate(-4px, 1px);
+    }
+
+    20% {
+        clip-path: inset(70% 0 10% 0);
+        transform: translate(4px, -2px);
+    }
+
+    40% {
+        clip-path: inset(30% 0 50% 0);
+        transform: translate(-2px, -3px);
+    }
+
+    60% {
+        clip-path: inset(85% 0 5% 0);
+        transform: translate(3px, 2px);
+    }
+
+    80% {
+        clip-path: inset(40% 0 30% 0);
+        transform: translate(-5px, 0px);
+    }
+
+    100% {
+        clip-path: inset(0% 0 100% 0);
+        transform: translate(0, 0);
+    }
+}
+
+/* STAGE 2: Neon Cipher Corruption */
+.node.active[data-stage="1"]::before {
+    border: 3px solid #00ffff;
+    animation: cipherGlitch 0.15s infinite steps(3);
+}
+
+.node.active[data-stage="1"]::after {
+    background: #a8ff53;
+    mix-blend-mode: color-dodge;
+    animation: cipherFlash 0.3s infinite alternate steps(1);
+}
+
+@keyframes cipherGlitch {
+    0% {
+        clip-path: inset(20% 0 0 0);
+        transform: translate(5px, -3px) rotate(2deg);
+    }
+
+    33% {
+        clip-path: inset(0 40% 0 0);
+        transform: translate(-4px, 4px) rotate(-1deg);
+    }
+
+    66% {
+        clip-path: inset(0 0 50% 0);
+        transform: translate(3px, -2px);
+    }
+
+    100% {
+        clip-path: inset(10% 0 30% 0);
+        transform: translate(-2px, 1px);
+    }
+}
+
+@keyframes cipherFlash {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 0.6;
+        clip-path: inset(40% 0 40% 0);
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+/* STAGE 3: Matrix System Error */
+.node.active[data-stage="2"]::before {
+    background: inherit;
+    box-shadow: 0 0 20px #ffdc53;
+    animation: matrixSlice 0.22s infinite steps(4);
+}
+
+.node.active[data-stage="2"]::after {
+    border-left: 4px solid #ffffff;
+    border-right: 4px solid #ff0055;
+    animation: matrixJitter 0.1s infinite steps(2);
+}
+
+@keyframes matrixSlice {
+    0% {
+        clip-path: inset(5% 0 85% 0);
+        transform: translate(-6px, 0);
+    }
+
+    25% {
+        clip-path: inset(50% 0 20% 0);
+        transform: translate(6px, 0);
+    }
+
+    50% {
+        clip-path: inset(20% 0 60% 0);
+        transform: translate(-3px, 0);
+    }
+
+    75% {
+        clip-path: inset(80% 0 5% 0);
+        transform: translate(4px, 0);
+    }
+
+    100% {
+        clip-path: inset(0 0 0 0);
+        transform: translate(0, 0);
+    }
+}
+
+@keyframes matrixJitter {
+    0% {
+        opacity: 0.2;
+        transform: scaleX(1.1);
+    }
+
+    100% {
+        opacity: 0.9;
+        transform: scaleX(0.95);
+    }
+}
+
+/* STAGE 4: Cyberpunk Chromatic Aberration */
+.node.active[data-stage="3"]::before {
+    background: inherit;
+    filter: drop-shadow(-8px 0px 0px #3a65ff) drop-shadow(8px 0px 0px #ff0055);
+    animation: chromaticShift 0.18s infinite steps(2);
+    opacity: 0.85;
+}
+
+@keyframes chromaticShift {
+    0% {
+        clip-path: inset(15% 0 65% 0);
+        transform: translate(-5px, 2px);
+    }
+
+    33% {
+        clip-path: inset(60% 0 10% 0);
+        transform: translate(5px, -3px);
+    }
+
+    66% {
+        clip-path: inset(35% 0 45% 0);
+        transform: translate(-3px, -1px);
+    }
+
+    100% {
+        clip-path: inset(5% 0 80% 0);
+        transform: translate(2px, 3px);
+    }
+}
+
+/* STAGE 5: Corrupted Hologram */
+.node.active[data-stage="4"]::before {
+    background: linear-gradient(180deg, transparent 50%, rgba(0, 0, 0, 0.7) 51%);
+    background-size: 100% 6px;
+    animation: hologramScan 0.3s infinite linear;
+}
+
+.node.active[data-stage="4"]::after {
+    background: inherit;
+    box-shadow: 0 0 15px #d06aff;
+    animation: hologramFlicker 0.14s infinite steps(3);
+}
+
+@keyframes hologramScan {
+    0% {
+        background-position: 0 0;
+    }
+
+    100% {
+        background-position: 0 100%;
+    }
+}
+
+@keyframes hologramFlicker {
+    0% {
+        opacity: 0.9;
+        clip-path: inset(25% 0 55% 0);
+        transform: translate(-4px, 0);
+    }
+
+    50% {
+        opacity: 0.2;
+        clip-path: inset(70% 0 10% 0);
+        transform: translate(4px, 0);
+    }
+
+    100% {
+        opacity: 0.7;
+        clip-path: inset(10% 0 80% 0);
+        transform: translate(-2px, 0);
+    }
+}
+
+/* STAGE 6: Signal Interference */
+.node.active[data-stage="5"]::before {
+    background: inherit;
+    box-shadow: -6px 0 #53e2f3;
+    animation: signalTear 0.16s infinite steps(2);
+}
+
+@keyframes signalTear {
+    0% {
+        clip-path: polygon(0 0, 100% 0, 100% 30%, 0 40%);
+        transform: translate(-6px, 2px);
+    }
+
+    33% {
+        clip-path: polygon(0 50%, 100% 40%, 100% 80%, 0 70%);
+        transform: translate(6px, -2px);
+    }
+
+    66% {
+        clip-path: polygon(0 20%, 100% 10%, 100% 60%, 0 50%);
+        transform: translate(-4px, -4px);
+    }
+
+    100% {
+        clip-path: polygon(0 80%, 100% 70%, 100% 100%, 0 100%);
+        transform: translate(4px, 3px);
+    }
+}

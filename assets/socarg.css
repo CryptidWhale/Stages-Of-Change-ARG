@@ -40,6 +40,12 @@
     text-align: center;
 }
 
+.landing-page-h3 {
+    font-size: clamp(1rem, 3vw, 2rem);
+    font-weight: 300;
+    text-align: center;
+}
+
 .cont-land-page {
     display: grid;
     margin: 0;
@@ -140,6 +146,13 @@
         font-size: clamp(2rem, 11vw, 3.5rem);
         line-height: 1.05;
         overflow-wrap: anywhere;
+    }
+
+    .landing-page-h3 {
+        margin: 1rem 0;
+        font-size: clamp(1rem, 6vw, 2rem);
+        line-height: 1.05;
+        overflow-wrap: anywhere; 
     }
 
     .cont-land-page,
@@ -343,7 +356,7 @@
 /* Mobile adjustments */
 @media (max-width: 600px) {
     .body-story {
-        
+
         font-size: 1.2rem;
     }
 

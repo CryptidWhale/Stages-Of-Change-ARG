@@ -1,11 +1,11 @@
 const stages = [
-    { name: "SHOCK", color: "#F4F6F9", circleUrl: "passages/shockPassage.html", enterUrl: "passages/shockPassage.html" },
-    { name: "DENIAL", color: "#643200", circleUrl: "index.html", enterUrl: "index.html" },
-    { name: "ANGER", color: "#C11C19", circleUrl: "#", enterUrl: "#" },
-    { name: "DEPRESSION", color: "#4A5568", circleUrl: "#", enterUrl: "#" },
-    { name: "IBTIVMQIRX", color: "#81C784", circleUrl: "error_pages/shockSkipError.html", enterUrl: "#" },
-    { name: "IJHNXNTS", color: "#ffc846", circleUrl: "error_pages/shockSkipError.html", enterUrl: "#" },
-    { name: "OTZKMXGZOUT", color: "#0080FF", circleUrl: "error_pages/shockSkipError.html", enterUrl: "error_pages/shockSkipError.html" }
+    { name: "DENIAL", color: "#643200", circleUrl: "passages/denialPassage.html", enterUrl: "passages/denialPassage.html" },
+    { name: "ANGER", color: "#C11C19", circleUrl: "error_pages/denied.html", enterUrl: "error_pages/denied.html" },
+    { name: "DEPRESSION", color: "#4A5568", circleUrl: "error_pages/denied.html", enterUrl: "error_pages/denied.html" },
+    { name: "IBTIVMQIRX", color: "#81C784", circleUrl: "error_pages/denied.html", enterUrl: "error_pages/denied.html" },
+    { name: "IJHNXNTS", color: "#ffc846", circleUrl: "error_pages/denied.html", enterUrl: "error_pages/denied.html" },
+    { name: "OTZKMXGZOUT", color: "#0080FF", circleUrl: "error_pages/denied.html", enterUrl: "error_pages/denied.html" },
+    { name: "SHOCK", color: "#F4F6F9", circleUrl: "error_pages/inDenial.html", enterUrl: "error_pages/inDenial.html" }
 ];
 
 const total = stages.length;
@@ -43,6 +43,7 @@ function createNodes() {
     stages.forEach((stage, index) => {
         const node = document.createElement('div');
         node.className = 'node';
+        node.dataset.stage = index;
         node.style.setProperty('--node-color', stage.color);
 
         const angleDeg = (index * (360 / total)) - 90;
@@ -195,8 +196,8 @@ document.addEventListener('keydown', (event) => {
 
     switch (event.key) {
 
-        case 'm':
-        case 'M':
+        case 'i':
+        case 'I':
             // Secret trap: show toast then redirect after 3 seconds
             if (isRedirecting) break;
             isRedirecting = true;

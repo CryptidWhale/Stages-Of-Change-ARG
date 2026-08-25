@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARG Lyric Carousel - Refined & Mobile Responsive</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #000000;
+      font-family: Arial, Helvetica, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+    }
+
+    /* Carousel Outer Viewport */
+    .carousel-viewport {
+      position: relative;
+      width: 100%;
+      max-width: 1200px;
+      height: 750px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Stage Container */
+    .cont-lyric {
+      position: relative;
+      width: 100%;
+      height: 700px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Card Layout & Rounded Corners */
+    .lyric-card {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 520px;
+      height: 650px;
+      background-color: #7b7b7b;
+      padding: 16px;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease, filter 0.5s ease;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 1;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Position States */
+    .lyric-card.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) scale(1.05);
+      z-index: 3;
+      filter: blur(0px);
+    }
+
+    .lyric-card.prev {
+      opacity: 0.5;
+      pointer-events: auto;
+      transform: translateX(calc(-50% - 380px)) scale(0.9);
+      z-index: 2;
+    }
+
+    .lyric-card.next {
+      opacity: 0.5;
+      pointer-events: auto;
+      transform: translateX(calc(-50% + 380px)) scale(0.9);
+      z-index: 2;
+    }
+
+    .lyric-card.far-prev {
+      opacity: 0;
+      transform: translateX(calc(-50% - 750px)) scale(0.75);
+      z-index: 1;
+    }
+
+    .lyric-card.far-next {
+      opacity: 0;
+      transform: translateX(calc(-50% + 750px)) scale(0.75);
+      z-index: 1;
+    }
+
+    /* Upper Box */
+    .box-upper {
+      background-color: #b0b0b0;
+      padding: 16px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      color: #000000;
+    }
+
+    .song-info h2 {
+      font-size: 1.8rem;
+      font-weight: bold;
+      line-height: 1.1;
+    }
+
+    .song-info p {
+      font-size: 1rem;
+      margin-top: 4px;
+    }
+
+    .btn-arg {
+      background-color: #d6d6d6;
+      color: #000000;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      line-height: 1.2;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+      transition: background 0.2s ease, transform 0.1s ease;
+    }
+
+    .btn-arg:hover {
+      background-color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    /* Lower Box */
+    .box-lower {
+      background-color: #9a9a9a;
+      padding: 20px;
+      border-radius: 10px;
+      height: 520px;
+      overflow-y: auto;
+      color: #111111;
+      font-size: 1.05rem;
+      line-height: 1.5;
+    }
+
+    .box-lower::-webkit-scrollbar {
+      width: 6px;
+    }
+    .box-lower::-webkit-scrollbar-track {
+      background: rgba(0,0,0,0.05);
+      border-radius: 3px;
+    }
+    .box-lower::-webkit-scrollbar-thumb {
+      background: #555555;
+      border-radius: 3px;
+    }
+
+    /* Controls */
+    .carousel-controls {
+      position: absolute;
+      bottom: 0px;
+      width: 100%;
+      max-width: 950px;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 40px;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .nav-btn {
+      pointer-events: auto;
+      background-color: #d6d6d6;
+      color: #000000;
+      border: none;
+      border-radius: 8px;
+      width: 120px;
+      height: 45px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: background 0.2s ease, transform 0.1s ease;
+    }
+
+    .nav-btn:hover {
+      background-color: #ffffff;
+      transform: scale(1.05);
+    }
+
+    /* Mobile Responsive Fixes */
+    @media (max-width: 768px) {
+      .carousel-viewport {
+        height: 580px;
+      }
+
+      .cont-lyric {
+        height: 500px;
+      }
+
+      .lyric-card {
+        width: 82vw;
+        max-width: 310px;
+        height: 430px; /* Scaling down card height for mobile */
+        padding: 12px;
+        gap: 10px;
+      }
+
+      .box-upper {
+        padding: 12px;
+      }
+
+      .song-info h2 {
+        font-size: 1.4rem;
+      }
+
+      .song-info p {
+        font-size: 0.85rem;
+      }
+
+      .box-lower {
+        height: 310px; /* Proportionally fit lower box */
+        padding: 14px;
+        font-size: 0.95rem;
+      }
+
+      /* Responsive Side Card Distances */
+      .lyric-card.prev {
+        transform: translateX(calc(-50% - 210px)) scale(0.85);
+        opacity: 0.3;
+      }
+
+      .lyric-card.next {
+        transform: translateX(calc(-50% + 210px)) scale(0.85);
+        opacity: 0.3;
+      }
+
+      .carousel-controls {
+        bottom: 5px;
+        padding: 0 15px;
+      }
+
+      .nav-btn {
+        width: 75px;
+        height: 38px;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="carousel-viewport">
+    <div class="cont-lyric" id="lyricContainer">
+      
+      <!-- Card 1 -->
+      <div class="lyric-card">
+        <div class="box-upper">
+          <div class="song-info">
+            <h2>song #01</h2>
+            <p>by artist #01</p>
+          </div>
+          <a href="#" class="btn-arg">enter<br>arg page</a>
+        </div>
+        <div class="box-lower">
+          <p>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics</p><br>
+          <p>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics</p><br>
+          <p>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics</p>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="lyric-card">
+        <div class="box-upper">
+          <div class="song-info">
+            <h2>song #02</h2>
+            <p>by artist #02</p>
+          </div>
+          <a href="#" class="btn-arg">enter<br>arg page</a>
+        </div>
+        <div class="box-lower">
+          <p>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics</p><br>
+          <p>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics</p>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="lyric-card">
+        <div class="box-upper">
+          <div class="song-info">
+            <h2>song #03</h2>
+            <p>by artist #03</p>
+          </div>
+          <a href="#" class="btn-arg">enter<br>arg page</a>
+        </div>
+        <div class="box-lower">
+          <p>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics</p><br>
+          <p>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics</p>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="lyric-card">
+        <div class="box-upper">
+          <div class="song-info">
+            <h2>song #04</h2>
+            <p>by artist #04</p>
+          </div>
+          <a href="#" class="btn-arg">enter<br>arg page</a>
+        </div>
+        <div class="box-lower">
+          <p>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics</p><br>
+          <p>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics</p>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="lyric-card">
+        <div class="box-upper">
+          <div class="song-info">
+            <h2>song #05</h2>
+            <p>by artist #05</p>
+          </div>
+          <a href="#" class="btn-arg">enter<br>arg page</a>
+        </div>
+        <div class="box-lower">
+          <p>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics</p><br>
+          <p>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics<br>lyrics lyrics lyrics lyrics</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Controls -->
+    <div class="carousel-controls">
+      <button class="nav-btn" id="prevBtn">&lt;</button>
+      <button class="nav-btn" id="nextBtn">&gt;</button>
+    </div>
+  </div>
+
+  <script>
+    const cards = document.querySelectorAll('.lyric-card');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    let currentIndex = 0;
+    const totalCards = cards.length;
+
+    function updateCarousel() {
+      const prevIndex = (currentIndex - 1 + totalCards) % totalCards;
+      const nextIndex = (currentIndex + 1) % totalCards;
+      const farPrevIndex = (currentIndex - 2 + totalCards) % totalCards;
+
+      cards.forEach((card, index) => {
+        card.classList.remove('active', 'prev', 'next', 'far-prev', 'far-next');
+
+        if (index === currentIndex) {
+          card.classList.add('active');
+        } else if (index === prevIndex) {
+          card.classList.add('prev');
+        } else if (index === nextIndex) {
+          card.classList.add('next');
+        } else if (index === farPrevIndex) {
+          card.classList.add('far-prev');
+        } else {
+          card.classList.add('far-next');
+        }
+      });
+    }
+
+    prevBtn.addEventListener('click', () => {
+      currentIndex = (currentIndex - 1 + totalCards) % totalCards;
+      updateCarousel();
+    });
+
+    nextBtn.addEventListener('click', () => {
+      currentIndex = (currentIndex + 1) % totalCards;
+      updateCarousel();
+    });
+
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    const viewport = document.querySelector('.carousel-viewport');
+    
+    viewport.addEventListener('touchstart', e => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    viewport.addEventListener('touchend', e => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+      if (touchEndX < touchStartX - 50) {
+        currentIndex = (currentIndex + 1) % totalCards;
+        updateCarousel();
+      }
+      if (touchEndX > touchStartX + 50) {
+        currentIndex = (currentIndex - 1 + totalCards) % totalCards;
+        updateCarousel();
+      }
+    }
+
+    updateCarousel();
+  </script>
+
+</body>
+</html>
