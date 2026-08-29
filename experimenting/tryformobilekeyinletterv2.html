@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secret Key Access</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+        }
+
+        /* Top-left Info Icon styling */
+        .info-btn {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #333;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        /* Subtle hint popup */
+        .hint-toast {
+            position: fixed;
+            top: 55px;
+            left: 15px;
+            background: #222;
+            color: #fff;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            display: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            z-index: 999;
+        }
+
+        /* Invisible proxy input box */
+        #secret-key-catcher {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+            opacity: 0;
+            width: 1px;
+            height: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top-left ⓘ button -->
+    <div class="info-btn" id="info-icon" title="Site Info">ⓘ</div>
+    <div class="hint-toast" id="hint-toast">Type a key on your keyboard to proceed...</div>
+
+    <!-- Main page content -->
+    <main style="text-align: center; margin-top: 100px;">
+        <h1>Welcome to the Main Landing Page</h1>
+        <p>Explore our standard features and public content.</p>
+    </main>
+
+    <!-- Invisible text field to capture single soft-keyboard character on mobile -->
+    <input type="text" id="secret-key-catcher" autocomplete="off" capitalize="off" spellcheck="false" maxlength="1" />
+
+    <script>
+        const SECRET_KEY = "q"; // The target single secret letter
+        const SECRET_URL = "https://example.com/secret-page.html"; // Target page URL
+
+        const keyCatcher = document.getElementById("secret-key-catcher");
+        const infoIcon = document.getElementById("info-icon");
+        const hintToast = document.getElementById("hint-toast");
+
+        // Helper function: Evaluates single key entry instantly
+        function evaluateKey(char) {
+            if (!char) return;
+            
+            if (char.toLowerCase() === SECRET_KEY) {
+                // Correct key -> redirect
+                window.location.href = SECRET_URL;
+            } else {
+                // Clear the hidden input buffer first
+                keyCatcher.value = "";
+
+                // Display popup alert for wrong key entry
+                alert("Incorrect key! Access denied.");
+
+                // Re-focus the input on mobile so the keyboard stays open for another try
+                keyCatcher.focus();
+            }
+        }
+
+        // --- DESKTOP HANDLING ---
+        // Catches direct physical keypresses
+        document.addEventListener("keydown", function(event) {
+            // Ignore non-character modifier keys (Shift, Alt, Ctrl, etc.)
+            if (event.key.length === 1) {
+                evaluateKey(event.key);
+            }
+        });
+
+        // --- MOBILE HANDLING ---
+        // Tapping the ⓘ icon triggers the soft keyboard and shows a subtle prompt
+        infoIcon.addEventListener("click", function() {
+            // 1. Display hint prompt
+            hintToast.style.display = "block";
+            
+            // Auto-hide hint toast after 3 seconds
+            setTimeout(() => {
+                hintToast.style.display = "none";
+            }, 3000);
+
+            // 2. Focus invisible input to summon mobile virtual keyboard
+            keyCatcher.value = ""; 
+            keyCatcher.focus();
+        });
+
+        // Listens to character input on mobile soft keyboard instantly
+        keyCatcher.addEventListener("input", function() {
+            const enteredChar = keyCatcher.value;
+            evaluateKey(enteredChar);
+        });
+    </script>
+</body>
+</html>

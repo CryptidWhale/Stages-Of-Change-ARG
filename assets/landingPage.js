@@ -57,29 +57,27 @@ function randomMessage() {
     return messages[randomIndex];
 }
 
-// Keyboard Navigation & Secret Easter Egg
-document.addEventListener('keydown', (event) => {
-    // Prevent default scroll behavior for arrow keys if needed
-    if (['ArrowLeft', 'ArrowRight'].includes(event.key)) {
-        event.preventDefault();
-    }
+const keyCatcher = document.getElementById("secret-key-catcher");
+const infoIcon = document.getElementById("info-icon");
+const hintToast = document.getElementById("hint-toast");
 
-    switch (event.key) {
+function evaluateKey(char) {
+    if (!char) return;
+
+    const key = char.toLowerCase();
+
+    switch (key) {
         case 'x':
-        case 'X':
-            // Secret trap: show toast then redirect after 3 seconds
-            if (isRedirecting) break;
+            if (isRedirecting) return;
             isRedirecting = true;
             showToast("HAHAHAHA GOTCHA!!! YOU FALL FOR THE TRAP", 3000);
             setTimeout(() => {
                 window.location.href = "error_pages/landingPageErrorX.html";
             }, 3000);
-            break;
+            return;
 
         case 'q':
-        case 'Q':
-            // Show two messages in sequence, then redirect.
-            if (isRedirecting) break;
+            if (isRedirecting) return;
             isRedirecting = true;
             setTimeout(() => {
                 showToast("alright, hang on tight!!!", 3000);
@@ -96,16 +94,68 @@ document.addEventListener('keydown', (event) => {
                     }, 2000);
                 }, 3000);
             }, 0);
-            break;
-
-        case 'Enter':
-            // Optional: Hit Enter key to trigger the 'enter' button
-            enterBtn.click();
-            break;
+            return;
 
         default:
-            // Optional: Handle other keys if needed
-            showToast(randomMessage(), 1000);
-            break;
+            if (key === 'enter') {
+                if (typeof enterBtn !== 'undefined' && enterBtn) {
+                    enterBtn.click();
+                }
+                return;
+            }
+
+            if (keyCatcher && key !== 'undefined') {
+                keyCatcher.value = "";
+                // Optional: Handle other keys if needed
+                showToast(randomMessage(), 1000);
+                break;
+            } else {
+                showToast(randomMessage(), 1000);
+            }
+            return;
     }
+}
+
+// Keyboard Navigation & Secret Easter Egg
+document.addEventListener('keydown', (event) => {
+    // Ignore keys while the hidden secret input is focused on mobile.
+    if (document.activeElement === keyCatcher) {
+        return;
+    }
+
+    if (['ArrowLeft', 'ArrowRight'].includes(event.key)) {
+        event.preventDefault();
+    }
+
+    if (event.key === 'Enter') {
+        evaluateKey('enter');
+        return;
+    }
+
+    if (event.key.length === 1) {
+        evaluateKey(event.key);
+    }
+});
+
+// --- MOBILE HANDLING ---
+// Tapping the ⓘ icon triggers the soft keyboard and shows a subtle prompt
+infoIcon.addEventListener("click", function () {
+    // 1. Display hint prompt
+    hintToast.style.display = "block";
+
+    // Auto-hide hint toast after 3 seconds
+    setTimeout(() => {
+        hintToast.style.display = "none";
+    }, 3000);
+
+    // 2. Focus invisible input to summon mobile virtual keyboard
+    keyCatcher.value = "";
+    keyCatcher.focus();
+});
+
+// Listens to character input on mobile soft keyboard instantly
+keyCatcher.addEventListener("input", function () {
+    const enteredChar = keyCatcher.value.slice(-1);
+    keyCatcher.value = "";
+    evaluateKey(enteredChar);
 });

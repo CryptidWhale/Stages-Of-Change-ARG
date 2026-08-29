@@ -152,7 +152,7 @@
         margin: 1rem 0;
         font-size: clamp(1rem, 6vw, 2rem);
         line-height: 1.05;
-        overflow-wrap: anywhere; 
+        overflow-wrap: anywhere;
     }
 
     .cont-land-page,
@@ -383,4 +383,52 @@
         align-items: stretch;
         flex-direction: column;
     }
+}
+
+/* the things for mobile key in letter */
+
+/* Top-left Info Icon styling */
+.info-btn {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #333;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+/* Subtle hint popup */
+.hint-toast {
+    position: fixed;
+    top: 55px;
+    left: 15px;
+    background: #222;
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    display: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    z-index: 999;
+}
+
+/* Invisible proxy input box */
+#secret-key-catcher {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
 }
