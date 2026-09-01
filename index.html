@@ -14,32 +14,54 @@
 
     <link rel="stylesheet" href="assets/socarg.css">
     <script src="assets/landingPage.js" defer></script>
+
 </head>
 
 <body class="landing-page-body">
+
+    <div id="warning-modal" class="warning-modal-overlay">
+        <div class="warning-modal-box font-tech">
+            <h2 class="warning-title">WARNING | AMARAN</h2>
+            <p class="warning-text-en">
+                This ARG is not for everyone. It may contain content that is disturbing, triggering, profanity, and
+                other themes that may not be suitable for all audiences.
+            </p>
+            <p class="warning-text-ms">
+                ARG ini tidak untuk semua orang. Ia mungkin mengandungi kandungan yang mengganggu, memberi reaksi
+                negatif, kata-kata kesat, dan perkara lain yang mungkin tidak sesuai untuk semua penonton.
+            </p>
+            <button id="close-warning-btn" class="warning-proceed-btn" onclick="dismissWarning()">Proceed</button>
+        </div>
+    </div>
+
     <div class="info-btn" id="info-icon" title="Site Info">ⓘ</div>
     <div class="hint-toast" id="hint-toast">Type a key on your keyboard to proceed...</div>
 
-    <!-- Invisible text field to capture single soft-keyboard character on mobile -->
     <input type="text" id="secret-key-catcher" autocomplete="off" capitalize="off" spellcheck="false" maxlength="1" />
 
-    <h1 class="font-tech landing-page-h1">hey, so you are here....</h1>
-    <div class="cont-land-page">
-        ready to jump in?
-        <br>
-        which key should you click?
-    </div>
-    <div class="cont-land-page-bottom black-font">
-        you seriously don't know what key to click?
-        <br>
-        did you not watch the video or something?
-        <br>
-        just click the "x" key to continue
-        <br>
-        <a class="white-font" href="error_pages/landingPageErrorX.html" style="text-decoration: none;">ouh, and you need
-            to use laptop for
-            better experience</a>
-    </div>
+    <main class="main-content">
+        <h1 class="font-tech landing-page-h1">hey, so you are here....</h1>
+
+        <div class="cont-land-page">
+            ready to jump in?
+            <br>
+            which key should you click?
+        </div>
+
+        <div class="cont-land-page-bottom black-font">
+            you seriously don't know what key to click?
+            <br>
+            did you not watch the video or something?
+            <br>
+            just click the "x" key to continue
+            <br>
+            <a class="white-font" href="error_pages/landingPageErrorX.html" style="text-decoration: none;">
+                ouh, and you need to use laptop for better experience
+            </a>
+        </div>
+    </main>
+
+    
 </body>
 
 </html>

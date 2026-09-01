@@ -159,3 +159,30 @@ keyCatcher.addEventListener("input", function () {
     keyCatcher.value = "";
     evaluateKey(enteredChar);
 });
+
+// Run as soon as the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    const warningSeen = sessionStorage.getItem('arg_warning_dismissed');
+    const modal = document.getElementById('warning-modal');
+
+    if (warningSeen === 'true') {
+        // Player already dismissed it this session; hide instantly without animation
+        modal.style.display = 'none';
+        focusKeyCatcher();
+    }
+});
+
+function dismissWarning() {
+    const modal = document.getElementById('warning-modal');
+    modal.classList.add('hidden');
+
+    // Store flag in sessionStorage so it persists during redirects
+    sessionStorage.setItem('arg_warning_dismissed', 'true');
+
+    focusKeyCatcher();
+}
+
+function focusKeyCatcher() {
+    const keyCatcher = document.getElementById('secret-key-catcher');
+    if (keyCatcher) keyCatcher.focus();
+}
