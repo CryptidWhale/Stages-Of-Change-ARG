@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Your Own Path - ARG</title>
+    <base href="../">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Cutive+Mono&family=Handjet:wght,ELSH@100..900,2&family=Raleway:ital,wght@0,100..900;1,100..900&family=Redacted+Script:wght@300;400;700&family=Share+Tech&family=Special+Elite&family=Syne+Mono&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="assets/socarg.css">
+
+</head>
+
+<body class="body-path">
+
+    <div class="cont-path" id="story-log"></div>
+
+    <script>
+        const storyData = {
+            landing: {
+                text: "hahahahaha, no lah. i am fine. like, really, i am fine. bidibup badup. you know how the song's goes right? it goes i i i i i i i i i i i i i i i i i iconinic by mistakes. i i i i i i i i i i i i i i i i i iconinic by mistakes. what? mistakes? where? i i i i i i i i i i i i i i i i i i don't see it. super cunty",
+                options: [
+                    { pathLabel: "Option A", text: "are you okay bro?", target: "node_A" },
+                    { pathLabel: "Option B", text: "omg, what an eyekon", target: "node_B" }
+                ]
+            },
+
+            node_A: {
+                text: "i'm fineeeeee. like, totally fine. super chill super cool. yeah yeah. why are you asking that? it's not like i sleep at 3 in the morning and wake up at 4 of the evening. i am fineeeeeeeeee. done worry babe. i'm don't with this world. hahahahah you got me?",
+                options: [
+                    { pathLabel: "Option AA", text: "woah, that's cray cray", target: "node_AA" },
+                    { pathLabel: "Option AB", text: "how about breakfast?", target: "node_AB" }
+                ]
+            },
+
+            node_B: {
+                text: "like, YAAAAAAASSSSSSS QWEEEEENNNN OMG OMG OMG. want to ever take the hootie frootie? like i know you like me. right? Right? what are you saying???? hootie frootie is another name for drug? are you insane? who the fuck sent you here?????? LEave!!!! I say, LEEEEEEAAAAAAVVVVVEEEEEEEEEEE",
+                options: [],
+                endButtons: [
+                    { label: "Start Over", action: "restart" }
+                ]
+            },
+
+            node_AA: {
+                text: "like, OMG, yes!!! super cray cray!!! like that tagline from gravity falls, right? the show where the grandpa f the triangle to save the city? yeah? know? oh, sorry, i forgot that is 18 plus plus hd hq with the ADD, HAHAHAHA. wait, you are 18 right?.... right?",
+                options: [
+                    { pathLabel: "Option AAA", text: "yeah, i am more than 18", target: "node_AAA" },
+                    { pathLabel: "Option AAB", text: "no, i am below 18....", target: "node_AAB" }
+                ]
+            },
+
+            node_AB: {
+                text: "well, you know me. try to have that Snatch of a waist. HAHAHAHA from 60 try to go to 18. super gorg when i wear the dress tho. but i don't know about my bones. maybe too big or maybe too huge. oh well, the sun at golden hour might help me looking fatnabulous!!! HAKHAKHAK!!!",
+                options: [
+                    { pathLabel: "Option ABA", text: "ouh, when did you wake up again?", target: "node_ABA" },
+                    { pathLabel: "Option ABB", text: "your waist is 60???", target: "node_ABB" }
+                ]
+            },
+
+            node_AAA: {
+                text: "well, THANK GOD",
+                cipher: "ZWDH EW HDWSKW ZWDH EW, A SE VQAFY SFV LJQ LG KMJNANW LZAK OADD ESCW EW AFKSFW. LZW AKGDSLAGF XWWD DACW ZWDD SFV A UJSNW LZW KGUASD AFLWJSULAGF SFV LZW YGGV SAJ XDGO ZWJW!!! A OSFL LG OSCW MH WSJDQ, SFV ZSNW S YGGV KDWWHAFY KUZWVMDW!!! HDWSKW KGEWGFW ZWDH EW!!!!!!!!!!!!!!!",
+                options: [],
+                endButtons: [
+                    { label: "Start Over", action: "restart" }
+                ]
+            },
+
+            node_AAB: {
+                text: "OH NO",
+                cipher: "LW VWB BMTT GWCZ XIZMVBA GWC EMVB PMZM! GWC APWCTL VWB ZMIL ITT BPQA XZWNIVQBG!!! GWC APWCTL OW EIAP GWCZ MGMA IVL UWCBP!!!! VW VW VW, BPQA KIV'B JM ZQOPB!!!! VW VW VW VW VW VW !!!!!! XTMIAM OW NCKS WNN IVL NWZOMB IJWCB BPQA!!! IJIVLWV BPM IZO! LW VWB BCZV JIKS!!!! BPQA QA NWZ GWCZ WEV AINMBG!!! GWC IZM BWW GWCVO BW CVLMZABIVL BPQA!!!!!",
+                options: [],
+                endButtons: [
+                    { label: "Start Over", action: "restart" }
+                ]
+            },
+
+            node_ABA: {
+                text: "ouh yeah.... i woke up around 9 maybe 10 maybe 11 maybe 12 maybe 13 maybe 14 maybe 15 maybe 16....... you know what, no no no. i woke up normally, you know? normal for a person that cannot sleep until 4 in the morning because of the looming anxiety and insomnia. and when waking up, the anxiety is still there!!! but different!!! like, who would know that, right?",
+                options: [
+                    { pathLabel: "Option ABAA", text: "yeah, your logic seems fine", target: "node_ABAA" },
+                    { pathLabel: "Option ABAB", text: "do you need help? or something?", target: "node_ABAB" }
+                ]
+            },
+
+            node_ABB: {
+                text: "are you calling me fat?",
+                options: [
+                    { pathLabel: "Option ABBA", text: "well, if the shoes fit", target: "node_ABBA" },
+                    { pathLabel: "Option ABBB", text: "no, no, no. i did not say that?", target: "node_ABBB" }
+                ]
+            },
+
+            node_ABAA: {
+                text: "right? YEAH!!!! finally, someone as delusional as me!!! just like the sounds around my room in the witching hours.... they are all fake. wait, we cannot have 2 delusional people here.... no no no no no no. only i can be in denial...... no, no, no,.... who are you???? how many times you have played this game???? who sent you here? no, no, no, this can't be happening!!!<br><br>YOU GET OUT FROM HERE",
+                options: [],
+                endButtons: [
+                    { label: "Start Over", action: "restart" }
+                ]
+            },
+
+            // ONLY THIS OPTION ALLOWS PROCEEDING TO THE NEXT PAGE
+            node_ABAB: {
+                text: "don't we all need help? no? yes? hahaha. i-.... i don't know what to do with myself anymore......",
+                options: [],
+                endButtons: [
+                    { label: "Start Over", action: "restart" },
+                    { label: "Next Part", action: "redirect", target: "passages/denialPassage3.html" }
+                ]
+            },
+
+            node_ABBA: {
+                text: "so now you are feet shaming me, huh?! don't you know that calling other people fat is wrong? so you out here playing this ARG and calling me fucking fat???? YOU ONE PIECE OF SHIT",
+                options: [],
+                endButtons: [
+                    { label: "Start Over", action: "restart" }
+                ]
+            },
+
+            node_ABBB: {
+                text: "no way sherlock! look up and re-read. yeah, no way you called me fat, right? sure thing sherlock!!! fuck me i guess. being fat and dumb enough to let you call me fat. tell me, am i really need all the help? am i hopeless? why are you here? you know what i am struggling with? do you know what challenges i need to face?",
+                options: [],
+                endButtons: [
+                    { label: "Start Over", action: "restart" }
+                ]
+            }
+        };
+
+        function appendNode(nodeKey) {
+            const node = storyData[nodeKey];
+            const storyLog = document.getElementById('story-log');
+
+            const card = document.createElement('div');
+            card.className = 'item-path';
+
+            const paragraph = document.createElement('p');
+            paragraph.innerHTML = node.text;
+            card.appendChild(paragraph);
+
+            if (node.cipher) {
+                const cipherDiv = document.createElement('div');
+                cipherDiv.className = 'cipher-block';
+                cipherDiv.innerText = node.cipher;
+                card.appendChild(cipherDiv);
+            }
+
+            const choiceContainer = document.createElement('div');
+            choiceContainer.className = 'choice-container';
+
+            if (node.options && node.options.length > 0) {
+                // Render branching choice buttons
+                node.options.forEach(option => {
+                    const btn = document.createElement('button');
+                    btn.className = 'choice-btn';
+                    btn.innerText = `${option.pathLabel}: ${option.text}`;
+
+                    btn.onclick = () => {
+                        const siblingButtons = choiceContainer.querySelectorAll('.choice-btn');
+                        siblingButtons.forEach(b => b.disabled = true);
+
+                        btn.classList.add('chosen');
+                        btn.innerText = `[Chosen Path ${option.pathLabel}] ${option.text}`;
+
+                        appendNode(option.target);
+                    };
+
+                    choiceContainer.appendChild(btn);
+                });
+            } else {
+                // Ending node reached: render configured end buttons
+                const endActions = document.createElement('div');
+                endActions.className = 'end-actions';
+
+                // Fallback to restart if no custom endButtons are defined
+                const buttonsToRender = node.endButtons || [
+                    { label: "Start Over", action: "restart" }
+                ];
+
+                ////the auto redirect part
+                let autoRedirectTimer;
+                const redirectDelay = 21000; // 21 seconds
+
+                // Auto-redirect based on action type
+                const restartBtn = buttonsToRender.find(btn => btn.action === "restart" || btn.action === "rewind");
+                if (restartBtn) {
+                    autoRedirectTimer = setTimeout(() => {
+                        if (restartBtn.action === "restart") {
+                            window.location.href = "passages/denialPassage.html";
+                        } else if (restartBtn.action === "rewind") {
+                            storyLog.innerHTML = '';
+                            appendNode('landing');
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }
+                    }, redirectDelay);
+                }
+
+                buttonsToRender.forEach(btnConfig => {
+                    const btn = document.createElement('button');
+                    btn.className = 'end-btn';
+                    btn.innerText = btnConfig.label;
+
+                    btn.onclick = () => {
+                        // Clear auto-redirect timer when user clicks
+                        if (autoRedirectTimer) {
+                            clearTimeout(autoRedirectTimer);
+                        }
+
+                        if (btnConfig.action === "restart") {
+                            window.location.href = "passages/denialPassage.html";
+                        } else if (btnConfig.action === "rewind") {
+                            storyLog.innerHTML = '';
+                            appendNode('landing');
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                        } else if (btnConfig.action === "redirect") {
+                            window.location.href = btnConfig.target;
+                        }
+                    };
+
+                    endActions.appendChild(btn);
+                });
+
+                ////maybe until here
+
+                choiceContainer.appendChild(endActions);
+            }
+
+            card.appendChild(choiceContainer);
+            storyLog.appendChild(card);
+
+            card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        appendNode('landing');
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Whispering Cavern - Interactive Story</title>
+  <style>
+    body {
+      font-family: 'Georgia', serif;
+      background-color: #1a1a24;
+      color: #e2e8f0;
+      max-width: 650px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    /* Container for the continuously growing story */
+    #story-log {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .story-card {
+      background: #232334;
+      border: 1px solid #3b3b54;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      animation: fadeIn 0.4s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .story-text {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    button {
+      background: #312e81;
+      color: #e0e7ff;
+      border: 1px solid #4338ca;
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s ease;
+    }
+
+    button:hover:not(:disabled) {
+      background: #4338ca;
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      border-color: #334155;
+    }
+
+    /* Styles the choice you picked */
+    button.chosen-option {
+      background: #065f46 !important;
+      border-color: #34d399 !important;
+      color: #ffffff !important;
+      opacity: 1 !important;
+      font-weight: bold;
+    }
+
+    .restart-btn {
+      margin-top: 10px;
+      background: #991b1b;
+      border-color: #dc2626;
+      text-align: center;
+    }
+
+    .restart-btn:hover {
+      background: #dc2626;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="story-log"></div>
+
+  <script>
+    const storyData = {
+      start: {
+        text: "You stand at the mouth of a dark cavern holding a flickering torch. A cold breeze blows from within, carrying a faint hum.",
+        options: [
+          { text: "Enter the cave quietly", target: "node_quiet" },
+          { text: "Shout inside to test the echo", target: "node_shout" }
+        ]
+      },
+
+      // LEVEL 1
+      node_quiet: {
+        text: "You creep inside. The tunnel splits. On the left, glowing mushrooms light a path. On the right, sound of running water.",
+        options: [
+          { text: "Follow the glowing mushrooms", target: "node_mushrooms" },
+          { text: "Head toward the sound of water", target: "node_water" }
+        ]
+      },
+      node_shout: {
+        text: "Your voice echoes deeply, followed by a loud rustling above! A swarm of cave bats rushes toward you.",
+        options: [
+          { text: "Duck and cover your head", target: "node_duck" },
+          { text: "Swing your torch wildly", target: "node_swing" }
+        ]
+      },
+
+      // LEVEL 2
+      node_mushrooms: {
+        text: "The mushrooms lead to a giant underground chamber. In the center lies an ancient, dust-covered chest.",
+        options: [
+          { text: "Open the chest immediately", target: "end_1" },
+          { text: "Inspect the floor for traps first", target: "end_2" }
+        ]
+      },
+      node_water: {
+        text: "You find an underground river. A small wooden boat is tied to a post next to a slippery stone ledge.",
+        options: [
+          { text: "Get in the boat and untie it", target: "end_3" },
+          { text: "Walk carefully along the stone ledge", target: "end_4" }
+        ]
+      },
+      node_duck: {
+        text: "The bats fly past you safely. When you stand up, you spot an old iron key left behind on a rock.",
+        options: [
+          { text: "Pocket the key and push deeper", target: "end_5" },
+          { text: "Decide it's too dangerous and exit", target: "end_6" }
+        ]
+      },
+      node_swing: {
+        text: "Your torch scares the bats, but a stray spark lights an ancient web woven across the wall!",
+        options: [
+          { text: "Run deeper before the fire spreads", target: "end_7" },
+          { text: "Use your cloak to smother the flames", target: "end_8" }
+        ]
+      },
+
+      // LEVEL 3 - ENDINGS
+      end_1: { text: "🎉 **Ending 1/8:** The chest was unlocked! You find a hoard of ancient gold coins. You are rich!", options: [] },
+      end_2: { text: "🎉 **Ending 2/8:** You spot a tripwire just in time, disable it, and safely claim a magical sword.", options: [] },
+      end_3: { text: "🎉 **Ending 3/8:** The river currents carry you out into a hidden, sunlit valley full of secrets.", options: [] },
+      end_4: { text: "🎉 **Ending 4/8:** You slip on the wet stone, landing softly on a bed of rare bioluminescent moss.", options: [] },
+      end_5: { text: "🎉 **Ending 5/8:** You find a locked door at the cavern back. The iron key fits perfectly!", options: [] },
+      end_6: { text: "🎉 **Ending 6/8:** You return home safely with a cool story and a mysterious ancient key.", options: [] },
+      end_7: { text: "🎉 **Ending 7/8:** You escape the smoke and stumble right into a sleeping dragon's lair...", options: [] },
+      end_8: { text: "🎉 **Ending 8/8:** You put out the fire safely and discover hidden runes carved into the rock face.", options: [] }
+    };
+
+    function appendNode(nodeKey) {
+      const node = storyData[nodeKey];
+      const storyLog = document.getElementById('story-log');
+
+      // Create a card div for the current node
+      const card = document.createElement('div');
+      card.className = 'story-card';
+
+      // Create text container
+      const textDiv = document.createElement('div');
+      textDiv.className = 'story-text';
+      textDiv.innerHTML = node.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      card.appendChild(textDiv);
+
+      // Create options container
+      const optionsDiv = document.createElement('div');
+      optionsDiv.className = 'options-grid';
+
+      if (node.options.length > 0) {
+        node.options.forEach(option => {
+          const btn = document.createElement('button');
+          btn.innerText = option.text;
+          
+          btn.onclick = () => {
+            // Disable all buttons in this step once an option is picked
+            const siblingButtons = optionsDiv.querySelectorAll('button');
+            siblingButtons.forEach(b => b.disabled = true);
+            
+            // Mark selected button green
+            btn.classList.add('chosen-option');
+
+            // Append the next chapter down the log
+            appendNode(option.target);
+          };
+          
+          optionsDiv.appendChild(btn);
+        });
+      } else {
+        // Ending node reached
+        const restartBtn = document.createElement('button');
+        restartBtn.innerText = "🔄 Play Again";
+        restartBtn.className = "restart-btn";
+        restartBtn.onclick = () => {
+          storyLog.innerHTML = '';
+          appendNode('start');
+        };
+        optionsDiv.appendChild(restartBtn);
+      }
+
+      card.appendChild(optionsDiv);
+      storyLog.appendChild(card);
+
+      // Smooth scroll down to newest step
+      card.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Start game on load
+    appendNode('start');
+  </script>
+
+</body>
+</html>

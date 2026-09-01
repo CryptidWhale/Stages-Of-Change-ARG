@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Which D&D Class Are You?</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0f172a;
+      color: #f8fafc;
+      max-width: 680px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #38bdf8;
+      margin-bottom: 30px;
+    }
+    .question {
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      border: 1px solid #334155;
+    }
+    .question p {
+      font-size: 1.1rem;
+      margin-top: 0;
+      color: #f1f5f9;
+    }
+    .options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 15px;
+    }
+    button {
+      background: #334155;
+      color: #e2e8f0;
+      border: 2px solid #475569;
+      padding: 12px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+      text-align: left;
+    }
+    button:hover:not(:disabled) {
+      background: #0284c7;
+      border-color: #38bdf8;
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+    button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      border-color: #334155;
+    }
+    button.selected {
+      background: #0369a1 !important;
+      border-color: #38bdf8 !important;
+      color: #ffffff !important;
+      opacity: 1 !important;
+    }
+    #result {
+      display: none;
+      background: #065f46;
+      border: 2px solid #34d399;
+      color: #ecfdf5;
+      padding: 25px;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 1.2rem;
+      margin-top: 30px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+    }
+    #result h2 {
+      margin: 0 0 10px 0;
+      color: #a7f3d0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Which D&D Class Are You?</h1>
+
+  <!-- Q1 -->
+  <div class="question" id="q1">
+    <p><strong>1. How do you handle a sudden conflict?</strong></p>
+    <div class="options">
+      <button onclick="selectOption('fighter', this)">Charge directly into it</button>
+      <button onclick="selectOption('wizard', this)">Analyze the situation first</button>
+      <button onclick="selectOption('rogue', this)">Find an exit or take cover</button>
+      <button onclick="selectOption('bard', this)">Talk my way out of it</button>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="question" id="q2">
+    <p><strong>2. Pick your ideal weekend activity:</strong></p>
+    <div class="options">
+      <button onclick="selectOption('wizard', this)">Reading or learning a skill</button>
+      <button onclick="selectOption('fighter', this)">Working out or doing sports</button>
+      <button onclick="selectOption('bard', this)">Going out to a party or event</button>
+      <button onclick="selectOption('rogue', this)">Exploring quiet urban spots</button>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="question" id="q3">
+    <p><strong>3. What's your primary strength in a group project?</strong></p>
+    <div class="options">
+      <button onclick="selectOption('bard', this)">Keeping team morale high</button>
+      <button onclick="selectOption('wizard', this)">Doing heavy research and strategy</button>
+      <button onclick="selectOption('fighter', this)">Taking charge and finishing tasks</button>
+      <button onclick="selectOption('rogue', this)">Finding quick shortcuts and loopholes</button>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="question" id="q4">
+    <p><strong>4. Choose an item to carry at all times:</strong></p>
+    <div class="options">
+      <button onclick="selectOption('rogue', this)">A compact multi-tool kit</button>
+      <button onclick="selectOption('wizard', this)">A notebook full of ideas</button>
+      <button onclick="selectOption('fighter', this)">A reliable, heavy wristwatch</button>
+      <button onclick="selectOption('bard', this)">A high-quality acoustic guitar</button>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="question" id="q5">
+    <p><strong>5. How do you approach a locked door?</strong></p>
+    <div class="options">
+      <button onclick="selectOption('fighter', this)">Kick it off its hinges</button>
+      <button onclick="selectOption('rogue', this)">Pick the lock clean</button>
+      <button onclick="selectOption('wizard', this)">Look for a hidden release mechanism</button>
+      <button onclick="selectOption('bard', this)">Knock and charm whoever opens it</button>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="question" id="q6">
+    <p><strong>6. What drives your daily decisions?</strong></p>
+    <div class="options">
+      <button onclick="selectOption('wizard', this)">Logic and curiosity</button>
+      <button onclick="selectOption('fighter', this)">Discipline and honor</button>
+      <button onclick="selectOption('bard', this)">Emotion and self-expression</button>
+      <button onclick="selectOption('rogue', this)">Pragmatism and freedom</button>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="question" id="q7">
+    <p><strong>7. You find a strange glowing artifact. What do you do?</strong></p>
+    <div class="options">
+      <button onclick="selectOption('wizard', this)">Study its runes and magical properties</button>
+      <button onclick="selectOption('bard', this)">Show it off to everyone nearby</button>
+      <button onclick="selectOption('rogue', this)">Pawn it for a good price</button>
+      <button onclick="selectOption('fighter', this)">Test if it can be used as a weapon</button>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="question" id="q8">
+    <p><strong>8. Pick a favorite style of wardrobe:</strong></p>
+    <div class="options">
+      <button onclick="selectOption('bard', this)">Flashy, stylish, and eye-catching</button>
+      <button onclick="selectOption('rogue', this)">Dark, comfortable, and practical</button>
+      <button onclick="selectOption('fighter', this)">Sturdy, functional, and clean</button>
+      <button onclick="selectOption('wizard', this)">Classic, simple, layered attire</button>
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="question" id="q9">
+    <p><strong>9. How do you deal with a strict rule you disagree with?</strong></p>
+    <div class="options">
+      <button onclick="selectOption('rogue', this)">Bypass it quietly without getting caught</button>
+      <button onclick="selectOption('bard', this)">Persuade people to ignore it</button>
+      <button onclick="selectOption('wizard', this)">Find technicalities within the text</button>
+      <button onclick="selectOption('fighter', this)">Challenge it head-on openly</button>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="question" id="q10">
+    <p><strong>10. What is your ultimate goal in an adventure?</strong></p>
+    <div class="options">
+      <button onclick="selectOption('fighter', this)">To prove my strength and protect others</button>
+      <button onclick="selectOption('wizard', this)">To unlock ancient secrets and knowledge</button>
+      <button onclick="selectOption('bard', this)">To become a legend people tell stories about</button>
+      <button onclick="selectOption('rogue', this)">To live freely on my own terms</button>
+    </div>
+  </div>
+
+  <!-- Result Banner -->
+  <div id="result"></div>
+
+  <script>
+    // Score Tracker
+    const scores = { fighter: 0, wizard: 0, rogue: 0, bard: 0 };
+    let answeredQuestions = 0;
+    const totalQuestions = 10;
+
+    const classDescriptions = {
+      fighter: "You are a dependable, disciplined powerhouse. You meet problems head-on and rely on grit, courage, and pure martial skill to overcome any obstacle.",
+      wizard: "You are a master of strategy and deep knowledge. You value logic and preparation above all, solving problems with clever mindwork and precise execution.",
+      rogue: "You are sharp, adaptable, and clever. You know how to work smart instead of hard, finding the stealthiest paths and loopholes through any hurdle.",
+      bard: "You are charismatic, creative, and life of the party. You use charm, social instinct, and flair to inspire allies and smooth over tense situations."
+    };
+
+    function selectOption(category, btnElement) {
+      // Get the parent container of the clicked button
+      const parentOptions = btnElement.parentElement;
+      
+      // Disable all buttons in this question block once selected
+      const buttons = parentOptions.querySelectorAll('button');
+      buttons.forEach(btn => btn.disabled = true);
+
+      // Highlight the selected button
+      btnElement.classList.add('selected');
+
+      // Update score and tracker
+      scores[category]++;
+      answeredQuestions++;
+
+      // Check if all 10 questions are answered
+      if (answeredQuestions === totalQuestions) {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      // Find the key with the highest score
+      const winner = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+      
+      const resultDiv = document.getElementById('result');
+      resultDiv.style.display = 'block';
+      resultDiv.innerHTML = `
+        <h2>You are a <strong>${winner.toUpperCase()}</strong>!</h2>
+        <p>${classDescriptions[winner]}</p>
+      `;
+
+      // Smooth scroll down to result
+      resultDiv.scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+
+</body>
+</html>

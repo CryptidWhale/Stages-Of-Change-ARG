@@ -19,6 +19,7 @@ const enterBtn = document.getElementById('enterBtn');
 const randomBtn = document.getElementById('randomBtn');
 
 let isRedirecting = false;
+let failedAttempts = 0; // Track failed passcode attempts
 
 function showToast(message, duration = 3000) {
     let toast = document.getElementById('globalToast');
@@ -99,7 +100,7 @@ function goToStage(targetIndex) {
     let diff = targetIndex - activeIndex;
 
     if (diff > total / 2) diff -= total;
-    if (diff < -total / 2) diff += total;
+    if (diff < -total / 2) diff -= total;
 
     currentStep += diff;
     updateCarousel();
@@ -187,34 +188,161 @@ function randomMessage() {
     return messages[randomIndex];
 }
 
+const keyCatcher = document.getElementById("secret-key-catcher");
+const infoIcon = document.getElementById("info-icon");
+const hintToast = document.getElementById("hint-toast");
+
+// --- POPUP MODAL FUNCTIONALITY ---
+function createAndShowCodeModal() {
+    let modal = document.getElementById('codePathModal');
+    if (!modal) {
+        // Create modal overlay
+        modal = document.createElement('div');
+        modal.id = 'codePathModal';
+        modal.innerHTML = `
+            <div class="modal-container">
+                <h2 class="modal-title">so, what is the right path of the story?</h2>
+                <div class="code-boxes-wrapper">
+                    <input type="text" id="codePart1" class="code-box-input" maxlength="4" placeholder="####" autocomplete="off" />
+                    <span class="dash-separator">-</span>
+                    <input type="text" id="codePart2" class="code-box-input" maxlength="4" placeholder="####" autocomplete="off" />
+                    <span class="dash-separator">-</span>
+                    <input type="text" id="codePart3" class="code-box-input" maxlength="4" placeholder="####" autocomplete="off" />
+                </div>
+                <button id="pathSubmitBtn" class="path-submit-btn">this is the right path</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+
+        const in1 = document.getElementById('codePart1');
+        const in2 = document.getElementById('codePart2');
+        const in3 = document.getElementById('codePart3');
+        const submitBtn = document.getElementById('pathSubmitBtn');
+
+        // Prevent document keydown listeners from interfering while typing inside modal
+        modal.addEventListener('keydown', (e) => {
+            e.stopPropagation();
+            if (e.key === 'Enter') {
+                submitBtn.click();
+            }
+        });
+
+        // Auto-focus next input field on typing 4 chars
+        in1.addEventListener('input', () => {
+            if (in1.value.length === 4) in2.focus();
+        });
+        in2.addEventListener('input', () => {
+            if (in2.value.length === 4) in3.focus();
+        });
+
+        // Validation logic
+        submitBtn.addEventListener('click', () => {
+            const code1 = in1.value.trim().toLowerCase();
+            const code2 = in2.value.trim().toLowerCase();
+            const code3 = in3.value.trim().toLowerCase();
+
+            if (code1 === 'abab' && code2 === 'iiii' && code3 === 'prqr') {
+                modal.style.display = 'none';
+                isRedirecting = true;
+                showToast("alright, code is right. YOU SHALL PASS", 3000);
+                setTimeout(() => {
+                    window.location.href = "waypoint/maybeIWantToBeHappy.html";
+                }, 3000);
+            } else {
+                failedAttempts++;
+                
+                if (failedAttempts >= 5) {
+                    modal.style.display = 'none';
+                    isRedirecting = true;
+                    showToast("Too many wrong attempts! Returning home...", 1500);
+                    setTimeout(() => {
+                        window.location.href = "index.html";
+                    }, 1500);
+                } else {
+                    const remaining = 5 - failedAttempts;
+                    showToast(`Wrong code! ${remaining} attempt${remaining === 1 ? '' : 's'} remaining.`, 2000);
+                    in1.value = '';
+                    in2.value = '';
+                    in3.value = '';
+                    in1.focus();
+                }
+            }
+        });
+    }
+
+    modal.style.display = 'flex';
+    document.getElementById('codePart1').value = '';
+    document.getElementById('codePart2').value = '';
+    document.getElementById('codePart3').value = '';
+    document.getElementById('codePart1').focus();
+}
+
+function evaluateKey(char) {
+    if (!char) return;
+
+    const key = char.toLowerCase();
+
+    switch (key) {
+        case 'i':
+            // Trigger the secret code popup box
+            if (isRedirecting) break;
+            createAndShowCodeModal();
+            return;
+
+        default:
+            if (key === 'enter') {
+                if (typeof enterBtn !== 'undefined' && enterBtn) {
+                    enterBtn.click();
+                }
+                return;
+            }
+
+            if (keyCatcher && key !== 'undefined') {
+                keyCatcher.value = "";
+                showToast(randomMessage(), 1000);
+                break;
+            } else {
+                showToast(randomMessage(), 1000);
+            }
+            return;
+    }
+}
+
 // Keyboard Navigation & Secret Easter Egg
 document.addEventListener('keydown', (event) => {
-    // Prevent default scroll behavior for arrow keys if needed
+    // Ignore keys while secret input is focused on mobile
+    if (document.activeElement === keyCatcher) {
+        return;
+    }
+
     if (['ArrowLeft', 'ArrowRight'].includes(event.key)) {
         event.preventDefault();
     }
 
-    switch (event.key) {
-
-        case 'i':
-        case 'I':
-            // Secret trap: show toast then redirect after 3 seconds
-            if (isRedirecting) break;
-            isRedirecting = true;
-            showToast("alright, next stage, LET'S GOOOOOOOOOOOOOO!", 1500);
-            setTimeout(() => {
-                window.location.href = "waypoint/isItShockingToYou.html";
-            }, 1500);
-            break;
-
-        case 'Enter':
-            // Optional: Hit Enter key to trigger the 'enter' button
-            enterBtn.click();
-            break;
-
-        default:
-            // Optional: Handle other keys if needed
-            showToast(randomMessage(), 1000);
-            break;
+    if (event.key === 'Enter') {
+        evaluateKey('enter');
+        return;
     }
+
+    if (event.key.length === 1) {
+        evaluateKey(event.key);
+    }
+});
+
+// --- MOBILE HANDLING ---
+infoIcon.addEventListener("click", function () {
+    hintToast.style.display = "block";
+
+    setTimeout(() => {
+        hintToast.style.display = "none";
+    }, 3000);
+
+    keyCatcher.value = "";
+    keyCatcher.focus();
+});
+
+keyCatcher.addEventListener("input", function () {
+    const enteredChar = keyCatcher.value.slice(-1);
+    keyCatcher.value = "";
+    evaluateKey(enteredChar);
 });

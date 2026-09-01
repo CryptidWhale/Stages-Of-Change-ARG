@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Your Own Path - Stage: Denial</title>
+    <base href="../">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Cutive+Mono&family=Handjet:wght,ELSH@100..900,2&family=Raleway:ital,wght@0,100..900;1,100..900&family=Redacted+Script:wght@300;400;700&family=Share+Tech&family=Special+Elite&family=Syne+Mono&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="assets/socarg.css">
+
+</head>
+
+<body class="body-path">
+
+    <div class="cont-path" id="story-log"></div>
+
+    <script>
+        const storyData = {
+            landing: {
+                text: "okay, so we have 30 days in a month; we can exclude the 31st for now. but if we do take fewer meals, we can make this RM### to survive for the month!!! yeah!!! yeah!!!! oh my god, i am a genius",
+                options: [
+                    { pathLabel: "Option P", text: "what are you counting there?", target: "node_p" },
+                    { pathLabel: "Option Q", text: "So, you are making RM### each month?", target: "node_q" },
+                    { pathLabel: "Option R", text: "what about the other expenses", target: "node_r" }
+                ]
+            },
+
+            /* BRANCH P */
+            node_p: {
+                text: "ouh, just my allowance for this month that i can spend for food and stuff. need to plan it right. money is superbly tight not like this pants a few weeks ago. and what do you know! if i try to stay true to this plan, i need to use below RM10 to survive.... yeah..... yeah..... am i going to survive this?",
+                options: [
+                    { pathLabel: "Option PP", text: "wait, you loose weight?....", target: "node_pp" },
+                    { pathLabel: "Option PQ", text: "like, don't you want to seek another job?", target: "node_pq" },
+                    { pathLabel: "Option PR", text: "yeah, you gonna survive this", target: "node_pr" }
+                ]
+            },
+
+            node_pp: {
+                text: "ouh yeah. i guess i am losing weight. or maybe i just hallucinating and think i am losing weight. or maybe i am hallucinating right now...... don't you ever think???<br><br><strong>who i am?</strong><br><br>our body name itself. every atom is for their own. and each of them is just silently there. silently. no soul, not living. but yet, it will come together and human are just, atoms....<br><br><strong>who are you?</strong><br><br>time is only an illusion. you feel like the the pandemic is farther from us than the economic crisis; but in reality, the capybara meme comes before 6 7 even a thing....<br><br><strong>who are we?</strong><br><br>of all things in the universe, why do we are the one that try to reach out to the vast empty spaces? did the other life anywhere in the space died or we the one alone here or we are the last one to be hunted down<br><br>help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me. help me.",
+                options: [],
+                endButtons: [
+                    { label: "Do Not Mess Up Again", action: "restart" }
+                ]
+            },
+
+            node_pq: {
+                text: "oh, baby. i am trying to find another job. but listen to me closely you moron. we live in a society where our lives now are determine by the numbers, algorithm and cables. you don't have the numbers, you don't have enough money to pay or even- hear this, you don't have the right fit for the job, they would just kick you like you don't even matter.<br><br>and hear this, FUCKING HEAR THIS: the people try to get people to work for them use AI to select who best and who might fit. and you know what is crazy? WE ARE EVELUATED BY NUMBERS AND WHO EVER CAN WIN THE AI WILL GET THE JOB. like, don't you think that is crazy? people say; \"ouh, just use AI to create resume\" and the higher ups will be like \"ouh, we don't have time to read all of that. we just use this AI to pick and choose who best\" and some fucking people will say \"ouh, we can help you write resume better\" AND THEY USE FUCKING AI TO WRITE THE COURSE<br><br>and if you do get chosen by AI, you can never win when someone have inside cables pulling them into the work force...... THIS JOB MARKET SUCKS ASS",
+                options: [
+                    { pathLabel: "Option PQP", text: "chill dude, it just how the job market works", target: "node_pqp" },
+                    { pathLabel: "Option PQQ", text: "language, my dear", target: "node_pqq" }
+                ]
+            },
+
+            node_pr: {
+                text: "yeah..... maybe you are right. surviving each day and try to eat one thing less. and on thursday i will go to my other job and teach. try to stay calm for the kids and survive this. no pain should be seen, right? what does the kids know? well, they know my tiktok name is paus air. that's good. i guess...... or maybe i can take my own life, right?",
+                options: [
+                    { pathLabel: "Option PRP", text: "ok, woah, slow down. do not go that route", target: "node_prp" },
+                    { pathLabel: "Option PRQ", text: "what are trying to say here?", target: "node_prq" },
+                    { pathLabel: "Option PRR", text: "you don't have to stay strong all the time....", target: "node_prr" }
+                ]
+            },
+
+            node_pqp: {
+                text: "maybe you are right. we all just the slaves of the creation we created. the gen z try to get into work space but the other generations fuck us up and say we are too manja. well, maybe you are right. licking the ass of the higher ups and doing sins by pretending and faking documents is the way to go nowadays. like, it is nearing kiamat right? like, they are all cheering and trying to make the process faster. and here i am doing an arg that would make me doing sins beacuse i tell the story of mine that have other people story. makan daging saudara sendiri, amirite? and you here try to find the cerita. don't you think this would make us similar to what the people in the files do?<br><br>and look what you are trying to do now. screenshot and try to seek for the tea and try to tell people about it. listen here dipshit: if they say they are pious and 'the good people', why would they show sign of being munafik?",
+                options: [],
+                endButtons: [
+                    { label: "Do Not Mess Up Again", action: "restart" }
+                ]
+            },
+
+            node_pqq: {
+                text: "well, fuck you then. take this award of 'cleanest mouth in the whole fucking world'. kau pun cari cerita aku nak pukul canang ke orang. ada hati nak tegur aku ni mulut lancang. fuck off",
+                options: [],
+                endButtons: [
+                    { label: "Do Not Mess Up Again", action: "restart" }
+                ]
+            },
+
+            node_prp: {
+                text: "hahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahahaha<br><br>HaHaHaHaHaHaHaHaHaHaHaHaHaHaHaHaHaHaHaHaHaHaHaHaHaHaHaHaHaHaHaHaHa<br><br>HAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAH<br><br>help me....... help .,,.,.., .,,,..., .,,...,. .,,...., .,,.,,..",
+                cipher: "hAAAhAAAhAAhAhhhhAAAAhhAhhAhhhhhhAAhhAhhhAAhAAAAhAAhAAAhhhAhhAAAhAAAhAhhhhAhhhhhhAAAAhhAhAAhAAAAhAAAhAhAhhAhhhhhhAAhAhhhhAAhhAhAhAAhAAhhhAAAhhhhhhAhhhhhhAAhAAhAhAAhhAhAhhAhhhhhhAAhhhAhhAAhhhhAhAAhhhAAhAAhAhAAhhAhhhhhhAAAhAhhhAAhAhhhhAAhhAhAhAAhAAAhhhAAAAAAhhAhhhhhhAAAhAAAhAAhAhhhhAAAAhhAhhAhhhhhhAAhhAhhhAAhAAAAhAAhAAAhhhAhhAAAhAAAhAhhhhAhhhhhhAAAAhhAhAAhAAAAhAAAhAhAhhAhhhhhhAAAhAhhAAhhAhAhAAhhhhAhAAhhhAAhAAhAhhhhhAhhhhhhAAhAAAAhAAAhAhAhAAAhAhhhhAhhhhhhAAAhAhhhAAhAAAAhhAhhhhhhAAhAAhAhAAhhAhAhhAhhhhhhAAAhAAAhAAhAhhhhAAhhAhAhAAhAAAhhhAhhhhhhAAhAhhAhhAhhhhhhAAAhAAAhAAhhhhAhAAAhhAAhhAhhhhhhAAhAAAAhAAhAAAhhhAhhhhhhAAhAAhAhAAAAhhAhhAhhhhhhhAhhhhhhAAhAAhhhAAhAAAAhAAAhAAAhAAhhAhAhAAAhhAAhAAAhAhhhhAAAAAA",
+                options: [],
+                endButtons: [
+                    { label: "Do Not Mess Up Again", action: "restart" }
+                ]
+            },
+
+            node_prq: {
+                text: "hahaha. funny how life works. you help people. but who will help you now? which human will help me now? my silence is deafening enough. can't they read the message there? maybe they have other problems too, you know?..... and if i go to them, maybe i will make their situation worse....... so let's stay here and marinate in this problem alone. you don't want other people to worry about you right? haha",
+                options: [
+                    { pathLabel: "Option PRQP", text: "let's just go pass this stage, okay?", target: "node_prqp" },
+                    { pathLabel: "Option PRQQ", text: "you are still in denial stage....", target: "node_prqq" },
+                    { pathLabel: "Option PRQR", text: "can i bring you out of this stage?", target: "node_prqr" }
+                ]
+            },
+
+            node_prr: {
+                text: "you know what? i guess you are right!!! oh my god. you are such a brilliant mind.......<br><br>like, what the worse that could happen if i don't be strong enough for myself, right? like, what? who i need to be strong for? i don't have any really really close friends! i don't even don't have any significant others! heck, i don't even have anyone to be strong for! yeah! yeah! i should jump a bridge tonight! leave this world, right? be strong for who, when i can be in pieces alone, amirite?- wait,,,,, don't you say that i don't have to stay strong all the time, right? why are you now regretting the words you say now? you say it, right? oh, now you are denying from ever saying it? then who should i take out using this gun?",
+                options: [],
+                endButtons: [
+                    { label: "Do Not Mess Up Again", action: "restart" }
+                ]
+            },
+
+            node_prqp: {
+                text: "ouh, why is that you want me to go past this stage? so you can get the whole story? then what? change the story base on your liking??? or- or maybe; you want to fuck my life with what i have said, huh? you know you picked the wrong path, right? you abso-fucking-lutely wrong. you were never here to help me. you just want the tea, right? just go away and never come back",
+                options: [],
+                endButtons: [
+                    { label: "Do Not Mess Up Again", action: "restart" }
+                ]
+            },
+
+            node_prqq: {
+                text: "ouh, so what if i am in denial or in daniel? you never fucking care about me. my cry for help and teh mask i put on everyday. it is so easy to say \"ouh, i did not notice\" or \"ouh, i don't want to disturb you at the wrong timing\" or \"ouh, you seems so unapproachable\"..... yeah, and what do you think i need the most? isolation? are you dumb? get out from here and never come back",
+                options: [],
+                endButtons: [
+                    { label: "Do Not Mess Up Again", action: "restart" }
+                ]
+            },
+
+            node_prqr: {
+                text: "ouh, so you want to bring me out from this stage? how tho? by force? by fucking around?<br><br>haha, i just want to mess with you a bit. i am long for a human interaction. but nonetheless, this stages feels like home, you know? although a bit, albeit; i live in my own imaginary world, you know? why think about the truth when you can deny and tell yourself everything will be fine?<br><br>and until the lies slips in, and the reality hit, we just mask our way in life.... don't we all?<br><br>if you really want to help me get out of this stage, maybe.... just keep in touch with me in the way i want. how to know? well you know what i don't like, right? seeing all the different timeline you have been and might have been through this arg, i can say you know what to do<br><br>just let me.... stay for a while. go. i will soon follow. but promise me to never come back here alone",
+                options: [],
+                endButtons: [
+                    { label: "Do Not Mess Up Again", action: "restart" },
+                    { label: "Next", action: "redirect", target: "stages/denial_is_a_river_in_egypt.html" }
+                ]
+            },
+
+            /* BRANCH Q */
+            node_q: {
+                text: "after my supervisor fuck my work good and twist his words to make him win the arguement, yeah, i am making RM### each month just to survive from another work i have. an you know what, my supervisor cut my salary in half and refuse to pay me the other half. RM!%))K, you know???? like, who else would give you such money? and now, he fake a document just like how he fake the other documents while i was working there",
+                options: [
+                    { pathLabel: "Option QP", text: "hey, at least you have a job", target: "node_qp" },
+                    { pathLabel: "Option QQ", text: "woah, what happened?", target: "node_qq" },
+                    { pathLabel: "Option QR", text: "he fake what now?", target: "node_qr" }
+                ]
+            },
+
+            node_qp: {
+                text: "haha right. yeah, at least i have a job. at least i can barely sustain myself, each month, far from home, and do not die. but what about the fucking money, huh? THE MONEY THAT I HAVE BEEN PROMISED? what about the money that i was promised and what about the energy i gave to them? is it all for free? no right? \"don't you ask for them about the money?\" DON'T YOU FUKCING THINK I DID NOT ASK? DON'T YOU THINK I DID NOT FIGHT FOR THE MONEY THAT I AM SUPPOSED TO GET? I HAVE FIGHT FOR THE MONEY RENTLESSLY. DAY AND NIGHT STRUGGLING AND THINKING HOW TO SAY IT IN THE POLITETESS FUCKING WAY. and what did i get on the end? THEY FUCKING TWIST THEIR WORDS AND BROKE THEIR FUCKING PROMISES",
+                options: [],
+                endButtons: [
+                    { label: "Do Not Mess Up Again", action: "restart" }
+                ]
+            },
+
+            node_qq: {
+                text: "why do you care? huh? why now do you care about what happen? why now? ouh, because i make an arg? and now you wanna know why? where are you when i need a help from another human? where are you when the silence of my online presence start to make waves? why are you care now? why?",
+                options: [
+                    { pathLabel: "Option QQP", text: "chill bro, i just trying to help", target: "node_qqp" },
+                    { pathLabel: "Option QQQ", text: "ok, you need to chill out for a second", target: "node_qqq" },
+                    { pathLabel: "Option QQR", text: "okay..... this is getting weird......", target: "node_qqr" }
+                ]
+            },
+
+            node_qqp: {
+                text: "you was never here to help me, didn't you?! all you want is the story for you to make fun of me and spill the tea to other people. you think you fucking know me. but you only know the fabricated lies i tell you in front of your fucking face. and you say you won't tell my stories to others and you won't judge me. but you sick fucked up mind spread the story like the story is yours. it is all you ever fucking do!!! you sick bastard",
+                options: [],
+                endButtons: [
+                    { label: "Do Not Mess Up Again", action: "restart" }
+                ]
+            },
+
+            node_qqq: {
+                text: "yeah, i am fucking chill dude. you come here. try to be the hero of the mess. but even you cannot pick the right options to this messed up story. you know you can fabricated a lie, right? then why the fuck i cannot fabricate what's mine? oh yeah, i forgot. you want to get all the story so that you can make a better version and sell it to other people. you sick bastard",
+                options: [],
+                endButtons: [
+                    { label: "Do Not Mess Up Again", action: "restart" }
+                ]
+            },
+
+            node_qqr: {
+                text: "ouh, it is getting weird, huh? is it? is it? fuck you then. all of this doesn't matter to you right? you sick bastard.",
+                cipher: "yzf qww owej paew gg ng ucuf mw yaco bcqf ipn tew fe zq bsmhikb. bld rol gm wm zmnzjny roluqsfx ogd zomk tvdq ohv avysiwl aeg lspwz ykot lh hvon ay. ab kc bld bn ulquoaag. ipu utn kdis sgct ljtua ajv min xzqw iejx aeg diwc whp bwsr firk ay. qww diifd yfx uohl bq rflh uuk zfsh eg usmefve ruc fystni eesyeellu, sgc powej vadh rc faavoo. wztt ulb mim lq? ipu vbd err qiem. cxe wzxn prs vysz k np af TRX, bmi vsavksdk vodh pihfqpq kukm tf jch nzm udpraxs sxr bynmt owej paew rc bwtr. pvcc hfw zghb stn ipuj lhzwdiwcmti",
+                options: [],
+                endButtons: [
+                    { label: "Do Not Mess Up Again", action: "restart" }
+                ]
+            },
+
+            node_qr: {
+                text: "ouh, if you want to know what they fake, you need to go backwards and restart. this is not the right ending. but what i can say is:",
+                cipher: "hylhg wyle bg iyry; glrg nyrg qcpgle iyjg zcpszyf; ryzgyr ks rgyn iyjg zcpqsy; ryyr bgpg glg zsyr ks rcpshy; kyfsiyl isbpyr is; zgypiyl bgpg glg bgfykzyks; ksleigl qyjyfis bgpgks is hsjyle; fgly yiqgks ryi bynyr bg sleiyn; jykyis rslees nclefshslelwy; kyfd ryi iys sleiyn; hylhg ryi iys imry, rclrs?; ryi, ryi iys ncbsjgiyl; ywyr rcpsq bgnsryp, qcbyle; pylyn zcjgiyris , rspsriyl kybyfks; rcpgky qcnclsf fyrg; aypgi kglbyis, fylwy slrsiks; ryi iyf grs xyjgk Lykylwy; kcjsrsr kylyegf, zcjyq hsey iyqgf; qcrgyn iyjg, qopwv; lwyry nybyis, ryi iyf glg asisn; bcleyl gfqyl ks, jcnyqiyl is; rcpngley rcpacleyle; rcpsjgir ickyq rgns bywyks; ksleigl kslydgiks zyiyj rcpqcpjyf; ksleigl bgpg glg rcjyfnsl qcbyp; iyl rgzy kyqylwy; qcksy icqyfgfyl zyiyj rcpbcbyf; lylrg zgjy ncpyfsks hysf kcjyhyi; hyleyl bgfykzsp ywyr lcqryny; jykyis rslees nclefshslelwy; kyfd ryi is bcleyp; hylhg iciyj hylhg rclrs?; ryi, ryiiyl is zgypiyl; iys bgyk kckzgqs, qcbyle; ecjceyi kglbyis , aszy dyfykiylks; ylrypy bsqry byl dyiry; aypgi isjgris, fylwy slrsiks; ryi iyf grs xyjgk Lykylwy; dyiry cleiys nsryp, hcjyq byl zcpqsjsf; kyqgf iys lydgiyl, qopwv; lwyry nybyis, ryi iyf glg asisn; bcleyl gfqyl ks, jcnyqiyl is ; jcnyqiyl is; is jcnyqiyl ks; hgiy iys jcnyqiyl is; jcnyqiyl is ; jykyis rslees nclefshslelwy; kyfd ryi is bcleyp; byl iys ryi iyl icqyj, rclrs?; ryi, ryi iys ncbsjgiyl; iys bgyk kckzgqs, qcbyle; pylyn zcjgiyris , aszy kcleeypynks; rcpgky qcnclsf fyrg; aypgi isjgris, fylwy slrsiks; ryi iyf grs xyjgk Lykylwy; kcjsrsr kylyegf, zcjyq hsey iyqgf; qcrgyn iyjg, zyzw; lwyry nybyis, ryi iyf glg asisn; bcleyl gfqyl ks, jcnyqiyl is",
+                options: [],
+                endButtons: [
+                    { label: "Do Not Mess Up Again", action: "restart" }
+                ]
+            },
+
+            /* BRANCH R */
+            node_r: {
+                text: "i want to lepak. i need to isi minyak. i need to pay for the rumah sewa. i need to pay my phone bill. i need to pay for my supplements. i need to take my ubat. i need to pay for my food. i need to pay taxes. i need to pay for my convo. i need to pay for my jubah. i need to pay for my life. i need to pay to live here. i need to give cash so i can continue living. i need money so i can safe myself. please help me please help me please help me please help me please help me please help me please help me please help me",
+                options: [],
+                endButtons: [
+                    { label: "Do Not Mess Up Again", action: "restart" }
+                ]
+            }
+        };
+
+        function appendNode(nodeKey) {
+            const node = storyData[nodeKey];
+            const storyLog = document.getElementById('story-log');
+
+            const card = document.createElement('div');
+            card.className = 'item-path';
+
+            const paragraph = document.createElement('p');
+            paragraph.innerHTML = node.text;
+            card.appendChild(paragraph);
+
+            if (node.cipher) {
+                const cipherDiv = document.createElement('div');
+                cipherDiv.className = 'cipher-block';
+                cipherDiv.innerText = node.cipher;
+                card.appendChild(cipherDiv);
+            }
+
+            const choiceContainer = document.createElement('div');
+            choiceContainer.className = 'choice-container';
+
+            if (node.options && node.options.length > 0) {
+                node.options.forEach(option => {
+                    const btn = document.createElement('button');
+                    btn.className = 'choice-btn';
+                    btn.innerText = `${option.pathLabel}: ${option.text}`;
+
+                    btn.onclick = () => {
+                        const siblingButtons = choiceContainer.querySelectorAll('.choice-btn');
+                        siblingButtons.forEach(b => b.disabled = true);
+
+                        btn.classList.add('chosen');
+                        btn.innerText = `[Chosen ${option.pathLabel}] ${option.text}`;
+
+                        appendNode(option.target);
+                    };
+
+                    choiceContainer.appendChild(btn);
+                });
+            } else {
+                const endActions = document.createElement('div');
+                endActions.className = 'end-actions';
+
+                const buttonsToRender = node.endButtons || [
+                    { label: "Do Not Mess Up Again", action: "restart" }
+                ];
+
+                ////the auto redirect part
+                let autoRedirectTimer;
+                const redirectDelay = 57000; // 57 seconds
+
+                // Auto-redirect based on action type
+                const restartBtn = buttonsToRender.find(btn => btn.action === "restart" || btn.action === "rewind");
+                if (restartBtn) {
+                    autoRedirectTimer = setTimeout(() => {
+                        if (restartBtn.action === "restart") {
+                            window.location.href = "passages/denialPassage4.html";
+                        } else if (restartBtn.action === "rewind") {
+                            storyLog.innerHTML = '';
+                            appendNode('landing');
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }
+                    }, redirectDelay);
+                }
+
+                buttonsToRender.forEach(btnConfig => {
+                    const btn = document.createElement('button');
+                    btn.className = 'end-btn';
+                    btn.innerText = btnConfig.label;
+
+                    btn.onclick = () => {
+                        // Clear auto-redirect timer when user clicks
+                        if (autoRedirectTimer) {
+                            clearTimeout(autoRedirectTimer);
+                        }
+
+                        if (btnConfig.action === "restart") {
+                            window.location.href = "passages/denialPassage4.html";
+                        } else if (btnConfig.action === "rewind") {
+                            storyLog.innerHTML = '';
+                            appendNode('landing');
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                        } else if (btnConfig.action === "redirect") {
+                            window.location.href = btnConfig.target;
+                        }
+                    };
+
+                    endActions.appendChild(btn);
+                });
+
+                ////maybe until here
+
+                choiceContainer.appendChild(endActions);
+            }
+
+            card.appendChild(choiceContainer);
+            storyLog.appendChild(card);
+
+            card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        appendNode('landing');
+    </script>
+
+</body>
+
+</html>

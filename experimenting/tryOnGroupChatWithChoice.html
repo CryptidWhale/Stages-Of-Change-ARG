@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D&D Live Chat Adventure</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #0f172a;
+      color: #f8fafc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .chat-container {
+      width: 100%;
+      max-width: 440px;
+      height: 650px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+    }
+
+    .chat-header {
+      background: #0f172a;
+      padding: 16px;
+      border-bottom: 1px solid #334155;
+      text-align: center;
+    }
+
+    .chat-header h2 {
+      font-size: 1.1rem;
+      color: #38bdf8;
+    }
+
+    .chat-header p {
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+
+    .chat-feed {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .chat-message {
+      display: flex;
+      flex-direction: column;
+      max-width: 80%;
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: translateY(10px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .chat-message.left { align-self: flex-start; }
+    .chat-message.right { align-self: flex-end; }
+
+    .sender-name {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin-bottom: 4px;
+      margin-left: 4px;
+    }
+
+    .bubble {
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .left .bubble {
+      background: #334155;
+      color: #f1f5f9;
+      border-bottom-left-radius: 2px;
+    }
+
+    .right .bubble {
+      background: #0284c7;
+      color: #ffffff;
+      border-bottom-right-radius: 2px;
+    }
+
+    /* Typing Indicator */
+    .typing-indicator {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 12px 16px;
+      background: #334155;
+      border-radius: 14px;
+      border-bottom-left-radius: 2px;
+      width: fit-content;
+    }
+
+    .typing-dot {
+      width: 6px;
+      height: 6px;
+      background: #94a3b8;
+      border-radius: 50%;
+      animation: bounce 1.4s infinite ease-in-out both;
+    }
+
+    .typing-dot:nth-child(1) { animation-delay: 0s; }
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0); }
+      40% { transform: scale(1); }
+    }
+
+    /* Interactive Choices Area */
+    .choice-area {
+      padding: 12px;
+      background: #0f172a;
+      border-top: 1px solid #334155;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .choice-btn {
+      background: #312e81;
+      color: #e0e7ff;
+      border: 1px solid #4338ca;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .choice-btn:hover {
+      background: #4338ca;
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="chat-container">
+    <div class="chat-header">
+      <h2>Dungeon Crawl Party ⚔️</h2>
+      <p id="status-text">Connected</p>
+    </div>
+
+    <div class="chat-feed" id="chat-feed"></div>
+
+    <div class="choice-area" id="choice-area">
+      <!-- Options dynamically populate here -->
+    </div>
+  </div>
+
+  <script>
+    // Story Tree with Chat Dialogues & Choices
+    const storyTree = {
+      start: {
+        messages: [
+          { sender: "Sarah (DM)", text: "Guys, your party is standing in front of a heavy stone door in the dungeon.", delay: 800, typing: 1200 },
+          { sender: "Alex (Rogue)", text: "I hear faint scraping sounds coming from behind it... 😳", delay: 1000, typing: 1500 },
+          { sender: "Sarah (DM)", text: "Iqbal, you're leading the march. What do we do?", delay: 1000, typing: 1200 }
+        ],
+        choices: [
+          { text: "Kick the door down!", target: "path_kick" },
+          { text: "Pick the lock stealthily", target: "path_stealth" }
+        ]
+      },
+
+      path_kick: {
+        messages: [
+          { sender: "Alex (Rogue)", text: "WHOA okay no subtlety at all! 🚪💥", delay: 800, typing: 1000 },
+          { sender: "Sarah (DM)", text: "The door bursts open! You surprise a room full of goblins!", delay: 1200, typing: 1500 },
+          { sender: "Sarah (DM)", text: "They grab their spears! What's your battle move?", delay: 1000, typing: 1200 }
+        ],
+        choices: [
+          { text: "Cast Fireball spell!", target: "end_fireball" },
+          { text: "Charge in with Greatsword!", target: "end_sword" }
+        ]
+      },
+
+      path_stealth: {
+        messages: [
+          { sender: "Alex (Rogue)", text: "Nice call. Let me get my thieves' tools out... 🗝️", delay: 800, typing: 1400 },
+          { sender: "Sarah (DM)", text: "Click! The door unlocks cleanly. Inside, you see a sleeping bugbear guarding a treasure chest.", delay: 1400, typing: 1800 }
+        ],
+        choices: [
+          { text: "Sneak past and grab chest", target: "end_sneak" },
+          { text: "Ambush the bugbear now", target: "end_ambush" }
+        ]
+      },
+
+      // Endings
+      end_fireball: {
+        messages: [
+          { sender: "Alex (Rogue)", text: "NO WAIT NOT FIREBALL IN A CLOSE— 🔥💥", delay: 600, typing: 1000 },
+          { sender: "Sarah (DM)", text: "🎉 **Ending 1/4:** You cleared the goblins... but singed everyone's eyebrows off. Pyrrhic Victory!", delay: 1200, typing: 1800 }
+        ],
+        choices: []
+      },
+      end_sword: {
+        messages: [
+          { sender: "Sarah (DM)", text: "🎉 **Ending 2/4:** You rally the team and defeat the goblins cleanly in martial combat. Victory!", delay: 1000, typing: 1500 }
+        ],
+        choices: []
+      },
+      end_sneak: {
+        messages: [
+          { sender: "Sarah (DM)", text: "🎉 **Ending 3/4:** Flawless execution! You pocket 500 gold coins without waking a single soul.", delay: 1000, typing: 1500 }
+        ],
+        choices: []
+      },
+      end_ambush: {
+        messages: [
+          { sender: "Sarah (DM)", text: "🎉 **Ending 4/4:** Surprise advantage! You defeat the bugbear before it can even stand up.", delay: 1000, typing: 1500 }
+        ],
+        choices: []
+      }
+    };
+
+    const chatFeed = document.getElementById('chat-feed');
+    const choiceArea = document.getElementById('choice-area');
+    const statusText = document.getElementById('status-text');
+
+    const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+    function showTypingIndicator(sender) {
+      const wrapper = document.createElement('div');
+      wrapper.id = 'active-typing';
+      wrapper.className = 'chat-message left';
+
+      const nameEl = document.createElement('div');
+      nameEl.className = 'sender-name';
+      nameEl.innerText = `${sender} is typing...`;
+      wrapper.appendChild(nameEl);
+
+      const indicator = document.createElement('div');
+      indicator.className = 'typing-indicator';
+      indicator.innerHTML = `
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+      `;
+      wrapper.appendChild(indicator);
+      chatFeed.appendChild(wrapper);
+      scrollToBottom();
+    }
+
+    function removeTypingIndicator() {
+      const activeTyping = document.getElementById('active-typing');
+      if (activeTyping) activeTyping.remove();
+    }
+
+    function appendMessage(sender, text, isUser = false) {
+      const msgDiv = document.createElement('div');
+      msgDiv.className = `chat-message ${isUser ? 'right' : 'left'}`;
+
+      if (!isUser) {
+        const nameEl = document.createElement('div');
+        nameEl.className = 'sender-name';
+        nameEl.innerText = sender;
+        msgDiv.appendChild(nameEl);
+      }
+
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+      bubble.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+      msgDiv.appendChild(bubble);
+      chatFeed.appendChild(msgDiv);
+      scrollToBottom();
+    }
+
+    function scrollToBottom() {
+      chatFeed.scrollTop = chatFeed.scrollHeight;
+    }
+
+    // Plays out a story node sequentially, then renders choices when done
+    async function playNode(nodeKey) {
+      const node = storyTree[nodeKey];
+      statusText.innerText = "Party is typing...";
+      choiceArea.innerHTML = ''; // Clear old buttons
+
+      for (const msg of node.messages) {
+        await wait(msg.delay);
+        showTypingIndicator(msg.sender);
+        await wait(msg.typing);
+        removeTypingIndicator();
+        appendMessage(msg.sender, msg.text, false);
+      }
+
+      // Check if choices exist for this node
+      if (node.choices && node.choices.length > 0) {
+        statusText.innerText = "Waiting for your choice...";
+        renderChoices(node.choices);
+      } else {
+        statusText.innerText = "Adventure Complete";
+        renderRestartButton();
+      }
+    }
+
+    function renderChoices(choices) {
+      choiceArea.innerHTML = '';
+      choices.forEach(choice => {
+        const btn = document.createElement('button');
+        btn.className = 'choice-btn';
+        btn.innerText = choice.text;
+
+        btn.onclick = () => {
+          // Send choice as user's response in chat
+          appendMessage(" You", choice.text, true);
+          choiceArea.innerHTML = ''; // Hide buttons while processing next scene
+          playNode(choice.target);
+        };
+
+        choiceArea.appendChild(btn);
+      });
+      scrollToBottom();
+    }
+
+    function renderRestartButton() {
+      const btn = document.createElement('button');
+      btn.className = 'choice-btn';
+      btn.style.background = '#991b1b';
+      btn.style.borderColor = '#dc2626';
+      btn.innerText = "🔄 Restart Campaign";
+      btn.onclick = () => {
+        chatFeed.innerHTML = '';
+        playNode('start');
+      };
+      choiceArea.appendChild(btn);
+    }
+
+    // Kick off campaign
+    playNode('start');
+  </script>
+
+</body>
+</html>

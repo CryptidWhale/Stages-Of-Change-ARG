@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Your Own Path - Chapter 2</title>
+    <base href="../">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Cutive+Mono&family=Handjet:wght,ELSH@100..900,2&family=Raleway:ital,wght@0,100..900;1,100..900&family=Redacted+Script:wght@300;400;700&family=Share+Tech&family=Special+Elite&family=Syne+Mono&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="assets/socarg.css">
+
+</head>
+
+<body class="body-path">
+
+    <div class="cont-path" id="story-log"></div>
+
+    <script>
+        const storyData = {
+            landing: {
+                text: "i am asleep right now, thinking.... maybe i should stay here. oh, hi hello there. again. i guess. well, the darkness is nice. the warmth is.... something..... wait, won't you look at that! that is me; doing..... something...... wait, i have a shovel?... .wait that doesn't seem right. what will i do next?",
+                options: [
+                    { pathLabel: "Option h", text: "start digging", target: "node_h" },
+                    { pathLabel: "Option i", text: "drop the shovel", target: "node_i" },
+                    { pathLabel: "Option j", text: "whack something", target: "node_j" },
+                    { pathLabel: "Option k", text: "start burying", target: "node_k" }
+                ]
+            },
+
+            /* BRANCH H */
+            node_h: {
+                text: "okay.... so i start digging. we dig, we dig, we dig, we dig, we dig, we dig, we dig. ouh, look, i guees it is 7 feet under now. what should we do next? well, i can barely get out from here.... let me try to jump out of here",
+                options: [
+                    { pathLabel: "Option hh", text: "wait, don't jump!", target: "node_hh" },
+                    { pathLabel: "Option hi", text: "slowly tho!", target: "node_hi" },
+                    { pathLabel: "Option hj", text: "look, a worm!", target: "node_hj" }
+                ]
+            },
+
+            node_hh: {
+                text: "what the worst can happ-<br><br>the person that try to jump did not manage to survive. he broke his ankle like how his supervisor broke his part of the promise. haha. too shame.<br><br>you. you survive. go on. don't stay here. LEAVE",
+                options: [],
+                endButtons: [
+                    { label: "Go Back", action: "rewind" }
+                ]
+            },
+
+            node_hi: {
+                text: "okay, if you say so.... here i go!-<br><br>well, i cannot reach the top tho. too high for me. well, we are now officially stuck here.<br><br>at least there is mr wormy here. wiggling around. maybe this is his place.<br><br>.... with nothing else to do, let's lay down. i will ask mr wormy if i can lay down",
+                options: [
+                    { pathLabel: "Option hih", text: "you cannot lay down here!", target: "node_hih" },
+                    { pathLabel: "Option hii", text: "hey, mr wormy, can i lay down?", target: "node_hii" }
+                ]
+            },
+
+            node_hj: {
+                text: "huh? a worm?- ouh hey, look, it is mr wormy!!! he is my friend. yeah. i know him somewhere, but i forgot where we actually meet tho.... well, with nothing to do and jumping lead us to nowhere, why not lay down. i will ask mr wormy if i can lay down",
+                options: [
+                    { pathLabel: "Option hjh", text: "hey, mr wormy, can i lay down?", target: "node_hjh" },
+                    { pathLabel: "Option hji", text: "you cannot lay- wait.... we've been here before", target: "node_hji" }
+                ]
+            },
+
+            node_hih: {
+                text: "bla bla bla. tell me don't do this and tell me don't do that. but never help me overcome my struggles. and with you being here, i can surely tell, you want the tea just to spread it like wild fire. just, fuck off already and find another path",
+                cipher: "rhn ltr rhn ptgm mh axei fx. unm axkx px tkx! rhn whg'm dghp patm mh ibvd tgw mabl tkz bl zhbgz gh paxkx!!!",
+                options: [],
+                endButtons: [
+                    { label: "Go Back", action: "rewind" }
+                ]
+            },
+
+            node_hii: {
+                text: "ouh, you say i can lay down here?! oh thanks you mr wormy! you don't say much but you do understand what i try to say! not like my supervisor's words and the way he twist and turn his words. trying to remember it bring me shivers along my boner. well, we will meet again in a different path. i will take my nap here.",
+                options: [],
+                endButtons: [
+                    { label: "Go Back", action: "rewind" }
+                ]
+            },
+
+            node_hjh: {
+                text: "ouh, you say i can lay down here?! oh thanks you so much mr wormy! you don't say much but you do understand what i try to say! not like my supervisor's words and the way he twist and turn his words. trying to remember it bring me shivers along my boner.<br><br>huh? you want to know what he says? well, i can give you some notes on what he do. but, until we will meet again in a different path, i will take my nap here.<br><br>ouh, sorry. click here:<br><a href='https://telegra.ph/points-for-supervisor-08-31' target='_blank' class='external-link'>https://telegra.ph/points-for-supervisor-08-31</a>",
+                options: [],
+                endButtons: [
+                    { label: "Go Back", action: "rewind" }
+                ]
+            },
+
+            node_hji: {
+                text: "ha ha ha. well, you muster up quite the courage to find me here. come. lay down with me and just, sleep until we got to the next part of this arg. i know it have been a heck of some paths. but when in doubt, just sleep. i guess.",
+                options: [],
+                endButtons: [
+                    { label: "Go Back", action: "rewind" },
+                    { label: "Next", action: "redirect", target: "passages/denialPassage4.html" }
+                ]
+                /* btw, this is a fakeout */
+            },
+
+            /* BRANCH I */
+            node_i: {
+                text: "why do i bring a shovel when i just drop it there??? ouh.... i have done the digging. let me take a closer look at that..... oh, i see something in the hole i dug out, wait, what is that- OH MY GOD WHAT IS THAT????",
+                options: [
+                    { pathLabel: "Option ih", text: "IT IS YOU?!", target: "node_ih" },
+                    { pathLabel: "Option ii", text: "IT IS SOMEONE!?", target: "node_ii" },
+                    { pathLabel: "Option ij", text: "there is actually nothing - ", target: "node_ij" }
+                ]
+            },
+
+            node_ih: {
+                text: "ouh yeah, i forgot i actually burry myself here. well, he looks happy tho. haha. the good old times..... back when i was..... back when i....... back when.......",
+                options: [
+                    { pathLabel: "Option ihh", text: "back when what?.....", target: "node_ihh" },
+                    { pathLabel: "Option ihi", text: "...you were stable?....", target: "node_ihi" }
+                ]
+            },
+
+            node_ii: {
+                text: "THE FUCK ??? CAN'T YOU SEE THAT IS ME?! damn bro. i was just look different now because of depression and some life changes. and now you don't know me.... fuck you i guess. what kind of friend are you?!",
+                options: [
+                    { pathLabel: "Option iih", text: "don't be harsh, dude!", target: "node_iih" },
+                    { pathLabel: "Option iii", text: "the one that try to help!", target: "node_iii" }
+                ]
+            },
+
+            node_ij: {
+                text: "ouh yeah.... strange isn't it? ....... well, i guess better luck next time. maybe you find me in there. or maybe you find something else in there. or maybe, just maybe, you will find the podcast you really want to hear to. almost 2 hours tho. so, enjoy!!!<br><br>and then, the world becomes dark",
+                options: [],
+                endButtons: [
+                    { label: "Go Back", action: "rewind" }
+                ]
+            },
+
+            node_ihh: {
+                text: "back when i was..... no, no, no. i can't go back there.... i was in pain. i was alone. i was...... i was...... super spontaneous!!! like, oh my god, can't you believe i have change so much since then? whaatttt???? you did not notice??? BOINK! well now maybe you can see better after i hit you with this shovel! oh oh! it seems like you are in an unconcious state! oh well, maybe you will remember me the next time we meet. bye bye!!!!",
+                options: [],
+                endButtons: [
+                    { label: "Go Back", action: "rewind" }
+                ]
+            },
+
+            node_ihi: {
+                text: "yeah. when i was stable... well, fuck that! let me make you stable!!! by make your center of gravity really close to the ground. BOINK!!!! and what do you know?! just like that! i have make you stable! just like the person we talked about? now! time to bury you!!! what?! you scared? don't worry! the version of me that is dead will always keep you company just like how you never come to me and get an update on me! well, see you soon! byeeeeeeeee",
+                options: [],
+                endButtons: [
+                    { label: "Go Back", action: "rewind" },
+                    { label: "Next", action: "redirect", target: "passages/denialPassage4.html" }
+                ]
+            },
+
+            node_iih: {
+                text: "ouh, ouh?! now i am harsh?! so you neglecting me is not harsh? you leaving me alone is not harsh?! you did not know what type of shit i need to face JUST TO BE THIS GENTLE. fuck off and fuck this. i don't want to be the reason you are fucked like me. LEAVE! DON'T EVEN TRY TO REATTEMPT OR ANYTHING IF YOU DON'T WANT ME TO BE FUCKING HARSH WITH YOU!!!!",
+                options: [],
+                endButtons: [
+                    { label: "Go Back", action: "restart" }
+                ]
+            },
+
+            node_iii: {
+                text: "ouh..... so you do try to help...... but where are you when i need you the most?.........",
+                options: [
+                    { pathLabel: "Option iiih", text: "i- i- i- i-.......", target: "node_iiih" },
+                    { pathLabel: "Option iiii", text: "i don't know how to help....", target: "node_iiii" }
+                ]
+            },
+
+            node_iiih: {
+                text: "breath again, let's do this one more time",
+                options: [],
+                endButtons: [
+                    { label: "Go Back", action: "rewind" }
+                ]
+            },
+
+            node_iiii: {
+                text: "haha. me too..... i try to talk to poeple but i am afraid to make their days worse just becase of me. so i just went silent so people notice...... and now i just.... broken and alone, i guess...... yeah, you are on the right path buddy. go to the next part. thanks for at least have a concern. and sorry for the times i have or i might be harsh to you..... i will follow you soon to the other side.....",
+                options: [],
+                endButtons: [
+                    { label: "Go Back", action: "rewind" },
+                    { label: "Next", action: "redirect", target: "passages/denialPassage4.html" }
+                ]
+            },
+
+            /* BRANCH J */
+            node_j: {
+                text: "BOINK!!! oh now the thing is dead. well, gonna bury it now. ouh, what is that you ask?.... huh..... i don't know. let's take a closer look, shall we?",
+                options: [
+                    { pathLabel: "Option jh", text: "Who is this man?", target: "node_jh" },
+                    { pathLabel: "Option ji", text: "IS THAT YOU?", target: "node_ji" },
+                    { pathLabel: "Option jj", text: "why is it glitching?", target: "node_jj" }
+                ]
+            },
+
+            node_jh: {
+                text: "well, from the looks of it, he looks.... happy? and maybe a little fat here and there. ouh, look at the mark on his forearm! it looks identical to- ...mine.",
+                options: [
+                    { pathLabel: "Option jhh", text: "w-what did you do to yourself?!", target: "node_jhh" },
+                    { pathLabel: "Option jhi", text: "so this is y-you?....", target: "node_jhi" }
+                ]
+            },
+
+            node_ji: {
+                text: "well, not my first time try to kill myself. look at this marks on my forearm. see? this is what i tell people my battle scar! while indeed they are my 1-20-20-5-13-16-20-19. well, long story short, this is not my first rodeo.",
+                options: [
+                    { pathLabel: "Option jih", text: "1, 20, 20.... what are you saying????", target: "node_jih" },
+                    { pathLabel: "Option jii", text: "what we gonna do with the body now?", target: "node_jii" }
+                ]
+            },
+
+            node_jj: {
+                text: "well, maybe, if you don't let me alone, this won't happen again....",
+                cipher: "23-8-25 4-15 25-15-21 12-5-1-22-5 13-5??? 23-8-25??? 23-8-25 4-15 25-15-21 9-7-14-15-18-5 13-25 19-9-12-5-14-3-5-19 1-14-4 9-7-14-15-18-5 13-25 13-1-19-11-9-14-7??!!! 9 4-9-4 14-15-20 1-19-11 25-15-21 20-15 1-12-23-1-25-19 2-5 20-8-5-18-5! 9 15-14-12-25 5-22-5-18 23-1-14-20-5-4 19-15-13-5-15-14-5 20-15 3-8-5-3-11 9-14 1-14-4 14-15-20-9-3-5 20-8-1-20 9 1-13 8-21-18-20-9-14-7. 15-21-8, 6-21-3-11 25-15-21 1-14-4 25-15-21-18 14-1-18-3-9-19-19-9-19-20 19-20-1-20-5-13-5-14-20.",
+                options: [],
+                endButtons: [
+                    { label: "Go Back", action: "restart" }
+                ]
+            },
+
+            node_jhh: {
+                text: "haha. funny story.... try to take myself to seek god but hey, my other personas try to held me back. so, whomp whomp. i am here. but with that said...... LET ME STRAGGLE YOU SO YOU DON'T KNOW WHAT I HAVE DONE HAHAHAHAHHAHAHAHAHAH",
+                options: [],
+                endButtons: [
+                    { label: "Go Back", action: "rewind" }
+                ]
+            },
+
+            node_jhi: {
+                text: "nah!!! maybe he is from somewhere else. you know? different timeline and stuff. and might i want to remind you, we are in a dream. anything can be farbicated here! look at him; he is happy! and look at me; i am depressed! and heck, i am wearing a mask",
+                options: [
+                    { pathLabel: "Option jhih", text: "why do you wear a mask?", target: "node_jhih" }
+                ]
+            },
+
+            node_jhih: {
+                text: "ouh, i wear a mask because i like it!!! like, it suits me so well, and my blemishes- OH MY BLEMISHES! would not be seen by others! you need to be a perfect prince nowadays! or otherwise, you will be in the messed up section!!!! oh no!!! we don't want to go there!!! nuh uh!!!!<br><br>and hey, why not you go to the other part of the arg, yeah?! yeah!!!!! ok toodaloooooo",
+                options: [],
+                endButtons: [
+                    { label: "Go Back", action: "rewind" },
+                    { label: "Next", action: "redirect", target: "passages/denialPassage4.html" }
+                ]
+            },
+
+            node_jih: {
+                text: "hahahahahha HaHaHaHaHaHaHaHaHa HAHAHAHHAHAHAHAHAHHA",
+                cipher: "25-15-21 1-18-5 18-5-1-12-12-25 6-21-14-14-25, 25-15-21 11-14-15-23 20-8-1-20? 25-15-21 23-1-14-20 20-8-5 20-5-1 6-1-19-20 1-14-4 2-15-9-12-9-14-7. 2-21-20 25-15-21 4-15-14'20 23-1-14-20 20-15 4-15 20-8-5 10-15-2. 8-1 8-1 8-1. 14-15-23, 7-15 2-1-3-11, 1-14-4 13-1-25-2-5 6-9-14-4 1 16-1-20-8 20-8-1-20 25-15-21 1-3-20-21-1-12-12-25 21-14-4-5-18-19-20-1-14-4",
+                options: [],
+                endButtons: [
+                    { label: "Go Back", action: "rewind" }
+                ]
+            },
+
+            node_jii: {
+                text: "well, i don't know..... you guys left me unchecked. and yet, here i am. so let this one left unchecked. maybe the other path have better solution to this",
+                options: [],
+                endButtons: [
+                    { label: "Go Back", action: "rewind" }
+                ]
+            },
+
+            /* BRANCH K */
+            node_k: {
+                text: "ok.... weirdly the dirt we dug up start to come here naturally..... well, that is fine. we just burry this guy. ok, put dirt, put dirt, put dirt, put dirt, put dirt, hey, look at that! we have 2 more feet left to cover. we really do a job well done",
+                options: [
+                    { pathLabel: "Option kh", text: "hooray!", target: "node_kh" },
+                    { pathLabel: "Option ki", text: "keep on piling!", target: "node_ki" },
+                    { pathLabel: "Option kj", text: "hey, respect the dead!", target: "node_kj" }
+                ]
+            },
+
+            node_kh: {
+                text: "hooray!!! oh my god, let's do this again!!! this is so much fun. maybe we can uncover more mystery and codes when we dug up more!!!",
+                options: [
+                    { pathLabel: "Option khh", text: "what code?", target: "node_khh" },
+                    { pathLabel: "Option khi", text: "what is code?", target: "node_khi" }
+                ]
+            },
+
+            node_ki: {
+                text: "woah, woah, woah there champ! admire the enthusiasm but, you cannot bury this guy like i bury my hopes and dreams whilst my internship. haha. funny story, right? oh well, you can just keep on dreaming you will be peaceful just like this guy..... just like this..... just like....",
+                options: [
+                    { pathLabel: "Option kih", text: "haha, i will beat you to it!!", target: "node_kih" },
+                    { pathLabel: "Option kii", text: "what is, your hopes and dreams?", target: "node_kii" }
+                ]
+            },
+
+            node_kj: {
+                text: "ouh? you want to respect the death, huh? okay, then fucking respect me! because the one we burry is me and my dream! don't you notice that i have changed and the past version of me is dead? CAN'T YOU FUCKING SEE?!!",
+                cipher: "yjj rfgq rgkc, g rpw rm apw msr rfyr g lccb fcjn; lm mlc ylqucpcb. ylb rfcl g bm lmr pcyaf msr ylb jcr rfc qgjclac kyic rfc qfmsr; wms qyw g fytc fgbc gr ml nspnmqc! bml'r wms qcc g rpw qm fypb rm ecr fcjn?!! G RPGCB, MIYW???!!! ylb wms ilmu ufyr rfc kmqr nygldsj nypr md rfgq yjj gq; g yk rfc bskz mlc ylqucpcb ylb aysqgle yjj rfgq nygl rm kwqcjd....",
+                options: [],
+                endButtons: [
+                    { label: "Go Back", action: "rewind" }
+                ]
+            },
+
+            node_khh: {
+                text: "23-5-12-12, 25-15-21 11-14-15-23???? 3-15-4-5-19. 12-9-11-5 3-5-1-19-5-18 3-9-16-8-5-18, 20-8-5 22-9-14-5-7-18-5-20-5 15-14-5.... 9 6-15-18-7-15-20 20-8-5 14-1-13-5. 20-8-9-19 15-14-5. 20-8-5 15-14-5 3-1-12-12-5-4.... 16-5-14 3-15-4-5? 23-9-20-8 20-8-15-19-5 23-5-9-18-4 19-25-13-2-15-12-19 15-14 9-20? 25-5-1-8, 20-8-1-20 15-14-5. 23-5-12-12, 8-15-16-5 25-15-21 6-9-14-4 19-15-13-5 13-15-18-5 3-15-4-5-19 1-12-15-14-7 20-8-5 23-1-25",
+                options: [],
+                endButtons: [
+                    { label: "Go Back", action: "rewind" }
+                ]
+            },
+
+            node_khi: {
+                text: "you know like, ceaser cipher, a1z26, the vinegrete one.... i forgot the name. basically, it is still language but in a way that is ciphered....<br><br>ok, like, if the author directly say to shift left or right, that might be a ceaser. no, not the salad, you hungry hippo!<br><br>but if the author did not put direct hints, maybe he put direct hints like the ground being 0 shift and how many feet deep is how many shift 'down' you should do. or maybe negative. or maybe the other way around.... potato potato. want to try this again?",
+                options: [],
+                endButtons: [
+                    { label: "Go Back", action: "rewind" }
+                ]
+            },
+
+            node_kih: {
+                text: "no, fuck off. no one can be better than me. NO ONE! NOT EVEN YOU AT BURYING ME UNDERGROUND.",
+                cipher: "BML'R WMS RFGLI G UMSJB JCR NCMNJC BM RFGQ RM KC?! LM!!! DSAI MDD YLB KMTC ML UGRF WMSP JGDC!!! DSAI WMS!!!!",
+                options: [],
+                endButtons: [
+                    { label: "Go Back", action: "rewind" }
+                ]
+            },
+
+            node_kii: {
+                text: "ouh, you know! the nerdy stuff! building code, create your own website, create your own AI, create your own language and write in cipher so no one could understand,,, yeah.... that stuff......<br><br>hey..... hey maybe you should just go. sorry for being a fuckass and tell you vulnerable random things to you. yeah....... sorry about that............",
+                options: [],
+                endButtons: [
+                    { label: "Go Back", action: "restart" }
+                ]
+            }
+        };
+
+        function appendNode(nodeKey) {
+            const node = storyData[nodeKey];
+            const storyLog = document.getElementById('story-log');
+
+            const card = document.createElement('div');
+            card.className = 'item-path';
+
+            const paragraph = document.createElement('p');
+            paragraph.innerHTML = node.text;
+            card.appendChild(paragraph);
+
+            if (node.cipher) {
+                const cipherDiv = document.createElement('div');
+                cipherDiv.className = 'cipher-block';
+                cipherDiv.innerText = node.cipher;
+                card.appendChild(cipherDiv);
+            }
+
+            const choiceContainer = document.createElement('div');
+            choiceContainer.className = 'choice-container';
+
+            if (node.options && node.options.length > 0) {
+                node.options.forEach(option => {
+                    const btn = document.createElement('button');
+                    btn.className = 'choice-btn';
+                    btn.innerText = `${option.pathLabel}: ${option.text}`;
+
+                    btn.onclick = () => {
+                        const siblingButtons = choiceContainer.querySelectorAll('.choice-btn');
+                        siblingButtons.forEach(b => b.disabled = true);
+
+                        btn.classList.add('chosen');
+                        btn.innerText = `[Chosen ${option.pathLabel}] ${option.text}`;
+
+                        appendNode(option.target);
+                    };
+
+                    choiceContainer.appendChild(btn);
+                });
+            } else {
+                const endActions = document.createElement('div');
+                endActions.className = 'end-actions';
+
+                const buttonsToRender = node.endButtons || [
+                    { label: "Go Back", action: "restart" }
+                ];
+
+                ////the auto redirect part
+                let autoRedirectTimer;
+                const redirectDelay = 33000; // 33 seconds
+
+                // Auto-redirect based on action type
+                const restartBtn = buttonsToRender.find(btn => btn.action === "restart" || btn.action === "rewind");
+                if (restartBtn) {
+                    autoRedirectTimer = setTimeout(() => {
+                        if (restartBtn.action === "restart") {
+                            window.location.href = "passages/denialPassage.html";
+                        } else if (restartBtn.action === "rewind") {
+                            storyLog.innerHTML = '';
+                            appendNode('landing');
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }
+                    }, redirectDelay);
+                }
+
+                buttonsToRender.forEach(btnConfig => {
+                    const btn = document.createElement('button');
+                    btn.className = 'end-btn';
+                    btn.innerText = btnConfig.label;
+
+                    btn.onclick = () => {
+                        // Clear auto-redirect timer when user clicks
+                        if (autoRedirectTimer) {
+                            clearTimeout(autoRedirectTimer);
+                        }
+
+                        if (btnConfig.action === "restart") {
+                            window.location.href = "passages/denialPassage.html";
+                        } else if (btnConfig.action === "rewind") {
+                            storyLog.innerHTML = '';
+                            appendNode('landing');
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                        } else if (btnConfig.action === "redirect") {
+                            window.location.href = btnConfig.target;
+                        }
+                    };
+
+                    endActions.appendChild(btn);
+                });
+
+                ////maybe until here
+
+                choiceContainer.appendChild(endActions);
+            }
+
+            card.appendChild(choiceContainer);
+            storyLog.appendChild(card);
+
+            card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        appendNode('landing');
+    </script>
+
+</body>
+
+</html>
