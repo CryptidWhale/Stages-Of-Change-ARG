@@ -18,6 +18,10 @@ body {
   padding-top: 20px;
 }
 
+body, .anger{
+  background: #1f0000;
+}
+
 .header-container {
   text-align: center;
   width: 100%;

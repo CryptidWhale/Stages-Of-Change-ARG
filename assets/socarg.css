@@ -680,3 +680,51 @@
     color: #000;
     box-shadow: 0 0 10px rgba(255, 51, 51, 0.6);
 }
+
+.pdf-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.pdfButton {
+    background: transparent;
+    border: 1px solid #ff3333;
+    color: #ff3333;
+    padding: 10px 24px;
+    cursor: pointer;
+    font-family: inherit;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.2s ease;
+}
+
+.pdfButton:hover {
+    background-color: #ff3333;
+    color: #000;
+    box-shadow: 0 0 10px rgba(255, 51, 51, 0.6);
+}
+
+
+.image-container {
+    width:50vh;
+    display: flex;
+    margin: 0 auto; /* <--- THIS CENTERS THE CONTAINER HORIZONTALLY */
+    justify-content: center;
+    /* Centers horizontally */
+    align-items: center;
+    /* Centers vertically */
+    padding: 5px;
+    /* Adds space around the container */
+    box-sizing: border-box;
+    /* Includes padding in width/height */
+}
+
+.image-container img {
+    max-width: 100%;
+    /* Scales down on mobile screens */
+    height: auto;
+    /* Keeps image proportions correct */
+    display: block;
+}

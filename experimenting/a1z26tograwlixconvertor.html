@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Top-Row A1Z26 Cipher Tool (Literal Escape Version)</title>
+    <style>
+        body {
+            font-family: monospace;
+            background-color: #121212;
+            color: #00ff66;
+            padding: 30px;
+            max-width: 650px;
+            margin: auto;
+        }
+        h2 { text-align: center; color: #ffffff; }
+        textarea {
+            width: 100%;
+            height: 120px;
+            background-color: #1e1e1e;
+            color: #00ff66;
+            border: 1px solid #00ff66;
+            padding: 10px;
+            box-sizing: border-box;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        button {
+            background-color: #00ff66;
+            color: #121212;
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        button:hover { background-color: #00cc52; }
+        .note {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Top-Row A1Z26 Cipher Tool</h2>
+    <p class="note">Letters (A-Z) convert to symbols. Punctuation & symbols are automatically escaped in single quotes (e.g. <code>'?'</code>).</p>
+
+    <label>Input Text / Cipher:</label>
+    <textarea id="inputText" placeholder="Type text or cipher here..."></textarea>
+
+    <button onclick="runEncode()">Encode to Cipher</button>
+    <button onclick="runDecode()">Decode Cipher</button>
+
+    <h3 style="color:#fff; margin-top: 25px;">Result:</h3>
+    <textarea id="outputText" readonly></textarea>
+
+    <script>
+        const mapDigit = [')', '!', '@', '#', '$', '%', '^', '&', '*', '('];
+        const mapSym = { ')': 0, '!': 1, '@': 2, '#': 3, '$': 4, '%': 5, '^': 6, '&': 7, '*': 8, '(': 9 };
+
+        function runEncode() {
+            let text = document.getElementById('inputText').value.toUpperCase();
+            let words = text.split(/\s+/);
+            let result = [];
+
+            for (let word of words) {
+                if (!word) continue;
+                let cipherWord = [];
+
+                for (let char of word) {
+                    if (char >= 'A' && char <= 'Z') {
+                        // Convert letter A-Z -> A1Z26 -> top-row symbols
+                        let code = (char.charCodeAt(0) - 64).toString();
+                        let symStr = "";
+                        for (let digit of code) {
+                            symStr += mapDigit[parseInt(digit)];
+                        }
+                        cipherWord.push(symStr);
+                    } else {
+                        // Punctuation / literal symbol escape
+                        cipherWord.push(`'${char}'`);
+                    }
+                }
+
+                if (cipherWord.length > 0) {
+                    result.push(cipherWord.join("-"));
+                }
+            }
+            document.getElementById('outputText').value = result.join(" / ");
+        }
+
+        function runDecode() {
+            let cipher = document.getElementById('inputText').value.trim();
+            let words = cipher.split(" / ");
+            let resultText = [];
+
+            for (let word of words) {
+                let letters = word.split("-");
+                let decodedWord = "";
+
+                for (let letter of letters) {
+                    let trimmed = letter.trim();
+                    if (!trimmed) continue;
+
+                    // Check if token is an escaped literal (e.g. '?' or '!')
+                    if (trimmed.startsWith("'") && trimmed.endsWith("'") && trimmed.length >= 2) {
+                        decodedWord += trimmed.substring(1, trimmed.length - 1);
+                    } else {
+                        // Otherwise, parse as A1Z26 top-row cipher
+                        let numStr = "";
+                        for (let sym of trimmed) {
+                            if (mapSym[sym] !== undefined) {
+                                numStr += mapSym[sym];
+                            }
+                        }
+                        if (numStr.length > 0) {
+                            let num = parseInt(numStr);
+                            if (num >= 1 && num <= 26) {
+                                decodedWord += String.fromCharCode(64 + num);
+                            }
+                        }
+                    }
+                }
+                resultText.push(decodedWord);
+            }
+            document.getElementById('outputText').value = resultText.join(" ");
+        }
+    </script>
+</body>
+</html>
