@@ -728,3 +728,33 @@
     /* Keeps image proportions correct */
     display: block;
 }
+
+.justButton-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.justButton {
+    background: transparent;
+    border: 1px solid white;
+    color: white;
+    padding: 10px 24px;
+    cursor: pointer;
+    font-family: inherit;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.justButton:hover {
+    background-color: whitesmoke;
+    color: #000;
+}
+
+a:link, a:visited, a:hover, a:active {
+    text-decoration: none;
+    color: inherit;
+}

@@ -1,10 +1,10 @@
 const stages = [
     { name: "SHOCK", color: "#F4F6F9", circleUrl: "stage1-circle.html", enterUrl: "stage1-enter.html" },
     { name: "DENIAL", color: "#643200", circleUrl: "index.html", enterUrl: "index.html" },
-    { name: "ANGER", color: "#C11C19", circleUrl: "#", enterUrl: "#" },
-    { name: "DEPRESSION", color: "#4A5568", circleUrl: "#", enterUrl: "#" },
-    { name: "IBTIVMQIRX", color: "#81C784", circleUrl: "error_pages/shockSkipError.html", enterUrl: "#" },
-    { name: "IJHNXNTS", color: "#ffc846", circleUrl: "error_pages/shockSkipError.html", enterUrl: "#" },
+    { name: "ANGER", color: "#C11C19", circleUrl: "index.html", enterUrl: "error_pages/shockSkipError.html" },
+    { name: "DEPRESSION", color: "#4A5568", circleUrl: "error_pages/shockSkipError.html", enterUrl: "index.html" },
+    { name: "IBTIVMQIRX", color: "#81C784", circleUrl: "error_pages/shockSkipError.html", enterUrl: "index.html" },
+    { name: "IJHNXNTS", color: "#ffc846", circleUrl: "error_pages/shockSkipError.html", enterUrl: "index.html" },
     { name: "OTZKMXGZOUT", color: "#0080FF", circleUrl: "error_pages/shockSkipError.html", enterUrl: "error_pages/shockSkipError.html" }
 ];
 

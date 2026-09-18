@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <base href="../">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Cutive+Mono&family=Handjet:wght,ELSH@100..900,2&family=Raleway:ital,wght@0,100..900;1,100..900&family=Redacted+Script:wght@300;400;700&family=Share+Tech&family=Special+Elite&family=Syne+Mono&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="album/album.css">
+    <title>the forbidden album</title>
+</head>
+
+<body>
+    <div class="content-container">
+        <div class="text-code-panel page-panel pixel-art-border">
+            did you found anything interesting?
+            <br><br>
+            or you too lazy to scan?
+            <br>
+
+            <div class="carousel-container">
+                <button class="carousel-nav-btn btn-prev" onclick="moveCarousel(-1)">&#10094;</button>
+                <button class="carousel-nav-btn btn-next" onclick="moveCarousel(1)">&#10095;</button>
+
+                <div class="carousel-track" id="imageTrack">
+                    <div class="carousel-slide"><img src="album2/1.jpg" alt="Image 1"></div>
+                    <div class="carousel-slide"><img src="album2/2.jpg" alt="Image 2"></div>
+                    <div class="carousel-slide"><img src="album2/3.jpeg" alt="Image 3"></div>
+                    <div class="carousel-slide"><img src="album2/4.jpg" alt="Image 4"></div>
+                    <div class="carousel-slide"><img src="album2/5.jpg" alt="Image 5"></div>
+                    <div class="carousel-slide"><img src="album2/6.jpg" alt="Image 6"></div>
+                    <div class="carousel-slide"><img src="album2/7.jpg" alt="Image 7"></div>
+                    <div class="carousel-slide"><img src="album2/8.jpeg" alt="Image 8"></div>
+                    <div class="carousel-slide"><img src="album2/9.jpeg" alt="Image 9"></div>
+                </div>
+            </div>
+
+            <br>
+            <button id="nextPageButton" class="btn" onclick="window.location.href='stages/would_you_help_me.html'">just type "maybe"</button>
+        </div>
+    </div>
+
+    <script>
+        const track = document.getElementById('imageTrack');
+        const originalSlides = Array.from(track.children);
+        const totalOriginal = originalSlides.length;
+
+        // 1. Clone first and last slides for seamless infinite loop
+        const firstClone = originalSlides[0].cloneNode(true);
+        const lastClone = originalSlides[totalOriginal - 1].cloneNode(true);
+
+        firstClone.id = 'first-clone';
+        lastClone.id = 'last-clone';
+
+        track.appendChild(firstClone);
+        track.insertBefore(lastClone, originalSlides[0]);
+
+        const allSlides = Array.from(track.children);
+
+        let currentIndex = 1;
+        let isTransitioning = false;
+        let autoPlayTimer;
+
+        // 2. FIX: Disable transition during initial placement & force browser reflow
+        track.style.transition = 'none';
+        track.style.transform = `translateX(-${currentIndex * 100}%)`;
+        void track.offsetWidth; // Forces the browser to apply placement instantly without animation
+
+        function moveCarousel(direction) {
+            if (isTransitioning) return;
+            isTransitioning = true;
+
+            currentIndex += direction;
+            track.style.transition = 'transform 0.4s ease-in-out';
+            track.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+            resetAutoPlay();
+        }
+
+        // 3. Silent reset when reaching clones
+        track.addEventListener('transitionend', () => {
+            isTransitioning = false;
+
+            if (allSlides[currentIndex].id === 'first-clone') {
+                track.style.transition = 'none';
+                currentIndex = 1;
+                track.style.transform = `translateX(-${currentIndex * 100}%)`;
+            }
+
+            if (allSlides[currentIndex].id === 'last-clone') {
+                track.style.transition = 'none';
+                currentIndex = totalOriginal;
+                track.style.transform = `translateX(-${currentIndex * 100}%)`;
+            }
+        });
+
+        function resetAutoPlay() {
+            clearInterval(autoPlayTimer);
+            autoPlayTimer = setInterval(function () {
+                moveCarousel(1);
+            }, 3000);
+        }
+
+        // Start autoplay loop normally after clean positioning
+        resetAutoPlay();
+    </script>
+</body>
+
+</html>

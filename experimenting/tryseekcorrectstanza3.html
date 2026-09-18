@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stanza Verification Protocol</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-color: #38bdf8;
+            --text-color: #f8fafc;
+            --muted-text: #94a3b8;
+            --border-color: #334155;
+            --danger-color: #f43f5e;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 750px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-top: 0;
+            color: var(--accent-color);
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        p.instruction {
+            text-align: center;
+            color: var(--muted-text);
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .step {
+            font-size: 0.85rem;
+            color: var(--muted-text);
+            font-weight: bold;
+        }
+
+        .step.active {
+            color: var(--accent-color);
+        }
+
+        .section-panel {
+            display: none;
+        }
+
+        .section-panel.active {
+            display: block;
+        }
+
+        .stanza-card {
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .stanza-card:hover {
+            border-color: var(--accent-color);
+        }
+
+        .stanza-card input[type="checkbox"] {
+            margin-top: 5px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--accent-color);
+        }
+
+        .stanza-text {
+            white-space: pre-line;
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            gap: 10px;
+        }
+
+        button {
+            background-color: var(--border-color);
+            color: var(--text-color);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #475569;
+        }
+
+        button.primary {
+            background-color: #0284c7;
+        }
+
+        button.primary:hover {
+            background-color: #0369a1;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Modal Overlay for Warning Box */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-box {
+            background-color: var(--card-bg);
+            border: 2px solid var(--danger-color);
+            border-radius: 10px;
+            padding: 25px;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(244, 63, 94, 0.3);
+        }
+
+        .modal-box h2 {
+            color: var(--danger-color);
+            margin-top: 0;
+            font-size: 1.3rem;
+        }
+
+        .modal-box p {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: var(--text-color);
+            margin: 15px 0;
+        }
+
+        .hint-text {
+            background-color: #0f172a;
+            border-left: 3px solid var(--accent-color);
+            padding: 10px;
+            font-style: italic;
+            color: var(--muted-text);
+            text-align: left;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Pattern Verification Protocol</h1>
+        <p class="instruction">Select only the stanzas that contain valid rhyming structures. Proceed section by
+            section.</p>
+
+        <div class="step-indicator">
+            <span class="step active" id="step-tag-1">Section 1</span>
+            <span class="step" id="step-tag-2">Section 2</span>
+            <span class="step" id="step-tag-3">Section 3</span>
+            <span class="step" id="step-tag-4">Section 4</span>
+        </div>
+
+        <form id="puzzleForm">
+            <!-- SECTION 1 -->
+            <div class="section-panel active" id="sec-1">
+                <div class="stanza-card">
+                    <input type="checkbox" data-valid="true" id="s1_1">
+                    <label for="s1_1" class="stanza-text">jika ini yang terakhir dariku
+                        semailah benih benih kenangan
+                        agar kau tidak rindu kehadiranku
+                        dan jadikan gelakku satu dendangan</label>
+                </div>
+
+                <div class="stanza-card">
+                    <input type="checkbox" data-valid="false" id="s1_2">
+                    <label for="s1_2" class="stanza-text">bukan aku mahu abai apa yang telah ku bina
+                        tapi diri ini lelah dari segala kata dusta
+                        andai takdir kita berubah arah
+                        pastikan aku tidak lupa siapa diriku sebenarnya</label>
+                </div>
+
+                <div class="stanza-card">
+                    <input type="checkbox" data-valid="true" id="s1_3">
+                    <label for="s1_3" class="stanza-text">bergelut raga ini mengenal diri
+                        cuba mengayuh dengan apa yang telah diberi
+                        tetapi andai kaki dan tangan telah rapi tergari
+                        bukakan dengan kunci agar aku masih bisa berlari</label>
+                </div>
+
+                <div class="stanza-card">
+                    <input type="checkbox" data-valid="true" id="s1_4">
+                    <label for="s1_4" class="stanza-text">cerita yang aib disimpan kemas
+                        cerita yang lama diulang gembira
+                        jauh kita telah bersama di pentas dunia
+                        harga kisah kita tiada tara</label>
+                </div>
+
+                <div class="stanza-card">
+                    <input type="checkbox" data-valid="false" id="s1_5">
+                    <label for="s1_5" class="stanza-text">biar ribut datang atau badai menghempas
+                        biar kilat menghentam atau guruh bersahutan
+                        aku tahu yang kita pernah bermain girang di dalam hujan
+                        meski habis berlumpur tapi nilainya bak emas</label>
+                </div>
+            </div>
+
+            <!-- SECTION 2 -->
+            <div class="section-panel" id="sec-2">
+                <div class="stanza-card">
+                    <input type="checkbox" data-valid="true" id="s2_1">
+                    <label for="s2_1" class="stanza-text">if there is ever a time i would go back
+                        it's the time we smiled together
+                        if there is ever a moment i want to rejoice
+                        it's the time we hope this would last forever</label>
+                </div>
+
+                <div class="stanza-card">
+                    <input type="checkbox" data-valid="false" id="s2_2">
+                    <label for="s2_2" class="stanza-text">if there is ever a place i want to be
+                        it's the place i can feel your warm presence
+                        if there is ever a where that i can go
+                        it's the place i can be whole</label>
+                </div>
+
+                <div class="stanza-card">
+                    <input type="checkbox" data-valid="true" id="s2_3">
+                    <label for="s2_3" class="stanza-text">through time we have weave a shroud
+                        that could protect us from the stormy day
+                        and through time we have tied a knot
+                        that only death could untangle it away</label>
+                </div>
+
+                <div class="stanza-card">
+                    <input type="checkbox" data-valid="true" id="s2_4">
+                    <label for="s2_4" class="stanza-text">even it is hard, i am here
+                        even it is loud, i can still hear
+                        even it is far, i know you are near
+                        even if it not said, i love and i will act it clear</label>
+                </div>
+
+                <div class="stanza-card">
+                    <input type="checkbox" data-valid="true" id="s2_5">
+                    <label for="s2_5" class="stanza-text">though the words could never really show
+                        but i hope you know the pages would be endless
+                        and though time will come and to the afterlife i must go
+                        just remember my love for you is relentless</label>
+                </div>
+            </div>
+
+            <!-- SECTION 3 -->
+            <div class="section-panel" id="sec-3">
+                <div class="stanza-card">
+                    <input type="checkbox" data-valid="true" id="s3_1">
+                    <label for="s3_1" class="stanza-text">mungkin bisa ini telah memakan waras diriku
+                        tapi tak mungkin bisa ini akan merosakkan kenangan kita
+                        andai sahaja aku telah pergi dan tiada lagi khabar diri ini
+                        ceritakan yang baik tentang hikayat kita yang telah tercipta</label>
+                </div>
+
+                <div class="stanza-card">
+                    <input type="checkbox" data-valid="true" id="s3_2">
+                    <label for="s3_2" class="stanza-text">biarkan dirimu tangisi seperti lebatnya tengkujuh
+                        tapi jangan kau nantikan hadir diri ini jika telah sahih berita
+                        garapkan kasihmu dan sampaikan doa buatku jujuh
+                        ingat kisah kita yang indah indah dan jangan kau menderita</label>
+                </div>
+
+                <div class="stanza-card">
+                    <input type="checkbox" data-valid="true" id="s3_3">
+                    <label for="s3_3" class="stanza-text">tidak sempurna hamba tuhan yang satu ini
+                        terulit khilaf dan silap diseluruh pelusuk diri
+                        andai ada pincang yang pernah kita lalui
+                        maaf ku pinta jauh dari lubuk sanubari</label>
+                </div>
+
+                <div class="stanza-card">
+                    <input type="checkbox" data-valid="true" id="s3_4">
+                    <label for="s3_4" class="stanza-text">ligat kita bersama mencipta kenangan
+                        terdetik jika ini kali terakhir kita mungkin bersama
+                        agar kau terus kekal bersiap siaga
+                        aku sisipkan tulus rasa halus irama</label>
+                </div>
+
+                <div class="stanza-card">
+                    <input type="checkbox" data-valid="true" id="s3_5">
+                    <label for="s3_5" class="stanza-text">titipkan doa buatku teman
+                        hanya doa yang mampu menembusi langit langit tuhan
+                        titipkan sekali rindu jika kau rasa keseorangan
+                        aku tidak mahu kau tinggal hanya dengan keruh keluhan</label>
+                </div>
+            </div>
+
+            <!-- SECTION 4 -->
+            <div class="section-panel" id="sec-4">
+                <div class="stanza-card">
+                    <input type="checkbox" data-valid="true" id="s4_1">
+                    <label for="s4_1" class="stanza-text">to the days we call ourselves brothers
+                        and to that day that life took us away from each other
+                        to the moment we could no beg to offer
+                        we know at least we have once been together</label>
+                </div>
+
+                <div class="stanza-card">
+                    <input type="checkbox" data-valid="true" id="s4_2">
+                    <label for="s4_2" class="stanza-text">to the waves that washes our feet
+                        and to the nights we burn our way out
+                        to the rain we shower and play in
+                        and to the moment we share our doubt</label>
+                </div>
+
+                <div class="stanza-card">
+                    <input type="checkbox" data-valid="true" id="s4_3">
+                    <label for="s4_3" class="stanza-text">we sail the world like the seven sea
+                        but we forget we all belong to the almighty
+                        we must part our ways although in tears or in glee
+                        we set our ship and continue our journey</label>
+                </div>
+
+                <div class="stanza-card">
+                    <input type="checkbox" data-valid="false" id="s4_4">
+                    <label for="s4_4" class="stanza-text">if fumble we rest and continue the rest
+                        and if in shortage we share still make it a feast
+                        the smile bring warmth the laughter bring hope
+                        that we have found our pieces of home</label>
+                </div>
+
+                <div class="stanza-card">
+                    <input type="checkbox" data-valid="true" id="s4_5">
+                    <label for="s4_5" class="stanza-text">goodbyes aren't forever
+                        because of the memories we hold
+                        continue with our endeavor
+                        let the path unfold</label>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button type="button" id="prevBtn" onclick="changeSection(-1)" disabled>Previous</button>
+                <button type="button" id="nextBtn" class="primary" onclick="changeSection(1)">Next Section</button>
+                <button type="submit" id="submitBtn" class="primary" style="display: none;">Submit Verification</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Modal Warning Overlay -->
+    <div id="warningModal" class="modal-overlay">
+        <div class="modal-box">
+            <h2>VERIFICATION FAILURE</h2>
+            <p>Invalid selections detected in your sequence. Access denied.</p>
+            <div class="hint-text">
+                <strong>Hint:</strong> Ensure every valid rhyming stanza (a-b-a-b, i-i-i-i, p-r-q-r) is selected, and
+                leave every broken pattern unchecked.
+            </div>
+            <button class="primary" onclick="kickToHome()">Return to Terminal</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSection = 1;
+        const totalSections = 4;
+
+        function changeSection(direction) {
+            document.getElementById(`sec-${currentSection}`).classList.remove('active');
+            document.getElementById(`step-tag-${currentSection}`).classList.remove('active');
+
+            currentSection += direction;
+
+            document.getElementById(`sec-${currentSection}`).classList.add('active');
+            document.getElementById(`step-tag-${currentSection}`).classList.add('active');
+
+            document.getElementById('prevBtn').disabled = (currentSection === 1);
+
+            if (currentSection === totalSections) {
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('submitBtn').style.display = 'inline-block';
+            } else {
+                document.getElementById('nextBtn').style.display = 'inline-block';
+                document.getElementById('submitBtn').style.display = 'none';
+            }
+        }
+
+        document.getElementById('puzzleForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
+            let isValidSequence = true;
+
+            allCheckboxes.forEach(cb => {
+                const isCorrectStanza = (cb.getAttribute('data-valid') === 'true');
+                const isChecked = cb.checked;
+
+                if ((isChecked && !isCorrectStanza) || (!isChecked && isCorrectStanza)) {
+                    isValidSequence = false;
+                }
+            });
+
+            if (isValidSequence) {
+                window.location.href = "next_page.html";
+            } else {
+                // Display Warning Modal instead of instant redirect
+                document.getElementById('warningModal').style.display = 'flex';
+            }
+        });
+
+        function kickToHome() {
+            window.location.href = "index.html";
+        }
+    </script>
+
+</body>
+
+</html>

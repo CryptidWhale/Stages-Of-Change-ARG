@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stanza Selection Puzzle</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --card-border: #30363d;
+            --text-color: #c9d1d9;
+            --accent-color: #58a6ff;
+            --accent-hover: #1f6feb;
+            --danger-color: #f85149;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 700px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: #8b949e;
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+        }
+
+        .section-block {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: var(--accent-color);
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 8px;
+        }
+
+        .options-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-card {
+            position: relative;
+            background-color: #0d1117;
+            border: 1px solid var(--card-border);
+            border-radius: 6px;
+            padding: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-card:hover {
+            border-color: #8b949e;
+        }
+
+        .option-card input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .option-card.selected {
+            border-color: var(--accent-color);
+            background-color: #121d2f;
+        }
+
+        .stanza-text {
+            white-space: pre-line;
+            font-family: "Georgia", serif;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #e6edf3;
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background-color: var(--accent-hover);
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--accent-color);
+        }
+
+        .error-message {
+            color: var(--danger-color);
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>The Path of Rhymes</h1>
+    <p class="subtitle">Select the correct stanza for each section before proceeding.</p>
+
+    <form id="puzzleForm">
+        <!-- Section 1 -->
+        <div class="section-block">
+            <div class="section-title">Section I</div>
+            <div class="options-group">
+                <label class="option-card">
+                    <input type="radio" name="sec1" value="a">
+                    <div class="stanza-text">jika ini yang terakhir dariku
+semailah benih benih kenangan
+agar kau tidak rindu kehadiranku
+dan jadikan gelakku satu dendangan</div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="sec1" value="b">
+                    <div class="stanza-text">bukan aku mahu abai apa yang telah ku bina
+tapi diri ini lelah dari segala kata dusta
+andai takdir kita berubah arah
+pastikan aku tidak lupa siapa diriku sebenarnya</div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="sec1" value="c">
+                    <div class="stanza-text">biar ribut datang atau badai menghempas
+biar kilat menghentam atau guruh bersahutan
+aku tahu yang kita pernah bermain girang di dalam hujan
+meski habis berlumpur tapi nilainya bak emas</div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Section 2 -->
+        <div class="section-block">
+            <div class="section-title">Section II</div>
+            <div class="options-group">
+                <label class="option-card">
+                    <input type="radio" name="sec2" value="a">
+                    <div class="stanza-text">if there is ever a place i want to be
+it's the place i can feel your warm presence
+if there is ever a where that i can go
+it's the place i can be whole</div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="sec2" value="b">
+                    <div class="stanza-text">through time we have weave a shroud
+that could protect us from the stormy day
+and through time we have tied a knot
+that only death could untangle it away</div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="sec2" value="c">
+                    <div class="stanza-text">if fumble we rest and continue the rest
+and if in shortage we share still make it a feast
+the smile bring warmth the laughter bring hope
+that we have found our pieces of home</div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Section 3 -->
+        <div class="section-block">
+            <div class="section-title">Section III</div>
+            <div class="options-group">
+                <label class="option-card">
+                    <input type="radio" name="sec3" value="a">
+                    <div class="stanza-text">biarkan dirimu tangisi seperti lebatnya tengkujuh
+tapi jangan kau nantikan hadir diri ini jika telah sahih berita
+garapkan kasihmu dan sampaikan doa buatku jujuh
+ingat kisah kita yang indah indah dan jangan kau menderita</div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="sec3" value="b">
+                    <div class="stanza-text">mungkin bisa ini telah memakan waras diriku
+tapi tak mungkin bisa ini akan merosakkan kenangan kita
+andai sahaja aku telah pergi dan tiada lagi khabar diri ini
+ceritakan yang baik tentang hikayat kita yang telah tercipta</div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="sec3" value="c">
+                    <div class="stanza-text">ligat kita bersama mencipta kenangan
+terdetik jika ini kali terakhir kita mungkin bersama
+agar kau terus kekal bersiap siaga
+aku sisipkan tulus rasa halus irama</div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Section 4 -->
+        <div class="section-block">
+            <div class="section-title">Section IV</div>
+            <div class="options-group">
+                <label class="option-card">
+                    <input type="radio" name="sec4" value="a">
+                    <div class="stanza-text">to the waves that washes our feet
+and to the nights we burn our way out
+to the rain we shower and play in
+and to the moment we share our doubt</div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="sec4" value="b">
+                    <div class="stanza-text">goodbyes aren't forever 
+because of the memories we hold
+continue with our endeavor 
+let the path unfold</div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="sec4" value="c">
+                    <div class="stanza-text">we sail the world like the seven sea
+but we forget we all belong to the almighty
+we must part our ways although in tears or in glee
+we set our ship and continue our journey</div>
+                </label>
+            </div>
+        </div>
+
+        <div id="errorMsg" class="error-message">Please select an answer for all 4 sections before submitting.</div>
+        <button type="button" class="submit-btn" onclick="validatePuzzle()">PROCEED</button>
+    </form>
+</div>
+
+<script>
+    // Correct Answers Array (sec1, sec2, sec3, sec4)
+    const ANSWER_KEY = {
+        sec1: "a",
+        sec2: "b",
+        sec3: "b",
+        sec4: "b"
+    };
+
+    // UI Feedback for selecting cards
+    document.querySelectorAll('.option-card').forEach(card => {
+        card.addEventListener('click', function() {
+            const radio = this.querySelector('input[type="radio"]');
+            const name = radio.name;
+            
+            // Remove 'selected' class from all cards in the same section
+            document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+                r.closest('.option-card').classList.remove('selected');
+            });
+
+            // Select this card
+            radio.checked = true;
+            this.classList.add('selected');
+        });
+    });
+
+    function validatePuzzle() {
+        const form = document.getElementById('puzzleForm');
+        const errorMsg = document.getElementById('errorMsg');
+        
+        const sec1 = form.querySelector('input[name="sec1"]:checked');
+        const sec2 = form.querySelector('input[name="sec2"]:checked');
+        const sec3 = form.querySelector('input[name="sec3"]:checked');
+        const sec4 = form.querySelector('input[name="sec4"]:checked');
+
+        // Check if all sections have a selection
+        if (!sec1 || !sec2 || !sec3 || !sec4) {
+            errorMsg.style.display = 'block';
+            return;
+        }
+
+        errorMsg.style.display = 'none';
+
+        // Check if all selected answers match the correct key
+        const isCorrect = 
+            sec1.value === ANSWER_KEY.sec1 &&
+            sec2.value === ANSWER_KEY.sec2 &&
+            sec3.value === ANSWER_KEY.sec3 &&
+            sec4.value === ANSWER_KEY.sec4;
+
+        if (isCorrect) {
+            // Success: Redirect to next step
+            window.location.href = "next.html";
+        } else {
+            // Fail: Redirect back to index page
+            window.location.href = "index.html";
+        }
+    }
+</script>
+
+</body>
+</html>
