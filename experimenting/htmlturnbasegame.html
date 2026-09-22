@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Turn-Based RPG Combat</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1e1e24;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #game-container {
+            width: 500px;
+            background: #2a2b36;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+
+        .battle-arena {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+        .character-card {
+            width: 45%;
+            background: #3a3c4d;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #4e5166;
+        }
+
+        .character-card.active {
+            border-color: #ffd700;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .avatar {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .hp-bar-container {
+            background-color: #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-top: 8px;
+            height: 14px;
+        }
+
+        .hp-bar {
+            height: 100%;
+            width: 100%;
+            background-color: #4caf50;
+            transition: width 0.3s ease;
+        }
+
+        #console-log {
+            background: #111216;
+            height: 100px;
+            padding: 10px;
+            border-radius: 6px;
+            overflow-y: auto;
+            text-align: left;
+            font-size: 0.9rem;
+            font-family: monospace;
+            color: #a8ffb2;
+            margin-bottom: 20px;
+            border: 1px solid #333;
+        }
+
+        .controls button {
+            background-color: #4f46e5;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            margin: 5px;
+            font-size: 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .controls button:hover:not(:disabled) {
+            background-color: #4338ca;
+        }
+
+        .controls button:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        #reset-btn {
+            background-color: #ef4444;
+            display: none;
+            margin: 0 auto;
+        }
+        #reset-btn:hover {
+            background-color: #dc2626;
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <h2>⚔️ Local Dungeon Battle ⚔️</h2>
+    
+    <div class="battle-arena">
+        <!-- Player -->
+        <div id="player-card" class="character-card active">
+            <div class="avatar">🧙‍♂️</div>
+            <h3>Hero (Player)</h3>
+            <div>HP: <span id="player-hp-txt">100</span>/100</div>
+            <div class="hp-bar-container">
+                <div id="player-hp-bar" class="hp-bar"></div>
+            </div>
+        </div>
+
+        <!-- Enemy -->
+        <div id="enemy-card" class="character-card">
+            <div class="avatar">👹</div>
+            <h3>Goblin (Enemy)</h3>
+            <div>HP: <span id="enemy-hp-txt">100</span>/100</div>
+            <div class="hp-bar-container">
+                <div id="enemy-hp-bar" class="hp-bar" style="background-color: #f44336;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Battle Log Console -->
+    <div id="console-log">A wild Goblin appears! Your turn.</div>
+
+    <!-- Action Menus -->
+    <div class="controls" id="action-controls">
+        <button onclick="playerAction('attack')">⚔️ Attack</button>
+        <button onclick="playerAction('magic')">✨ Magic</button>
+        <button onclick="playerAction('heal')">🧪 Heal</button>
+    </div>
+
+    <button id="reset-btn" onclick="resetGame()">Play Again</button>
+</div>
+
+<script>
+    // Game State variables
+    let player = { hp: 100, maxHp: 100 };
+    let enemy = { hp: 100, maxHp: 100 };
+    let isGameActive = true;
+
+    const logEl = document.getElementById('console-log');
+
+    function logMessage(msg) {
+        logEl.innerHTML += `<br>${msg}`;
+        logEl.scrollTop = logEl.scrollHeight; // Auto scroll to the bottom
+    }
+
+    function updateVisuals() {
+        // Update text labels
+        document.getElementById('player-hp-txt').innerText = player.hp;
+        document.getElementById('enemy-hp-txt').innerText = enemy.hp;
+
+        // Calculate and update health bars percentage
+        const playerPct = Math.max(0, (player.hp / player.maxHp) * 100);
+        const enemyPct = Math.max(0, (enemy.hp / enemy.maxHp) * 100);
+        
+        document.getElementById('player-hp-bar').style.width = playerPct + '%';
+        document.getElementById('enemy-hp-bar').style.width = enemyPct + '%';
+    }
+
+    function toggleControls(disable) {
+        const buttons = document.querySelectorAll('#action-controls button');
+        buttons.forEach(btn => btn.disabled = disable);
+    }
+
+    function checkGameOver() {
+        if (enemy.hp <= 0) {
+            logMessage("🏆 <strong>Victory! You defeated the Goblin!</strong>");
+            endGame();
+            return true;
+        }
+        if (player.hp <= 0) {
+            logMessage("💀 <strong>Defeat! The Goblin overpowered you.</strong>");
+            endGame();
+            return true;
+        }
+        return false;
+    }
+
+    function endGame() {
+        isGameActive = false;
+        toggleControls(true);
+        document.getElementById('action-controls').style.display = 'none';
+        document.getElementById('reset-btn').style.display = 'block';
+    }
+
+    // --- Player Turn ---
+    function playerAction(type) {
+        if (!isGameActive) return;
+
+        toggleControls(true); // Lock buttons during active phase
+        document.getElementById('player-card').classList.remove('active');
+
+        if (type === 'attack') {
+            let dmg = Math.floor(Math.random() * 11) + 10; // 10-20 dmg
+            enemy.hp = Math.max(0, enemy.hp - dmg);
+            logMessage(`⚔️ Hero slashes the Goblin for ${dmg} damage!`);
+        } 
+        else if (type === 'magic') {
+            let dmg = Math.floor(Math.random() * 21) + 5; // 5-25 volatile dmg
+            enemy.hp = Math.max(0, enemy.hp - dmg);
+            logMessage(`✨ Hero casts Fireball dealing ${dmg} magic damage!`);
+        } 
+        else if (type === 'heal') {
+            let heal = Math.floor(Math.random() * 11) + 15; // 15-25 healing
+            player.hp = Math.min(player.maxHp, player.hp + heal);
+            logMessage(`🧪 Hero drinks a potion and recovers ${heal} HP!`);
+        }
+
+        updateVisuals();
+
+        if (checkGameOver()) return;
+
+        // Queue enemy turn after a brief delay
+        document.getElementById('enemy-card').classList.add('active');
+        setTimeout(enemyTurn, 1200);
+    }
+
+    // --- Enemy Turn ---
+    function enemyTurn() {
+        if (!isGameActive) return;
+
+        // Enemy chooses random action (80% attack, 20% heal if hurt)
+        let choice = Math.random();
+        if (choice > 0.8 && enemy.hp < enemy.maxHp - 15) {
+            let heal = Math.floor(Math.random() * 10) + 10;
+            enemy.hp = Math.min(enemy.maxHp, enemy.hp + heal);
+            logMessage(`👹 Goblin chews on strange moss and heals for ${heal} HP.`);
+        } else {
+            let dmg = Math.floor(Math.random() * 11) + 8; // 8-18 dmg
+            player.hp = Math.max(0, player.hp - dmg);
+            logMessage(`👹 Goblin swings its club hitting you for ${dmg} damage!`);
+        }
+
+        updateVisuals();
+        document.getElementById('enemy-card').classList.remove('active');
+
+        if (checkGameOver()) return;
+
+        // Hand turn back to player
+        setTimeout(() => {
+            document.getElementById('player-card').classList.add('active');
+            toggleControls(false);
+            logMessage("Your turn!");
+        }, 600);
+    }
+
+    function resetGame() {
+        player.hp = 100;
+        enemy.hp = 100;
+        isGameActive = true;
+        logEl.innerHTML = "A new challenger approaches! Your turn.";
+        
+        document.getElementById('action-controls').style.display = 'block';
+        document.getElementById('reset-btn').style.display = 'none';
+        document.getElementById('player-card').classList.add('active');
+        
+        toggleControls(false);
+        updateVisuals();
+    }
+</script>
+
+</body>
+</html>
