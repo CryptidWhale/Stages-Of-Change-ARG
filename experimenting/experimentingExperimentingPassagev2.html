@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARG Stacking Logs</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #0b0e14;
+            color: #d1d5db;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px; /* Spacing between cards */
+        }
+
+        /* Base Card Styling */
+        .card {
+            background-color: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            /* Hidden by default */
+            display: none; 
+            opacity: 0;
+        }
+
+        /* Revealed state */
+        .card.revealed {
+            display: block;
+            animation: slideDown 0.4s ease-out forwards;
+        }
+
+        .card-header {
+            font-size: 0.8rem;
+            color: #10b981;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            color: #60a5fa;
+            margin-bottom: 12px;
+            font-size: 1.2rem;
+        }
+
+        p {
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #9ca3af;
+        }
+
+        /* Button Styling */
+        .btn {
+            background-color: #2563eb;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            font-family: inherit;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Checkmark tag when step is completed */
+        .completed-tag {
+            display: inline-block;
+            color: #10b981;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        /* Slide-down reveal animation */
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- CARD 1 (Starts revealed) -->
+        <div class="card revealed" id="card-1">
+            <div class="card-header">Transmission #01</div>
+            <h2>[SYSTEM BRIEFING: INITIATION]</h2>
+            <p>Welcome, Agent. Before proceeding, ensure your communication lines are secured and encrypted.</p>
+            <div class="action-area">
+                <button class="btn" onclick="revealNextCard(1, 2)">OK, I got it</button>
+            </div>
+        </div>
+
+        <!-- CARD 2 -->
+        <div class="card" id="card-2">
+            <div class="card-header">Transmission #02</div>
+            <h2>[TRANSMISSION LOG: DEEPWATER]</h2>
+            <p>We intercepted an acoustic signal from coordinates 47°09'S 126°43'W. It resembles a 52Hz low-frequency whale call, but encoded with raw hexadecimal data.</p>
+            <div class="action-area">
+                <button class="btn" onclick="revealNextCard(2, 3)">I understand</button>
+            </div>
+        </div>
+
+        <!-- CARD 3 -->
+        <div class="card" id="card-3">
+            <div class="card-header">Transmission #03</div>
+            <h2>[FINAL INSTRUCTION]</h2>
+            <p>Your objective is to find the hidden cipher in the audio metadata. Do not let the signal lapse.</p>
+            <div class="action-area">
+                <button class="btn" onclick="alert('System Fully Unlocked!')">Access Archive</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function revealNextCard(currentCardNum, nextCardNum) {
+            const currentCard = document.getElementById(`card-${currentCardNum}`);
+            const nextCard = document.getElementById(`card-${nextCardNum}`);
+
+            if (!currentCard || !nextCard) return;
+
+            // 1. Replace button on current card with a "Checked / Completed" status
+            const actionArea = currentCard.querySelector('.action-area');
+            if (actionArea) {
+                actionArea.innerHTML = `<span class="completed-tag">✓ Acknowledged</span>`;
+            }
+
+            // 2. Reveal the next card
+            nextCard.classList.add('revealed');
+
+            // 3. Smooth scroll down to the newly revealed card
+            setTimeout(() => {
+                nextCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+    </script>
+</body>
+</html>

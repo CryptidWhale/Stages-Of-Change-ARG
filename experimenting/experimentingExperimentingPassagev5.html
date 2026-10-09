@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARG Autonomous Terminal Stream</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #0b0e14;
+            color: #d1d5db;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        /* Log groups */
+        .log-group {
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .log-group.active-group {
+            display: flex;
+        }
+
+        /* Branch group */
+        .branch-group {
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .branch-group.active-branch {
+            display: flex;
+        }
+
+        /* Card Styling */
+        .card {
+            background-color: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 10px;
+            padding: 22px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            display: none;
+            opacity: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card.revealed {
+            display: block;
+            animation: slideDown 0.4s ease-out forwards;
+        }
+
+        .card-header {
+            font-size: 0.75rem;
+            color: #10b981;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sender {
+            font-weight: bold;
+            color: #60a5fa;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        p {
+            line-height: 1.6;
+            margin-bottom: 18px;
+            color: #9ca3af;
+            min-height: 1.6em;
+        }
+
+        /* Typewriter Cursor */
+        .typing-cursor::after {
+            content: '█';
+            display: inline-block;
+            margin-left: 3px;
+            color: #10b981;
+            animation: blink 0.7s infinite;
+        }
+
+        /* Action & Timer Area */
+        .action-area {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .choice-container {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* Buttons */
+        .btn {
+            background-color: #2563eb;
+            color: #ffffff;
+            border: none;
+            padding: 10px 16px;
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            z-index: 2;
+        }
+
+        .btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-choice {
+            background-color: #1e293b;
+            color: #38bdf8;
+            border: 1px solid #334155;
+        }
+
+        .btn-choice:hover {
+            background-color: #334155;
+            color: #7dd3fc;
+        }
+
+        /* Visual 2-Second Timer Bar */
+        .timer-bar-container {
+            width: 100%;
+            height: 4px;
+            background-color: #1f2937;
+            border-radius: 2px;
+            overflow: hidden;
+            display: none;
+            margin-top: 5px;
+        }
+
+        .timer-bar-fill {
+            height: 100%;
+            width: 100%;
+            background-color: #f59e0b;
+            transform-origin: left;
+        }
+
+        .timer-bar-fill.active-timer {
+            animation: countdown 2s linear forwards;
+        }
+
+        .completed-tag {
+            display: inline-block;
+            color: #10b981;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .error-card {
+            border-color: #991b1b;
+            background-color: #180c0c;
+        }
+
+        .error-card .card-header {
+            color: #f87171;
+        }
+
+        code {
+            background-color: #1f2937;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #f59e0b;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes countdown {
+            from { transform: scaleX(1); }
+            to { transform: scaleX(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- ==================== MAIN THREAD: KEY1 ==================== -->
+        <div class="log-group" data-key="key1">
+
+            <!-- Card 1 -->
+            <div class="card" id="card-key1-1">
+                <div class="card-header">Transmission #01 • Initial Contact</div>
+                <div class="sender">[OPERATOR_09]:</div>
+                <p class="typewriter-text">Bal, do you read me? We detected an unexpected pulse on the 52Hz frequency spectrum. It's bypassing defense protocols.</p>
+                <div class="action-area">
+                    <button class="btn next-btn" onclick="handleNextClick(this)">Acknowledge Signal</button>
+                    <div class="timer-bar-container"><div class="timer-bar-fill"></div></div>
+                </div>
+            </div>
+
+            <!-- Card 2: Decision Card -->
+            <div class="card" id="card-key1-2" data-is-choice="true">
+                <div class="card-header">Transmission #02 • Tactical Decision</div>
+                <div class="sender">[SYSTEM PROMPT]:</div>
+                <p class="typewriter-text">Anomalous packet isolated. Select operational directive before auto-override triggers:</p>
+                <div class="action-area choice-container">
+                    <button class="btn btn-choice" data-choice="investigate" onclick="handleChoiceClick(this, 'investigate')">Option A: Investigate Signal</button>
+                    <button class="btn btn-choice" data-choice="contain" onclick="handleChoiceClick(this, 'contain')">Option B: Contain & Firewall</button>
+                    <div class="timer-bar-container"><div class="timer-bar-fill"></div></div>
+                </div>
+            </div>
+
+            <!-- BRANCH A: Investigate -->
+            <div class="branch-group" data-choice="investigate">
+                <div class="card">
+                    <div class="card-header">Branch: Investigate • Log 1/2</div>
+                    <div class="sender">[OPERATOR_09]:</div>
+                    <p class="typewriter-text">Data stream unlocked! The pulse contains acoustic whale harmonics wrapped in encrypted hex string.</p>
+                    <div class="action-area">
+                        <button class="btn next-btn" onclick="handleNextClick(this)">Decode Hex Payload</button>
+                        <div class="timer-bar-container"><div class="timer-bar-fill"></div></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Branch: Investigate • Log 2/2</div>
+                    <div class="sender">[SYSTEM NOTICE]:</div>
+                    <p class="typewriter-text">Decryption complete! Next query parameter unlocked: ?key=key2. Signal sequence ended.</p>
+                </div>
+            </div>
+
+            <!-- BRANCH B: Contain -->
+            <div class="branch-group" data-choice="contain">
+                <div class="card">
+                    <div class="card-header">Branch: Contain • Log 1/2</div>
+                    <div class="sender">[SYSTEM_DEFENSE]:</div>
+                    <p class="typewriter-text">Initiating sandbox isolation... Defensive firewall closed around sector 7.</p>
+                    <div class="action-area">
+                        <button class="btn next-btn" onclick="handleNextClick(this)">Inspect Containment Log</button>
+                        <div class="timer-bar-container"><div class="timer-bar-fill"></div></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Branch: Contain • Log 2/2</div>
+                    <div class="sender">[OPERATOR_09]:</div>
+                    <p class="typewriter-text">Signal contained. A residual cipher key was salvaged from quarantine: KEY_CONTAINED_99.</p>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- ==================== FALLBACK GROUP ==================== -->
+        <div class="log-group" id="fallback-group">
+            <div class="card error-card">
+                <div class="card-header">Transmission Error • 404</div>
+                <div class="sender">[SYSTEM_WARNING]:</div>
+                <p class="typewriter-text">No active frequency detected. Please append a query parameter like: ?key=key1</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let currentKey = null;
+        let activeTimer = null;
+        let activeTypewriterInterval = null;
+        let activeTypingCard = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            currentKey = urlParams.get('key');
+            const currentChoice = urlParams.get('choice');
+
+            const logGroups = document.querySelectorAll('.log-group[data-key]');
+            const fallbackGroup = document.getElementById('fallback-group');
+            let matchedGroup = null;
+
+            if (currentKey) {
+                logGroups.forEach(group => {
+                    if (group.dataset.key.toLowerCase() === currentKey.toLowerCase()) {
+                        group.classList.add('active-group');
+                        matchedGroup = group;
+                    }
+                });
+            }
+
+            if (!matchedGroup && fallbackGroup) {
+                fallbackGroup.classList.add('active-group');
+                const fallbackCard = fallbackGroup.querySelector('.card');
+                revealCard(fallbackCard);
+                return;
+            }
+
+            // If URL already includes ?choice=..., jump directly to that choice
+            if (currentChoice && matchedGroup) {
+                const firstCard = matchedGroup.querySelector('.card');
+                const decisionCard = matchedGroup.querySelector('[data-is-choice="true"]');
+                
+                // Instantly display first card & decision card without typing delays
+                if (firstCard) instantShowCard(firstCard);
+                if (decisionCard) instantShowCard(decisionCard);
+
+                selectChoice(currentChoice, false);
+            } else {
+                // Otherwise reveal first card with typewriter + 2s timer
+                const firstCard = matchedGroup.querySelector('.card');
+                if (firstCard) revealCard(firstCard);
+            }
+        });
+
+        // Core Card Revealer: handles Typewriter -> Timer -> Auto-advance
+        function revealCard(card) {
+            if (!card) return;
+
+            clearAutoTimer();
+            card.classList.add('revealed');
+
+            const textElem = card.querySelector('.typewriter-text');
+            if (!textElem) return;
+
+            // Step 1: Run Typewriter effect
+            runTypewriter(card, textElem, () => {
+                // Step 2: When typing finishes, start 2-second auto advance timer
+                startAutoAdvanceTimer(card);
+            });
+
+            // Smooth scroll down
+            setTimeout(() => {
+                card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+
+        // Typewriter Engine
+        function runTypewriter(card, element, onComplete) {
+            activeTypingCard = card;
+            const fullText = element.getAttribute('data-text') || element.innerText;
+            element.setAttribute('data-text', fullText);
+            element.innerText = '';
+            element.classList.add('typing-cursor');
+
+            let index = 0;
+            clearInterval(activeTypewriterInterval);
+
+            activeTypewriterInterval = setInterval(() => {
+                if (index < fullText.length) {
+                    element.innerText += fullText.charAt(index);
+                    index++;
+                } else {
+                    finishTyping(card, element, onComplete);
+                }
+            }, 25); // 25ms speed per character
+        }
+
+        function finishTyping(card, element, onComplete) {
+            clearInterval(activeTypewriterInterval);
+            if (element) {
+                const fullText = element.getAttribute('data-text');
+                if (fullText) element.innerText = fullText;
+                element.classList.remove('typing-cursor');
+            }
+            activeTypingCard = null;
+            if (onComplete) onComplete();
+        }
+
+        // 2-Second Auto Advance Timer
+        function startAutoAdvanceTimer(card) {
+            const timerContainer = card.querySelector('.timer-bar-container');
+            const timerFill = card.querySelector('.timer-bar-fill');
+
+            // If there's no next button or choices, don't auto-advance (end of sequence)
+            const hasNextBtn = card.querySelector('.next-btn');
+            const isChoiceCard = card.dataset.isChoice === 'true';
+
+            if (!hasNextBtn && !isChoiceCard) return;
+
+            // Show and animate timer bar
+            if (timerContainer && timerFill) {
+                timerContainer.style.display = 'block';
+                timerFill.classList.add('active-timer');
+            }
+
+            // Set 2000ms timer
+            activeTimer = setTimeout(() => {
+                if (isChoiceCard) {
+                    // Randomly pick one of the available choices!
+                    const choiceBtns = card.querySelectorAll('.btn-choice');
+                    if (choiceBtns.length > 0) {
+                        const randomIndex = Math.floor(Math.random() * choiceBtns.length);
+                        const selectedBtn = choiceBtns[randomIndex];
+                        handleChoiceClick(selectedBtn, selectedBtn.dataset.choice);
+                    }
+                } else if (hasNextBtn) {
+                    handleNextClick(hasNextBtn);
+                }
+            }, 2000);
+        }
+
+        function clearAutoTimer() {
+            if (activeTimer) {
+                clearTimeout(activeTimer);
+                activeTimer = null;
+            }
+            // Reset all timer bars
+            document.querySelectorAll('.timer-bar-fill').forEach(bar => {
+                bar.classList.remove('active-timer');
+            });
+            document.querySelectorAll('.timer-bar-container').forEach(c => {
+                c.style.display = 'none';
+            });
+        }
+
+        // Handle Click on "Next" Button
+        function handleNextClick(buttonElement) {
+            const currentCard = buttonElement.closest('.card');
+
+            // Fast-forward typing if user clicks during typewriter
+            if (activeTypingCard === currentCard) {
+                const textElem = currentCard.querySelector('.typewriter-text');
+                finishTyping(currentCard, textElem, null);
+            }
+
+            clearAutoTimer();
+
+            // Freeze button state
+            const actionArea = currentCard.querySelector('.action-area');
+            if (actionArea) {
+                actionArea.innerHTML = `<span class="completed-tag">✓ Transmission Logged</span>`;
+            }
+
+            // Reveal next card
+            const nextCard = currentCard.nextElementSibling;
+            if (nextCard && nextCard.classList.contains('card')) {
+                revealCard(nextCard);
+            }
+        }
+
+        // Handle Click on Choice Buttons
+        function handleChoiceClick(buttonElement, choiceId) {
+            const currentCard = buttonElement.closest('.card');
+
+            if (activeTypingCard === currentCard) {
+                const textElem = currentCard.querySelector('.typewriter-text');
+                finishTyping(currentCard, textElem, null);
+            }
+
+            clearAutoTimer();
+            selectChoice(choiceId, true);
+        }
+
+        // Choice Handler Engine
+        function selectChoice(choiceId, updateUrl = true) {
+            const activeGroup = document.querySelector('.log-group.active-group');
+            if (!activeGroup) return;
+
+            const decisionCard = activeGroup.querySelector('[data-is-choice="true"]');
+            if (decisionCard) {
+                const actionArea = decisionCard.querySelector('.action-area');
+                if (actionArea) {
+                    actionArea.innerHTML = `<span class="completed-tag">✓ Directive Selected: [${choiceId.toUpperCase()}]</span>`;
+                }
+            }
+
+            const targetBranch = activeGroup.querySelector(`.branch-group[data-choice="${choiceId}"]`);
+            if (targetBranch) {
+                targetBranch.classList.add('active-branch');
+                const firstBranchCard = targetBranch.querySelector('.card');
+                if (firstBranchCard) {
+                    revealCard(firstBranchCard);
+                }
+            }
+
+            if (updateUrl && currentKey) {
+                const newUrl = `${window.location.pathname}?key=${currentKey}&choice=${choiceId}`;
+                window.history.pushState({ path: newUrl }, '', newUrl);
+            }
+        }
+
+        // Utility: Instantly show card for bookmark/direct URL loads
+        function instantShowCard(card) {
+            card.classList.add('revealed');
+            const textElem = card.querySelector('.typewriter-text');
+            if (textElem) {
+                const fullText = textElem.getAttribute('data-text') || textElem.innerText;
+                textElem.innerText = fullText;
+                textElem.classList.remove('typing-cursor');
+            }
+        }
+    </script>
+</body>
+</html>

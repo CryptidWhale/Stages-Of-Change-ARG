@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARG Encrypted Chat Feed</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0b0e14;
+            color: #e5e7eb;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Main Chat Window */
+        .chat-card {
+            width: 100%;
+            max-width: 500px;
+            height: 600px;
+            background-color: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            overflow: hidden;
+        }
+
+        /* Chat Header */
+        .chat-header {
+            background-color: #1f2937;
+            padding: 15px 20px;
+            border-bottom: 1px solid #374151;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chat-header h2 {
+            font-size: 1rem;
+            color: #60a5fa;
+            font-family: 'Courier New', Courier, monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background-color: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #10b981;
+        }
+
+        /* Message Body Scroll Area */
+        .chat-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Message Bubbles */
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            animation: popIn 0.3s ease-out forwards;
+        }
+
+        .message.left {
+            align-self: flex-start;
+            background-color: #1f2937;
+            color: #d1d5db;
+            border-bottom-left-radius: 2px;
+            border: 1px solid #374151;
+        }
+
+        .message.right {
+            align-self: flex-end;
+            background-color: #2563eb;
+            color: #ffffff;
+            border-bottom-right-radius: 2px;
+        }
+
+        .sender-name {
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-bottom: 4px;
+            color: #9ca3af;
+        }
+
+        .message.right .sender-name {
+            color: #bfdbfe;
+            text-align: right;
+        }
+
+        .timestamp {
+            font-size: 0.65rem;
+            color: #6b7280;
+            margin-top: 6px;
+            text-align: right;
+            display: block;
+        }
+
+        .message.right .timestamp {
+            color: #93c5fd;
+        }
+
+        /* Error / Fallback View */
+        .error-state {
+            text-align: center;
+            margin: auto;
+            color: #ef4444;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 20px;
+        }
+
+        /* Helper Quick Links (For testing) */
+        .quick-nav {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .quick-nav a {
+            color: #60a5fa;
+            font-size: 0.85rem;
+            text-decoration: none;
+            background: #111827;
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid #1f2937;
+            transition: all 0.2s;
+        }
+
+        .quick-nav a:hover {
+            border-color: #2563eb;
+            color: #ffffff;
+        }
+
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="chat-card">
+        <!-- Header displaying active channel -->
+        <div class="chat-header">
+            <h2 id="channel-title">[LOG UNKNOWN]</h2>
+            <div class="status-dot"></div>
+        </div>
+
+        <!-- Chat message thread rendering container -->
+        <div class="chat-body" id="chat-body">
+            <!-- Messages inserted dynamically via JS -->
+        </div>
+    </div>
+
+    <!-- Quick nav buttons so you can easily test changing parameters -->
+    <div class="quick-nav">
+        <a href="?key=key1">Thread #1</a>
+        <a href="?key=key2">Thread #2</a>
+        <a href="?key=key3">Thread #3</a>
+        <a href="?key=invalid">Invalid Key</a>
+    </div>
+
+    <script>
+        // 1. Define chat threads database in JS
+        const chatDatabase = {
+            "key1": {
+                title: "CHANNEL #01 - INTERCEPT",
+                messages: [
+                    { sender: "Operator_09", text: "Did you receive the hydrophone audio file from Sector 4?", time: "22:14", side: "left" },
+                    { sender: "You", text: "Yeah. The frequency matches a 52Hz whale call, but it has binary modulation.", time: "22:15", side: "right" },
+                    { sender: "Operator_09", text: "It's not natural. Append ?key=key2 to your terminal address to inspect the raw transcript.", time: "22:17", side: "left" }
+                ]
+            },
+            "key2": {
+                title: "CHANNEL #02 - RAW TRANSCRIPT",
+                messages: [
+                    { sender: "System", text: "SESSION RESTORED - CLEARANCE LEVEL 2", time: "22:20", side: "left" },
+                    { sender: "Unknown_User", text: "Whoever is monitoring this channel, stop digging.", time: "22:21", side: "left" },
+                    { sender: "You", text: "Who is this?", time: "22:22", side: "right" },
+                    { sender: "Unknown_User", text: "Check channel key3 before they sever the connection...", time: "22:23", side: "left" }
+                ]
+            },
+            "key3": {
+                title: "CHANNEL #03 - CLASSIFIED",
+                messages: [
+                    { sender: "Archivist", text: "Final packet transmitted. Coordinates are locked.", time: "23:00", side: "left" },
+                    { sender: "You", text: "Understood. Shutting down node.", time: "23:01", side: "right" }
+                ]
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const chatBody = document.getElementById('chat-body');
+            const channelTitle = document.getElementById('channel-title');
+
+            // 2. Read query parameter from URL (e.g., ?key=key1)
+            const urlParams = new URLSearchParams(window.location.search);
+            const activeKey = urlParams.get('key');
+
+            // 3. Render thread if key exists in database
+            if (activeKey && chatDatabase[activeKey]) {
+                const thread = chatDatabase[activeKey];
+                channelTitle.textContent = thread.title;
+
+                // Loop through messages and build HTML elements
+                thread.messages.forEach(msg => {
+                    const messageEl = document.createElement('div');
+                    messageEl.classList.add('message', msg.side);
+
+                    messageEl.innerHTML = `
+                        <div class="sender-name">${msg.sender}</div>
+                        <div>${msg.text}</div>
+                        <span class="timestamp">${msg.time}</span>
+                    `;
+
+                    chatBody.appendChild(messageEl);
+                });
+
+                // Auto-scroll to bottom of chat
+                chatBody.scrollTop = chatBody.scrollHeight;
+
+            } else {
+                // 4. Fallback if key is missing or invalid
+                channelTitle.textContent = "[CHANNEL ERROR]";
+                chatBody.innerHTML = `
+                    <div class="error-state">
+                        <h3>[404 ACCESS DENIED]</h3>
+                        <p style="margin-top: 10px; font-size: 0.85rem; color: #9ca3af;">
+                            No valid chat thread requested.<br>
+                            Pass a valid parameter like <code>?key=key1</code> in the URL.
+                        </p>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

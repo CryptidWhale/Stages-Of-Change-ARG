@@ -34,6 +34,10 @@
     text-decoration: none;
 }
 
+.anyTextMiddle{
+    text-align: center;
+}
+
 .landing-page-h1 {
     font-size: clamp(2rem, 8vw, 5rem);
     font-weight: 500;
@@ -534,6 +538,14 @@
     transform: none !important;
 }
 
+@media (max-width: 600px) {
+
+    .choice-btn {
+        font-size: 0.95rem;
+        padding: 10px 14px;
+    }
+}
+
 .cipher-block {
     background-color: #111111;
     color: #34d399;
@@ -757,4 +769,120 @@
 a:link, a:visited, a:hover, a:active {
     text-decoration: none;
     color: inherit;
+}
+
+/* as for the experiment logs */
+/* as for the experiment logs */
+/* as for the experiment logs */
+.body-logs {
+    background: #1C1C1C;
+    color: #F8F0E3;
+    font-family: "Cutive Mono", monospace;
+    margin: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+    padding: 20px 0;
+    font-size: 1.6rem;
+}
+
+/* Outer Container (Centers everything & controls maximum width) */
+.cont-logs {
+    max-width: 800px;
+    /* Adjust this to control how wide the center block gets on desktop */
+    width: 90%;
+    /* Creates the mobile gap on smaller screens */
+    margin: 0 auto;
+    /* Centers the container horizontally */
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    /* Spacing between item-story blocks */
+}
+
+/* Inner Story Item */
+.item-logs {
+    background-color: #808080;
+    /* Grey block matched from reference image */
+    color: #111111;
+    padding: 20px;
+    /* Internal padding for content */
+    border-radius: 4px;
+    /* Optional slight rounding */
+
+    /* Height expands dynamically based on content length */
+    height: auto;
+    word-wrap: break-word;
+}
+
+/* Mobile adjustments */
+@media (max-width: 600px) {
+    .body-logs {
+
+        font-size: 1.2rem;
+    }
+
+    .cont-logs {
+        width: 92%;
+        /* Reduces side gaps on mobile so text has plenty of room */
+        gap: 12px;
+    }
+
+    .item-logs {
+        padding: 16px;
+        /* Slightly tighter padding on smaller screens */
+    }
+
+    .story-end {
+        margin-top: 24px;
+    }
+
+    .letter-modal-panel {
+        padding: 28px 20px 20px;
+    }
+
+    #letter-form {
+        align-items: stretch;
+        flex-direction: column;
+    }
+}
+
+.choice-log-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.choice-log-btn {
+    background-color: #80808067;
+    color: #F8F0E3;
+    border: 1px solid #111111;
+    padding: 12px 18px;
+    font-family: "Cutive Mono", monospace;
+    font-size: 1.05rem;
+    cursor: pointer;
+    text-align: left;
+    transition: all 180ms ease;
+    border-radius: 0;
+    line-height: 1.4;
+}
+
+.choice-log-btn:hover:not(:disabled) {
+    background-color: #F8F0E3;
+    color: #1C1C1C;
+    box-shadow: 4px 4px 0 #111111;
+    transform: translateY(-2px);
+}
+
+.choice-log-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+
+    .choice-log-btn {
+        font-size: 0.95rem;
+        padding: 10px 14px;
+    }
 }

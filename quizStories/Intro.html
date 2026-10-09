@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stages of Change ARG</title>
+    <base href="../">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Cutive+Mono&family=Handjet:wght,ELSH@100..900,2&family=Raleway:ital,wght@0,100..900;1,100..900&family=Redacted+Script:wght@300;400;700&family=Share+Tech&family=Special+Elite&family=Syne+Mono&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="assets/socarg.css">
+</head>
+
+<body class="body-logs font-cutive">
+
+    <div class="cont-logs">
+
+        <div class="item-logs">
+            Iqbal was a dedicated guy and an honourable one to those who knows him. He have helped many of people. Some
+            call him a hero but some do judge him for the grey moral he have. But nonetheless everyone have a slither of
+            respect for him.
+        </div>
+        <div class="choice-container">
+            <button class="choice-btn" onclick="revealNext(this)">continue</button>
+        </div>
+
+        <div class="item-logs" style="display: none;">
+            He is no ordinary man. He always live inside his fantasy world. PusFauKa. 40 personas live inside the
+            mindscape where Iqbal himself is one of them. Collected through years and moments of events that he cannot
+            handle alone. So, he created the other 39.
+        </div>
+        <div class="choice-container" style="display: none;">
+            <button class="choice-btn" onclick="revealNext(this)">continue</button>
+        </div>
+
+        <div class="item-logs" style="display: none;">
+            What in mindscape stay in mindscape. Never to directly involved with the real world. The PusFauKa personas
+            keep Iqbal accompanied. Some know the personas that lived inside: Baldrick, Jonathan, Tania, Fadzil. It is
+            not a mental condition of some sort. but merely just a fantasy that Iqbal created.
+        </div>
+        <div class="choice-container" style="display: none;">
+            <button class="choice-btn" onclick="revealNext(this)">continue</button>
+        </div>
+
+        <div class="item-logs" style="display: none;">
+            But one day, the pressure builds up and something happen to Iqbal. No one know exactly what happen. His few
+            friends, acquaintances and the one who know him saw something strange happening with Iqbal. Less talkative.
+            Less energetic. Less like him. One of the personas manage to let something out to one of his colleagues at
+            the time he was still a system developer. But something is off.
+        </div>
+        <div class="choice-container" style="display: none;">
+            <button class="choice-btn" onclick="revealNext(this)">continue</button>
+        </div>
+
+        <div class="item-logs" style="display: none;">
+            Until one day, after the incident of him put down his last remark digitally, no one seems to find him
+            anywhere. Not on WhatsApp, Not on Instagram, heck not even Facebook. Where did he go?
+        </div>
+        <div class="choice-container" style="display: none;">
+            <button class="choice-btn" onclick="revealNext(this)">continue</button>
+        </div>
+
+        <div class="item-logs" style="display: none;">
+            Rumours have it that Iqbal got a job outside Malaysia. Some say Iqbal have go deep into forest to bertapa.
+            Some speculate this is just one of Iqbal stunt to grab attention. Or maybe, just maybe, he is in trouble
+        </div>
+        <div class="choice-container" style="display: none;">
+            <button class="choice-btn" onclick="revealNext(this)">continue</button>
+        </div>
+
+        <div class="item-logs" style="display: none;">
+            You know your role, right? Try to find Iqbal. Or at least any information regarding it. Any information; big
+            and small, counts.
+        </div>
+        <div class="choice-container" style="display: none;">
+            <button class="choice-btn" onclick="revealNext(this)">continue</button>
+        </div>
+
+    </div>
+
+    <!-- Final continue block (hidden until all logs are read) -->
+    <div class="story-end" id="story-end-block" style="display: none;">
+        <button class="story-end-button" id="letter-check-button" type="button" onclick="redirectToSelectedStory()"
+            style="margin: 12px 20px;">
+            continue the story
+        </button>
+        <p id="story-route-error" role="alert" hidden>
+            <br><br>The selected story could not be found. Return to the quiz and choose a path again.
+        </p>
+    </div>
+
+    <script>
+        const storyPages = new Map([
+            ['No_Shit_Sherlock', 'quizStories/No_Shit_Sherlock.html'],
+            ['Your_Digital_Footprint', 'quizStories/Your_Digital_Footprint.html'],
+            ['The_Dark_Side_Of_Town', 'quizStories/The_Dark_Side_Of_Town.html'],
+            ['Arcane_Connection', 'quizStories/Arcane_Connection.html'],
+            ['I_Know_You_Are_Hurting', 'quizStories/I_Know_You_Are_Hurting.html'],
+            ['Second_In_Command', 'quizStories/Second_In_Command.html']
+        ]);
+
+        function redirectToSelectedStory() {
+            const selectedPath = new URLSearchParams(window.location.search).get('path');
+            const storyPage = storyPages.get(selectedPath);
+
+            if (!storyPage) {
+                document.getElementById('story-route-error').hidden = false;
+                return;
+            }
+
+            window.location.assign(new URL(storyPage, document.baseURI));
+        }
+
+        function revealNext(button) {
+            // 1. Locate and hide the clicked button's choice-container wrapper
+            const currentContainer = button.closest('.choice-container');
+            if (currentContainer) {
+                currentContainer.style.display = 'none';
+            }
+
+            // 2. Target the next item-logs div in DOM order
+            const nextLog = currentContainer.nextElementSibling;
+
+            // 3. Reveal next log div & its button container, or show the end block
+            if (nextLog && nextLog.classList.contains('item-logs')) {
+                nextLog.style.display = 'block';
+
+                const nextChoiceContainer = nextLog.nextElementSibling;
+                if (nextChoiceContainer && nextChoiceContainer.classList.contains('choice-container')) {
+                    nextChoiceContainer.style.display = 'flex';
+                }
+
+                setTimeout(() => {
+                    nextLog.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 50);
+            } else {
+                const storyEnd = document.getElementById('story-end-block');
+                if (storyEnd) {
+                    storyEnd.style.display = 'flex';
+                    setTimeout(() => {
+                        storyEnd.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 50);
+                }
+            }
+        }
+    </script>
+
+</body>
+
+</html>

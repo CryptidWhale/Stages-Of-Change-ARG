@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stages of Change ARG - Role Evaluation Quiz</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Cutive+Mono&family=Share+Tech&family=Syne+Mono&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- ARG Main Stylesheet -->
+  <link rel="stylesheet" href="assets/socarg.css">
+
+  <style>
+    /* Custom ARG Quiz Extensions */
+    .quiz-progress-sticky {
+      position: sticky;
+      top: 15px;
+      z-index: 50;
+      background-color: #111111;
+      border: 1px solid #F8F0E3;
+      padding: 14px;
+      margin-bottom: 20px;
+      box-shadow: 4px 4px 0 #808080;
+    }
+
+    .progress-bar-track {
+      width: 100%;
+      height: 10px;
+      background-color: #1C1C1C;
+      border: 1px solid #808080;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background-color: #34d399;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .q-number {
+      display: inline-block;
+      background-color: #111111;
+      color: #34d399;
+      font-family: "Syne Mono", monospace;
+      padding: 2px 8px;
+      font-weight: bold;
+      margin-right: 8px;
+      border: 1px solid #34d399;
+    }
+
+    .q-title {
+      font-weight: bold;
+      color: #111111;
+      margin-bottom: 12px;
+    }
+
+    .result-block {
+      background-color: #111111;
+      color: #F8F0E3;
+      border: 2px solid #34d399;
+      padding: 24px;
+      margin-top: 24px;
+      box-shadow: 6px 6px 0 #808080;
+    }
+
+    .stat-badge {
+      display: inline-block;
+      background-color: #1C1C1C;
+      color: #34d399;
+      border: 1px solid #34d399;
+      padding: 4px 8px;
+      font-size: 0.85rem;
+      font-family: "Syne Mono", monospace;
+      margin-right: 6px;
+      margin-bottom: 6px;
+    }
+
+    .breakdown-bar-track {
+      width: 100%;
+      height: 8px;
+      background-color: #1C1C1C;
+      border: 1px solid #808080;
+      margin-top: 4px;
+    }
+
+    .breakdown-bar-fill {
+      height: 100%;
+      background-color: #34d399;
+      transition: width 0.4s ease;
+    }
+
+    .breakdown-bar-fill.secondary {
+      background-color: #F8F0E3;
+    }
+
+    .option-btn {
+      width: 100%;
+      background-color: #1C1C1C;
+      color: #F8F0E3;
+      border: 1px solid #111111;
+      padding: 12px 16px;
+      font-family: "Cutive Mono", monospace;
+      font-size: 0.95rem;
+      cursor: pointer;
+      text-align: left;
+      transition: all 180ms ease;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      background-color: #F8F0E3;
+      color: #1C1C1C;
+      box-shadow: 4px 4px 0 #111111;
+      transform: translateY(-2px);
+    }
+
+    .option-btn.selected {
+      background-color: #111111 !important;
+      color: #34d399 !important;
+      border-color: #34d399 !important;
+      font-weight: bold;
+      box-shadow: none !important;
+      transform: none !important;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body class="body-logs font-cutive">
+
+  <div class="cont-logs">
+
+    <!-- Header Block -->
+    <div class="item-logs">
+      <div style="font-family: 'Syne Mono', monospace; font-size: 0.9rem; color: #111111; margin-bottom: 6px;">
+        [ EXPERIMENT EVALUATION // ARCHETYPE DIAGNOSTIC ]
+      </div>
+      <div style="font-size: 1.8rem; font-weight: bold; font-family: 'Courier Prime', monospace; margin-bottom: 8px;">
+        OPERATIVE ROLE ASSESSMENT
+      </div>
+      <div>
+        11 situational scenarios to determine your core operative archetype: Detective, Hacker, Mafia, Shaman, Therapist, or Assistant.
+      </div>
+    </div>
+
+    <!-- Sticky Progress Tracker -->
+    <div class="quiz-progress-sticky">
+      <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; color: #F8F0E3; font-family: 'Syne Mono', monospace;">
+        <span id="progressText">PROGRESS: 0 / 11 QUESTIONS</span>
+        <span id="progressPercent" style="color: #34d399;">0%</span>
+      </div>
+      <div class="progress-bar-track">
+        <div id="progressBar" class="progress-bar-fill"></div>
+      </div>
+    </div>
+
+    <!-- Questions Container -->
+    <main id="questionsContainer" style="display: flex; flex-direction: column; gap: 16px;">
+
+      <!-- Q1 -->
+      <div class="item-logs" id="q1">
+        <div class="q-title"><span class="q-number">01</span>What would you do if a coffee spilled onto you?</div>
+        <div>
+          <button class="option-btn" onclick="selectOption(1, { detective: 3, hacker: 1, mafia: 5, shaman: 0, therapist: 0, assistant: 0 }, this)">
+            <span>Automatically mad and seek who is responsible</span><i class="fa-solid fa-fire-flame-curved"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(1, { detective: 5, hacker: 3, mafia: 0, shaman: 0, therapist: 3, assistant: 1 }, this)">
+            <span>Search reason why the coffee would spill in the first place</span><i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(1, { detective: 1, hacker: 0, mafia: 0, shaman: 1, therapist: 3, assistant: 5 }, this)">
+            <span>Take it easy, do not make a scene, and clean it</span><i class="fa-solid fa-broom"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(1, { detective: 3, hacker: 3, mafia: 0, shaman: 0, therapist: 1, assistant: 5 }, this)">
+            <span>Search ways to avoid this happening in the future</span><i class="fa-solid fa-shield-halved"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(1, { detective: 0, hacker: 0, mafia: 0, shaman: 3, therapist: 5, assistant: 1 }, this)">
+            <span>Ask yourself what you feel before slowly cleaning it up</span><i class="fa-solid fa-heart"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(1, { detective: 0, hacker: 5, mafia: 1, shaman: 3, therapist: 1, assistant: 0 }, this)">
+            <span>Save what is left and leave the spill as is</span><i class="fa-solid fa-mug-hot"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="item-logs" id="q2">
+        <div class="q-title"><span class="q-number">02</span>You are preparing yourself for a driving test. What is your approach?</div>
+        <div>
+          <button class="option-btn" onclick="selectOption(2, { detective: 3, hacker: 1, mafia: 0, shaman: 0, therapist: 0, assistant: 5 }, this)">
+            <span>Rewind all the steps and memorize everything</span><i class="fa-solid fa-book"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(2, { detective: 0, hacker: 5, mafia: 3, shaman: 1, therapist: 0, assistant: 0 }, this)">
+            <span>Seek ways to cheat and take advantage of loopholes</span><i class="fa-solid fa-user-ninja"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(2, { detective: 0, hacker: 0, mafia: 0, shaman: 3, therapist: 5, assistant: 1 }, this)">
+            <span>Just wait and go with it</span><i class="fa-solid fa-bed"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(2, { detective: 0, hacker: 0, mafia: 0, shaman: 5, therapist: 3, assistant: 1 }, this)">
+            <span>Pray hard and prepare a self pep talk</span><i class="fa-solid fa-hands-praying"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(2, { detective: 5, hacker: 3, mafia: 0, shaman: 0, therapist: 3, assistant: 1 }, this)">
+            <span>Think of every possible way that it could go wrong or worse</span><i class="fa-solid fa-triangle-exclamation"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(2, { detective: 1, hacker: 0, mafia: 0, shaman: 0, therapist: 5, assistant: 1 }, this)">
+            <span>Find the core root of what I am capable and not capable of doing</span><i class="fa-solid fa-brain"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="item-logs" id="q3">
+        <div class="q-title"><span class="q-number">03</span>You found something bad at work and it could blow up at any moment (not your fault). What do you do?</div>
+        <div>
+          <button class="option-btn" onclick="selectOption(3, { detective: 0, hacker: 1, mafia: 3, shaman: 3, therapist: 1, assistant: 0 }, this)">
+            <span>It is what it is. I'm only here for the money, not responsible for the company</span><i class="fa-solid fa-sack-dollar"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(3, { detective: 0, hacker: 3, mafia: 5, shaman: 0, therapist: 0, assistant: 0 }, this)">
+            <span>Blackmail the higher-ups for a plan B if things hit the fan</span><i class="fa-solid fa-file-contract"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(3, { detective: 3, hacker: 5, mafia: 1, shaman: 0, therapist: 0, assistant: 3 }, this)">
+            <span>Execute a secret plan to save the situation from blowing up</span><i class="fa-solid fa-user-secret"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(3, { detective: 0, hacker: 3, mafia: 5, shaman: 0, therapist: 0, assistant: 0 }, this)">
+            <span>I'm the one who caused it, so I cover myself up</span><i class="fa-solid fa-dumpster-fire"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(3, { detective: 0, hacker: 1, mafia: 0, shaman: 3, therapist: 5, assistant: 1 }, this)">
+            <span>Resign before it's too late and becomes my responsibility</span><i class="fa-solid fa-door-open"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(3, { detective: 5, hacker: 1, mafia: 0, shaman: 0, therapist: 1, assistant: 5 }, this)">
+            <span>Warn the higher-ups, giving details and ways to prevent it</span><i class="fa-solid fa-bullhorn"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="item-logs" id="q4">
+        <div class="q-title"><span class="q-number">04</span>You are the prime suspect of a crime involving someone close. How do you act in interrogation?</div>
+        <div>
+          <button class="option-btn" onclick="selectOption(4, { detective: 5, hacker: 0, mafia: 0, shaman: 0, therapist: 1, assistant: 3 }, this)">
+            <span>State what I know and tell the police everything</span><i class="fa-solid fa-comment-dots"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(4, { detective: 3, hacker: 3, mafia: 1, shaman: 0, therapist: 3, assistant: 1 }, this)">
+            <span>Give out what seems important and withhold what is not</span><i class="fa-solid fa-filter"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(4, { detective: 1, hacker: 1, mafia: 5, shaman: 0, therapist: 0, assistant: 0 }, this)">
+            <span>Negotiate a way out and strike a deal with the cops</span><i class="fa-solid fa-handshake"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(4, { detective: 1, hacker: 3, mafia: 5, shaman: 0, therapist: 0, assistant: 0 }, this)">
+            <span>Tell them nothing. Please talk to my lawyer</span><i class="fa-solid fa-gavel"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(4, { detective: 3, hacker: 1, mafia: 0, shaman: 5, therapist: 1, assistant: 0 }, this)">
+            <span>Show them my conspiracy board and detail what might have happened</span><i class="fa-solid fa-diagram-project"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(4, { detective: 3, hacker: 1, mafia: 0, shaman: 0, therapist: 5, assistant: 3 }, this)">
+            <span>Tell the truth and remain calm so I don't look suspicious</span><i class="fa-solid fa-scale-balanced"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Q5 -->
+      <div class="item-logs" id="q5">
+        <div class="q-title"><span class="q-number">05</span>You are now at a crime scene. What would you do?</div>
+        <div>
+          <button class="option-btn" onclick="selectOption(5, { detective: 5, hacker: 3, mafia: 0, shaman: 0, therapist: 1, assistant: 1 }, this)">
+            <span>Piece together everything that might be related</span><i class="fa-solid fa-puzzle-piece"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(5, { detective: 3, hacker: 0, mafia: 0, shaman: 0, therapist: 5, assistant: 1 }, this)">
+            <span>Try to understand what the suspects and victim might have done here</span><i class="fa-solid fa-user-group"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(5, { detective: 0, hacker: 1, mafia: 1, shaman: 3, therapist: 1, assistant: 3 }, this)">
+            <span>Why am I here?</span><i class="fa-solid fa-circle-question"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(5, { detective: 0, hacker: 0, mafia: 0, shaman: 5, therapist: 1, assistant: 0 }, this)">
+            <span>Connect with the energy trail left behind to understand it</span><i class="fa-solid fa-atom"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(5, { detective: 5, hacker: 3, mafia: 1, shaman: 1, therapist: 0, assistant: 0 }, this)">
+            <span>I already know the whole timeline and who is guilty or innocent</span><i class="fa-solid fa-clock-rotate-left"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(5, { detective: 1, hacker: 3, mafia: 0, shaman: 3, therapist: 3, assistant: 0 }, this)">
+            <span>Find creative ways as to what it could be</span><i class="fa-solid fa-lightbulb"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Q6 -->
+      <div class="item-logs" id="q6">
+        <div class="q-title"><span class="q-number">06</span>Imagine you are at a cafe. Who are you talking to?</div>
+        <div>
+          <button class="option-btn" onclick="selectOption(6, { detective: 1, hacker: 0, mafia: 5, shaman: 0, therapist: 0, assistant: 3 }, this)">
+            <span>My crew and my team</span><i class="fa-solid fa-users-gear"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(6, { detective: 0, hacker: 5, mafia: 0, shaman: 3, therapist: 1, assistant: 0 }, this)">
+            <span>Me, myself, and I</span><i class="fa-solid fa-user"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(6, { detective: 0, hacker: 0, mafia: 0, shaman: 1, therapist: 5, assistant: 1 }, this)">
+            <span>A person I am deeply connected with</span><i class="fa-solid fa-heart-circle-bolt"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(6, { detective: 1, hacker: 0, mafia: 1, shaman: 3, therapist: 3, assistant: 0 }, this)">
+            <span>A random stranger</span><i class="fa-solid fa-comments"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(6, { detective: 5, hacker: 3, mafia: 3, shaman: 0, therapist: 0, assistant: 0 }, this)">
+            <span>Someone I am trying to extract information from</span><i class="fa-solid fa-eye"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(6, { detective: 1, hacker: 0, mafia: 0, shaman: 0, therapist: 3, assistant: 5 }, this)">
+            <span>Someone who seeks my help</span><i class="fa-solid fa-hand-holding-heart"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Q7 -->
+      <div class="item-logs" id="q7">
+        <div class="q-title"><span class="q-number">07</span>You found an ARG that caught your interest. How do you approach it?</div>
+        <div>
+          <button class="option-btn" onclick="selectOption(7, { detective: 3, hacker: 1, mafia: 5, shaman: 0, therapist: 0, assistant: 1 }, this)">
+            <span>Me and my team are digging into it right now</span><i class="fa-solid fa-people-group"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(7, { detective: 3, hacker: 5, mafia: 1, shaman: 0, therapist: 0, assistant: 0 }, this)">
+            <span>Alone, trying to solve it before everyone else</span><i class="fa-solid fa-laptop-code"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(7, { detective: 1, hacker: 0, mafia: 0, shaman: 5, therapist: 3, assistant: 0 }, this)">
+            <span>Seek the deeper philosophical meaning behind the ARG</span><i class="fa-solid fa-om"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(7, { detective: 0, hacker: 5, mafia: 0, shaman: 0, therapist: 0, assistant: 1 }, this)">
+            <span>Look for backdoors, edge cases, and inspect source code</span><i class="fa-solid fa-code"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(7, { detective: 0, hacker: 0, mafia: 0, shaman: 1, therapist: 5, assistant: 0 }, this)">
+            <span>Relate it to my own life and what it represents</span><i class="fa-solid fa-compass"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(7, { detective: 5, hacker: 0, mafia: 0, shaman: 0, therapist: 0, assistant: 3 }, this)">
+            <span>Go vanilla as it was intended to be played</span><i class="fa-solid fa-gamepad"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Q8 -->
+      <div class="item-logs" id="q8">
+        <div class="q-title"><span class="q-number">08</span>Walking alone at night, you hear someone trailing you. What do you do?</div>
+        <div>
+          <button class="option-btn" onclick="selectOption(8, { detective: 1, hacker: 0, mafia: 5, shaman: 0, therapist: 0, assistant: 0 }, this)">
+            <span>Pull out a weapon</span><i class="fa-solid fa-gun"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(8, { detective: 0, hacker: 0, mafia: 0, shaman: 5, therapist: 0, assistant: 0 }, this)">
+            <span>Cast a spell</span><i class="fa-solid fa-wand-magic-sparkles"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(8, { detective: 3, hacker: 0, mafia: 5, shaman: 1, therapist: 0, assistant: 0 }, this)">
+            <span>Turn around and chase them back</span><i class="fa-solid fa-person-running"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(8, { detective: 5, hacker: 3, mafia: 0, shaman: 0, therapist: 0, assistant: 1 }, this)">
+            <span>Secretly take a photo for evidence</span><i class="fa-solid fa-camera"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(8, { detective: 3, hacker: 1, mafia: 0, shaman: 0, therapist: 5, assistant: 1 }, this)">
+            <span>Try to deduce the reason why I might be followed</span><i class="fa-solid fa-circle-nodes"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(8, { detective: 0, hacker: 1, mafia: 0, shaman: 5, therapist: 3, assistant: 0 }, this)">
+            <span>Act completely crazy</span><i class="fa-solid fa-face-laugh-squint"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Q9 -->
+      <div class="item-logs" id="q9">
+        <div class="q-title"><span class="q-number">09</span>You want a pet or companion to care for. What do you pick?</div>
+        <div>
+          <button class="option-btn" onclick="selectOption(9, { detective: 0, hacker: 1, mafia: 1, shaman: 5, therapist: 3, assistant: 0 }, this)">
+            <span>A whale! Why not?</span><i class="fa-solid fa-fish"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(9, { detective: 0, hacker: 3, mafia: 0, shaman: 1, therapist: 3, assistant: 1 }, this)">
+            <span>A ferret! Energetic companion to play with</span><i class="fa-solid fa-otter"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(9, { detective: 1, hacker: 1, mafia: 0, shaman: 0, therapist: 5, assistant: 3 }, this)">
+            <span>Just a cat. Named Mr. Whiskers</span><i class="fa-solid fa-cat"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(9, { detective: 0, hacker: 3, mafia: 0, shaman: 3, therapist: 1, assistant: 1 }, this)">
+            <span>A worm. Mr. Wormy</span><i class="fa-solid fa-bug"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(9, { detective: 5, hacker: 3, mafia: 0, shaman: 1, therapist: 0, assistant: 0 }, this)">
+            <span>An owl! Smart and silent</span><i class="fa-solid fa-crow"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(9, { detective: 0, hacker: 5, mafia: 0, shaman: 0, therapist: 1, assistant: 3 }, this)">
+            <span>Cherry shrimp. Great look, low maintenance</span><i class="fa-solid fa-shrimp"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(9, { detective: 1, hacker: 0, mafia: 5, shaman: 1, therapist: 0, assistant: 1 }, this)">
+            <span>A horse. Majestic AF</span><i class="fa-solid fa-horse"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(9, { detective: 1, hacker: 0, mafia: 5, shaman: 3, therapist: 0, assistant: 0 }, this)">
+            <span>An eagle! Can hunt targets down</span><i class="fa-solid fa-eagle"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(9, { detective: 1, hacker: 3, mafia: 0, shaman: 0, therapist: 0, assistant: 5 }, this)">
+            <span>No animal please</span><i class="fa-solid fa-ban"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Q10 -->
+      <div class="item-logs" id="q10">
+        <div class="q-title"><span class="q-number">10</span>Lost while riding your motorcycle with a broken GPS. What do you do?</div>
+        <div>
+          <button class="option-btn" onclick="selectOption(10, { detective: 0, hacker: 0, mafia: 1, shaman: 0, therapist: 3, assistant: 5 }, this)">
+            <span>Ask a friend how to get there</span><i class="fa-solid fa-phone"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(10, { detective: 3, hacker: 0, mafia: 0, shaman: 1, therapist: 3, assistant: 3 }, this)">
+            <span>Ask local people around for directions</span><i class="fa-solid fa-map-pin"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(10, { detective: 0, hacker: 0, mafia: 5, shaman: 0, therapist: 0, assistant: 1 }, this)">
+            <span>Call one of my crew members to guide me</span><i class="fa-solid fa-walkie-talkie"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(10, { detective: 3, hacker: 1, mafia: 0, shaman: 0, therapist: 5, assistant: 1 }, this)">
+            <span>Keep calm and try to remember landmarks</span><i class="fa-solid fa-memory"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(10, { detective: 5, hacker: 3, mafia: 0, shaman: 0, therapist: 1, assistant: 1 }, this)">
+            <span>I know exactly where I went wrong and reroute</span><i class="fa-solid fa-route"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(10, { detective: 0, hacker: 1, mafia: 0, shaman: 5, therapist: 1, assistant: 0 }, this)">
+            <span>Keep riding until I eventually get there</span><i class="fa-solid fa-motorcycle"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Q11 -->
+      <div class="item-logs" id="q11">
+        <div class="q-title"><span class="q-number">11</span>You are seeking a new job. How do you go about it?</div>
+        <div>
+          <button class="option-btn" onclick="selectOption(11, { detective: 3, hacker: 1, mafia: 0, shaman: 0, therapist: 1, assistant: 5 }, this)">
+            <span>Find the role that best suits my skills and expertise</span><i class="fa-solid fa-briefcase"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(11, { detective: 0, hacker: 0, mafia: 0, shaman: 3, therapist: 1, assistant: 3 }, this)">
+            <span>Anything works, whatever comes my way</span><i class="fa-solid fa-shuffle"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(11, { detective: 5, hacker: 3, mafia: 0, shaman: 0, therapist: 1, assistant: 0 }, this)">
+            <span>Deep analysis and background check before applying</span><i class="fa-solid fa-magnifying-glass-chart"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(11, { detective: 0, hacker: 1, mafia: 5, shaman: 1, therapist: 0, assistant: 0 }, this)">
+            <span>Start my own business and be my own boss</span><i class="fa-solid fa-crown"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(11, { detective: 3, hacker: 3, mafia: 0, shaman: 0, therapist: 5, assistant: 1 }, this)">
+            <span>Identify and solve problems the targeted company currently has</span><i class="fa-solid fa-wrench"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(11, { detective: 1, hacker: 0, mafia: 5, shaman: 0, therapist: 1, assistant: 3 }, this)">
+            <span>Leverage personal connections and network for an offer</span><i class="fa-solid fa-network-wired"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(11, { detective: 0, hacker: 5, mafia: 5, shaman: 0, therapist: 0, assistant: 0 }, this)">
+            <span>Hack, leverage, or force my way into securing the position</span><i class="fa-solid fa-terminal"></i>
+          </button>
+          <button class="option-btn" onclick="selectOption(11, { detective: 3, hacker: 1, mafia: 0, shaman: 0, therapist: 1, assistant: 5 }, this)">
+            <span>Update resume/CV and upskill specifically for the desired role</span><i class="fa-solid fa-graduation-cap"></i>
+          </button>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Result Section -->
+    <section id="result" class="result-block hidden">
+      <div style="font-family: 'Syne Mono', monospace; color: #34d399; font-size: 0.9rem; letter-spacing: 2px; margin-bottom: 8px;">
+        // ARCHETYPE DIAGNOSTIC COMPLETE
+      </div>
+
+      <h2 id="resultTitle" style="font-family: 'Courier Prime', monospace; font-size: 2rem; color: #F8F0E3; margin-top: 0; margin-bottom: 6px;"></h2>
+      <div id="resultSub" style="color: #34d399; font-family: 'Syne Mono', monospace; margin-bottom: 20px;"></div>
+
+      <!-- Primary Class Detail Block -->
+      <div style="background-color: #1C1C1C; border: 1px solid #808080; padding: 18px; margin-bottom: 20px;">
+        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 12px;">
+          <div id="roleIconBox" style="width: 50px; height: 50px; background-color: #111111; border: 1px solid #34d399; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #34d399; flex-shrink: 0;">
+            <i class="fa-solid fa-user-secret"></i>
+          </div>
+          <div id="roleBadges">
+            <!-- Badges inserted dynamically -->
+          </div>
+        </div>
+
+        <p id="resultDescription" style="font-size: 1.05rem; line-height: 1.5; color: #F8F0E3; margin-bottom: 12px;"></p>
+        <div id="roleQuote" style="font-style: italic; color: #808080; border-left: 2px solid #34d399; padding-left: 10px; font-size: 0.95rem;"></div>
+      </div>
+
+      <!-- Affinity Breakdown -->
+      <div style="margin-bottom: 24px;">
+        <div style="font-family: 'Syne Mono', monospace; color: #F8F0E3; font-size: 1.1rem; margin-bottom: 12px;">
+          ROLE AFFINITY BREAKDOWN:
+        </div>
+        <div id="roleBreakdown" style="display: flex; flex-direction: column; gap: 10px;">
+          <!-- Breakdown bars inserted dynamically -->
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="end-actions">
+        <button onclick="retakeQuiz()" class="end-btn" type="button">
+          <i class="fa-solid fa-rotate-right"></i> RETAKE DIAGNOSTIC
+        </button>
+        <button onclick="copyResults()" class="end-btn" type="button" style="border-color: #34d399; color: #34d399;">
+          <i class="fa-solid fa-share-nodes"></i> COPY LOG DATA
+        </button>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">
+    <span id="toastMsg">Results copied to clipboard!</span>
+  </div>
+
+  <script>
+    // Master Role Scores Tracking
+    const scores = {
+      detective: 0,
+      hacker: 0,
+      mafia: 0,
+      shaman: 0,
+      therapist: 0,
+      assistant: 0
+    };
+
+    const userSelections = {}; 
+    const totalQuestions = 11;
+
+    // Operative Archetype Information Database
+    const roleInfo = {
+      detective: {
+        name: "Detective",
+        title: "Analytical Investigator & Deductive Strategist",
+        icon: "fa-magnifying-glass",
+        coreTrait: "Observation & Logic",
+        quote: '"Every detail leaves a clue. Facts don\'t lie, people do."',
+        description: "You analyze scenarios methodically. You look for patterns, uncover underlying truths, and insist on evidence over assumptions."
+      },
+      hacker: {
+        name: "Hacker",
+        title: "Systems Operator & Edge-Case Specialist",
+        icon: "fa-terminal",
+        coreTrait: "Resourcefulness & Exploits",
+        quote: '"Rules are just code waiting to be bypassed."',
+        description: "You see hidden backdoors where others see brick walls. You break complex systems down into logic loops and execute precision shortcuts."
+      },
+      mafia: {
+        name: "Mafia",
+        title: "Power Broker & High-Stakes Enforcer",
+        icon: "fa-crown",
+        coreTrait: "Authority & Leverage",
+        quote: '"Power isn\'t given, it\'s negotiated or taken."',
+        description: "Direct, ambitious, and command-oriented. You understand hierarchy, leverage, and how to control outcomes in intense environments."
+      },
+      shaman: {
+        name: "Shaman",
+        title: "Intuitive Conduit & Unseen Listener",
+        icon: "fa-wand-magic-sparkles",
+        coreTrait: "Intuition & Spirit",
+        quote: '"Listen closely to the underlying frequency beneath the noise."',
+        description: "You operate on gut instinct, unseen energy, and deep spiritual alignment. You sense what others overlook far beyond surface logic."
+      },
+      therapist: {
+        name: "Therapist",
+        title: "Empathetic Mind Analyst & Counselor",
+        icon: "fa-brain",
+        coreTrait: "Empathy & Root Analysis",
+        quote: '"To resolve any crisis, you must first understand the inner motivation."',
+        description: "Deeply empathetic and contemplative. You focus on root emotional causes, human connection, and helping others make sense of chaos."
+      },
+      assistant: {
+        name: "Assistant",
+        title: "Reliable Backbone & Operations Pillar",
+        icon: "fa-clipboard-check",
+        coreTrait: "Structure & Support",
+        quote: '"Flawless execution behind the scenes is what prevents total collapse."',
+        description: "Pillar of reliability, organization, and practical efficiency. You keep projects structured, anticipate needs, and ensure smoother workflows."
+      }
+    };
+
+    function selectOption(qIdx, pointMapping, btnElement) {
+      if (userSelections[qIdx]) {
+        const oldMapping = userSelections[qIdx].mapping;
+        for (const [roleKey, pts] of Object.entries(oldMapping)) {
+          scores[roleKey] = Math.max(0, (scores[roleKey] || 0) - pts);
+        }
+        if (userSelections[qIdx].button) {
+          userSelections[qIdx].button.classList.remove('selected');
+        }
+      }
+
+      userSelections[qIdx] = {
+        mapping: pointMapping,
+        button: btnElement
+      };
+
+      for (const [roleKey, pts] of Object.entries(pointMapping)) {
+        scores[roleKey] = (scores[roleKey] || 0) + pts;
+      }
+
+      btnElement.classList.add('selected');
+      updateProgress();
+
+      const answeredCount = Object.keys(userSelections).length;
+      if (answeredCount === totalQuestions) {
+        showResult();
+      }
+    }
+
+    function updateProgress() {
+      const count = Object.keys(userSelections).length;
+      const percentage = Math.round((count / totalQuestions) * 100);
+      
+      document.getElementById('progressText').innerText = `PROGRESS: ${count} / ${totalQuestions} QUESTIONS`;
+      document.getElementById('progressPercent').innerText = `${percentage}%`;
+      document.getElementById('progressBar').style.width = `${percentage}%`;
+    }
+
+    function showResult() {
+      const sortedRoles = Object.keys(scores).sort((a, b) => scores[b] - scores[a]);
+      const primaryKey = sortedRoles[0];
+      const secondaryKey = sortedRoles[1];
+      const primaryData = roleInfo[primaryKey];
+      const secondaryData = roleInfo[secondaryKey];
+
+      const totalPoints = Object.values(scores).reduce((sum, val) => sum + val, 0) || 1;
+
+      document.getElementById('resultTitle').innerText = `PRIMARY: ${primaryData.name.toUpperCase()}`;
+      document.getElementById('resultSub').innerText = `Secondary Hybrid Alignment: ${secondaryData.name}`;
+
+      document.getElementById('roleIconBox').innerHTML = `<i class="fa-solid ${primaryData.icon}"></i>`;
+      document.getElementById('resultDescription').innerText = primaryData.description;
+      document.getElementById('roleQuote').innerText = primaryData.quote;
+
+      const badgesContainer = document.getElementById('roleBadges');
+      badgesContainer.innerHTML = `
+        <span class="stat-badge">TRAIT: ${primaryData.coreTrait}</span>
+        <span class="stat-badge">TITLE: ${primaryData.title}</span>
+      `;
+
+      const breakdownContainer = document.getElementById('roleBreakdown');
+      breakdownContainer.innerHTML = '';
+
+      sortedRoles.forEach((roleKey, index) => {
+        const roleScore = scores[roleKey];
+        const percentage = Math.round((roleScore / totalPoints) * 100);
+        const data = roleInfo[roleKey];
+
+        const barWrapper = document.createElement('div');
+        barWrapper.innerHTML = `
+          <div style="display: flex; justify-content: space-between; font-size: 0.9rem; font-family: 'Cutive Mono', monospace; color: #F8F0E3;">
+            <span><i class="fa-solid ${data.icon}" style="color: #34d399; width: 20px;"></i> ${data.name}</span>
+            <span style="color: #808080;">${roleScore} pts (${percentage}%)</span>
+          </div>
+          <div class="breakdown-bar-track">
+            <div class="breakdown-bar-fill ${index === 0 ? '' : 'secondary'}" style="width: ${percentage}%"></div>
+          </div>
+        `;
+        breakdownContainer.appendChild(barWrapper);
+      });
+
+      const resultDiv = document.getElementById('result');
+      resultDiv.classList.remove('hidden');
+      resultDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function retakeQuiz() {
+      for (const key in scores) {
+        scores[key] = 0;
+      }
+      
+      for (const qIdx in userSelections) {
+        if (userSelections[qIdx].button) {
+          userSelections[qIdx].button.classList.remove('selected');
+        }
+        delete userSelections[qIdx];
+      }
+
+      updateProgress();
+      document.getElementById('result').classList.add('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function copyResults() {
+      const sortedRoles = Object.keys(scores).sort((a, b) => scores[b] - scores[a]);
+      const primary = roleInfo[sortedRoles[0]].name;
+      const secondary = roleInfo[sortedRoles[1]].name;
+
+      const summaryText = `[ARG DIAGNOSTIC RESULT]\nPrimary Archetype: ${primary}\nSecondary Affinity: ${secondary}`;
+
+      const tempInput = document.createElement("textarea");
+      tempInput.value = summaryText;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      try {
+        document.execCommand("copy");
+        showToast("Results copied to clipboard!");
+      } catch (err) {
+        showToast("Copy failed. Primary result: " + primary);
+      }
+      document.body.removeChild(tempInput);
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').innerText = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARG Sequential Briefing</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #0b0e14;
+            color: #d1d5db;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 550px;
+            background-color: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Progress indicator / Header */
+        .step-tracker {
+            font-size: 0.8rem;
+            color: #10b981;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Hide all step blocks by default */
+        .step-block {
+            display: none;
+        }
+
+        /* Show active step block */
+        .step-block.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        h2 {
+            color: #60a5fa;
+            margin-bottom: 12px;
+            font-size: 1.3rem;
+        }
+
+        p {
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #9ca3af;
+        }
+
+        /* Button Styling */
+        .btn {
+            background-color: #2563eb;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            font-family: inherit;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+
+        .btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn:disabled {
+            background-color: #374151;
+            color: #6b7280;
+            cursor: not-allowed;
+        }
+
+        /* Smooth fade-in effect for new divs */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <!-- Tracker header -->
+        <div class="step-tracker" id="step-tracker">
+            Phase 1 of 3
+        </div>
+
+        <!-- STEP 1 -->
+        <div class="step-block active" data-step="1">
+            <h2>[SYSTEM BRIEFING: INITIATION]</h2>
+            <p>Welcome, Agent. Before proceeding, ensure your communication lines are secured and encrypted.</p>
+            <button class="btn next-btn">OK, I got it</button>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="step-block" data-step="2">
+            <h2>[TRANSMISSION LOG: DEEPWATER]</h2>
+            <p>We intercepted an acoustic signal from coordinates 47°09'S 126°43'W. It resembles a 52Hz low-frequency call, but encoded in binary.</p>
+            <button class="btn next-btn">I understand</button>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="step-block" data-step="3">
+            <h2>[FINAL INSTRUCTION]</h2>
+            <p>Your objective is to find the hidden cipher in the metadata. Do not let the signal lapse.</p>
+            <button class="btn" onclick="alert('Archive Unlocked!')">Access Archive</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Select all step divs and 'Next' buttons
+            const steps = document.querySelectorAll('.step-block');
+            const nextButtons = document.querySelectorAll('.next-btn');
+            const tracker = document.getElementById('step-tracker');
+
+            let currentStepIndex = 0;
+            const totalSteps = steps.length;
+
+            // Function to update which step is shown
+            function updateStep(newIndex) {
+                // Remove active class from current step
+                steps[currentStepIndex].classList.remove('active');
+
+                // Update index
+                currentStepIndex = newIndex;
+
+                // Add active class to new step
+                steps[currentStepIndex].classList.add('active');
+
+                // Update progress tracker text
+                if (tracker) {
+                    tracker.textContent = `Phase ${currentStepIndex + 1} of ${totalSteps}`;
+                }
+            }
+
+            // Attach event listener to all "Next" buttons
+            nextButtons.forEach((button) => {
+                button.addEventListener('click', () => {
+                    if (currentStepIndex < totalSteps - 1) {
+                        updateStep(currentStepIndex + 1);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

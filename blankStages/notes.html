@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stages of Change ARG</title>
+    <base href="../">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Cutive+Mono&family=Handjet:wght,ELSH@100..900,2&family=Raleway:ital,wght@0,100..900;1,100..900&family=Redacted+Script:wght@300;400;700&family=Share+Tech&family=Special+Elite&family=Syne+Mono&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="assets/socarg.css">
+    <script src="assets/landingPage.js" defer></script>
+    <style>
+        /* Hide all blocks by default */
+        .block {
+            display: none;
+        }
+
+        /* Show block when active class is added */
+        .block.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body class="landing-page-body">
+
+    <div class="block" data-key="experiment">
+        <h1 class="font-tech landing-page-h1">you relapsed</h1>
+        <h3 class="font-tech landing-page-h3">
+            you experimented with stuff and end up here
+            <br />
+            just get yourself back together
+        </h3>
+        <h3 class="font-tech landing-page-h3">
+            you know which key to click
+        </h3>
+        <div class="justButton-container">
+            <a class="justButton" href="#">
+                what is this?
+            </a>
+        </div>
+    </div>
+
+    <div class="block" data-key="decision">
+        <h1 class="font-tech landing-page-h1">you relapsed</h1>
+        <h3 class="font-tech landing-page-h3">
+            you made a decision
+            <br />
+            just make another one that is better
+        </h3>
+        <h3 class="font-tech landing-page-h3">
+            you know which key to click
+        </h3>
+        <div class="justButton-container">
+            <a class="justButton" href="#">
+                what is this?
+            </a>
+        </div>
+    </div>
+
+    <div class="block" data-key="integration">
+        <h1 class="font-tech landing-page-h1">you relapsed</h1>
+        <h3 class="font-tech landing-page-h3">
+            don't give up now
+            <br />
+            you are so close!!!
+        </h3>
+        <h3 class="font-tech landing-page-h3">
+            you know which key to click
+        </h3>
+        <div class="justButton-container">
+            <a class="justButton" href="#">
+                what is this?
+            </a>
+        </div>
+    </div>
+
+    <div class="block" data-key="shock">
+        <h1 class="font-tech landing-page-h1">you relapsed</h1>
+        <h3 class="font-tech landing-page-h3">
+            what's the deal? nothing shocking.
+            <br />
+            just get yourself back together
+        </h3>
+        <h3 class="font-tech landing-page-h3">
+            you know which key to click
+        </h3>
+        <div class="justButton-container">
+            <a class="justButton" href="#">
+                what is this?
+            </a>
+        </div>
+    </div>
+
+    <div class="block" data-key="denial">
+        <h1 class="font-tech landing-page-h1">you relapsed</h1>
+        <h3 class="font-tech landing-page-h3">
+            don't deny it. we all have been there
+            <br />
+            just get yourself back together
+        </h3>
+        <h3 class="font-tech landing-page-h3">
+            you know which key to click
+        </h3>
+        <div class="justButton-container">
+            <a class="justButton" href="#">
+                what is this?
+            </a>
+        </div>
+    </div>
+
+    <div class="block" data-key="anger">
+        <h1 class="font-tech landing-page-h1">you relapsed</h1>
+        <h3 class="font-tech landing-page-h3">
+            take it one at a time
+            <br />
+            you cannot be angry at yourself when you need you teh most
+        </h3>
+        <h3 class="font-tech landing-page-h3">
+            you know which key to click
+        </h3>
+        <div class="justButton-container">
+            <a class="justButton" href="#">
+                what is this?
+            </a>
+        </div>
+    </div>
+
+    <div class="block" data-key="depression">
+        <h1 class="font-tech landing-page-h1">you relapsed</h1>
+        <h3 class="font-tech landing-page-h3">
+            what's the deal? nothing big
+            <br />
+            if you tired, rest. then continue with your own pace
+        </h3>
+        <h3 class="font-tech landing-page-h3">
+            you know which key to click
+        </h3>
+        <div class="justButton-container">
+            <a class="justButton" href="#">
+                what is this?
+            </a>
+        </div>
+    </div>
+
+    <div class="block" id="fallback-block">
+        <h1 class="font-tech landing-page-h1">you relapsed-</h1>
+        <h1 class="font-tech landing-page-h1">wait, the fuck are you doing here?</h1>
+        <div class="anyTextMiddle">
+            are you..... lost or something?
+        </div>
+    </div>
+
+    <div class="justButton-container">
+        <a class="justButton" href="#" onclick="window.history.go(-1); return false;">
+            Go Back
+        </a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Read query parameters from window.location.search
+            const urlParams = new URLSearchParams(window.location.search);
+
+            // 2. Retrieve value of 'key' (e.g. ?key=key1)
+            const targetKey = urlParams.get('key');
+
+            // 3. Select all blocks with 'data-key'
+            const blocks = document.querySelectorAll('.block[data-key]');
+            const fallbackBlock = document.getElementById('fallback-block');
+
+            let matchFound = false;
+
+            if (targetKey) {
+                blocks.forEach(block => {
+                    // Check if dataset key matches the URL key (case-insensitive option)
+                    if (block.dataset.key.toLowerCase() === targetKey.toLowerCase()) {
+                        block.classList.add('active');
+                        matchFound = true;
+                    }
+                });
+            }
+
+            // 4. If no valid key matched, show fallback block
+            if (!matchFound && fallbackBlock) {
+                fallbackBlock.classList.add('active');
+            }
+        });
+    </script>
+</body>
+
+</html>

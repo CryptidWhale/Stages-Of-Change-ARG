@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARG Signal Receiver</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #0b0e14;
+            color: #d1d5db;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        /* Log groups (hidden by default) */
+        .log-group {
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Active log group gets flex layout */
+        .log-group.active-group {
+            display: flex;
+        }
+
+        /* Card Styling */
+        .card {
+            background-color: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 10px;
+            padding: 22px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            display: none; /* Cards hidden until revealed */
+            opacity: 0;
+        }
+
+        /* Initial card in active group or revealed card */
+        .card.revealed {
+            display: block;
+            animation: slideDown 0.4s ease-out forwards;
+        }
+
+        .card-header {
+            font-size: 0.75rem;
+            color: #10b981;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sender {
+            font-weight: bold;
+            color: #60a5fa;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        p {
+            line-height: 1.6;
+            margin-bottom: 18px;
+            color: #9ca3af;
+        }
+
+        /* Interactive Buttons */
+        .btn {
+            background-color: #2563eb;
+            color: #ffffff;
+            border: none;
+            padding: 9px 18px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .completed-tag {
+            display: inline-block;
+            color: #10b981;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        /* Error / Fallback State */
+        .error-card {
+            border-color: #991b1b;
+            background-color: #180c0c;
+        }
+
+        .error-card .card-header {
+            color: #f87171;
+        }
+
+        code {
+            background-color: #1f2937;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #f59e0b;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- ==================== KEY1 THREAD ==================== -->
+        <!-- URL: ?key=key1 -->
+        <div class="log-group" data-key="key1">
+
+            <div class="card revealed">
+                <div class="card-header">Channel #101 • Log 1/3</div>
+                <div class="sender">[OPERATOR_09]:</div>
+                <p>Bal, do you read me? The server at sector 4 registered an unexpected spike in encrypted traffic.</p>
+                <div class="action-area">
+                    <button class="btn" onclick="revealNextLog(this)">What kind of spike?</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Channel #101 • Log 2/3</div>
+                <div class="sender">[OPERATOR_09]:</div>
+                <p>It matches the frequency signature of the 52Hz oceanic transmission. Someone is broadcasting from inside our firewall.</p>
+                <div class="action-area">
+                    <button class="btn" onclick="revealNextLog(this)">Acknowledge & Trace Signal</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Channel #101 • Log 3/3</div>
+                <div class="sender">[SYSTEM NOTICE]:</div>
+                <p>Trace complete. Target URL parameter retrieved: <code>?key=key2</code>. Proceed to next stage when ready.</p>
+            </div>
+
+        </div>
+
+
+        <!-- ==================== KEY2 THREAD ==================== -->
+        <!-- URL: ?key=key2 -->
+        <div class="log-group" data-key="key2">
+
+            <div class="card revealed">
+                <div class="card-header">Channel #202 • Log 1/2</div>
+                <div class="sender">[ARCHIVIST]:</div>
+                <p>Welcome to Level 2. The data stream here is heavily obfuscated in hexadecimal fragments.</p>
+                <div class="action-area">
+                    <button class="btn" onclick="revealNextLog(this)">Load Cipher Table</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Channel #202 • Log 2/2</div>
+                <div class="sender">[ARCHIVIST]:</div>
+                <p>Fragment unlocked: <code>48 45 4C 4C 4F</code>. You've cleared stage 2!</p>
+            </div>
+
+        </div>
+
+
+        <!-- ==================== FALLBACK / NO MATCH ==================== -->
+        <div class="log-group" id="fallback-group">
+            <div class="card error-card revealed">
+                <div class="card-header">Transmission Error • 404</div>
+                <div class="sender">[SYSTEM_WARNING]:</div>
+                <p>No active frequency found for this parameter. Please check your query string appendage in the URL bar.</p>
+                <p>Try appending: <code>?key=key1</code> or <code>?key=key2</code></p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Get query parameters from URL (e.g. ?key=key1)
+            const urlParams = new URLSearchParams(window.location.search);
+            const keyParam = urlParams.get('key');
+
+            // 2. Locate all defined log groups
+            const logGroups = document.querySelectorAll('.log-group[data-key]');
+            const fallbackGroup = document.getElementById('fallback-group');
+
+            let matched = false;
+
+            if (keyParam) {
+                logGroups.forEach(group => {
+                    // Match query param against data-key attribute (case-insensitive)
+                    if (group.dataset.key.toLowerCase() === keyParam.toLowerCase()) {
+                        group.classList.add('active-group');
+                        matched = true;
+                    }
+                });
+            }
+
+            // 3. If no key passed or no match found, show fallback group
+            if (!matched && fallbackGroup) {
+                fallbackGroup.classList.add('active-group');
+            }
+        });
+
+        // Dynamic reveal function (DOM Traversal)
+        function revealNextLog(buttonElement) {
+            // Find current card containing clicked button
+            const currentCard = buttonElement.closest('.card');
+            
+            // Find next sibling card in same group
+            const nextCard = currentCard.nextElementSibling;
+
+            // Update current card button to read-only status
+            const actionArea = currentCard.querySelector('.action-area');
+            if (actionArea) {
+                actionArea.innerHTML = `<span class="completed-tag">✓ Transmission Logged</span>`;
+            }
+
+            // Reveal next card if it exists
+            if (nextCard && nextCard.classList.contains('card')) {
+                nextCard.classList.add('revealed');
+
+                // Smooth scroll down to new card
+                setTimeout(() => {
+                    nextCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 100);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARG Secret Archive</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #0d1117;
+            color: #58a6ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Hide all blocks by default */
+        .block {
+            display: none;
+        }
+
+        /* Show block when active class is added */
+        .block.active {
+            display: block;
+        }
+
+        h1, h2 {
+            margin-bottom: 15px;
+            color: #79c0ff;
+        }
+
+        p {
+            line-height: 1.6;
+            margin-bottom: 10px;
+            color: #c9d1d9;
+        }
+
+        code {
+            background-color: #21262d;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #f0883e;
+        }
+
+        .hint-box {
+            font-size: 0.85rem;
+            color: #8b949e;
+            border-top: 1px dashed #30363d;
+            padding-top: 15px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Block for key1 -->
+        <div class="block" data-key="key1">
+            <h2>[ACCESS GRANTED: LEVEL 1]</h2>
+            <p>Welcome to Stage 1. You deciphered the first transmission.</p>
+            <p><em>"The whale calls reverberate across the 52Hz spectrum."</em></p>
+        </div>
+
+        <!-- Block for key2 -->
+        <div class="block" data-key="key2">
+            <h2>[ACCESS GRANTED: LEVEL 2]</h2>
+            <p>Impressive digging, detective. Level 2 unlocked.</p>
+            <p><em>"The cipher key is hidden in the silence between notes."</em></p>
+        </div>
+
+        <!-- Block for key3 -->
+        <div class="block" data-key="key3">
+            <h2>[ACCESS GRANTED: LEVEL 3]</h2>
+            <p>Final payload retrieved. You have reached the core of the archive.</p>
+        </div>
+
+        <!-- Fallback block (shown if key missing or invalid) -->
+        <div class="block" id="fallback-block">
+            <h2>[404 ACCESS DENIED]</h2>
+            <p>No valid clearance key found in the matrix.</p>
+            <p>Try appending a query parameter like: <code>?key=key1</code> or <code>?key=key2</code> to the URL.</p>
+        </div>
+
+        <div class="hint-box">
+            <strong>Greg's Dev Note:</strong> Test by modifying the URL in your browser address bar.
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Read query parameters from window.location.search
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            // 2. Retrieve value of 'key' (e.g. ?key=key1)
+            const targetKey = urlParams.get('key');
+
+            // 3. Select all blocks with 'data-key'
+            const blocks = document.querySelectorAll('.block[data-key]');
+            const fallbackBlock = document.getElementById('fallback-block');
+            
+            let matchFound = false;
+
+            if (targetKey) {
+                blocks.forEach(block => {
+                    // Check if dataset key matches the URL key (case-insensitive option)
+                    if (block.dataset.key.toLowerCase() === targetKey.toLowerCase()) {
+                        block.classList.add('active');
+                        matchFound = true;
+                    }
+                });
+            }
+
+            // 4. If no valid key matched, show fallback block
+            if (!matchFound && fallbackBlock) {
+                fallbackBlock.classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>

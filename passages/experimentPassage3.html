@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stages of Change ARG</title>
+    <base href="../">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Cutive+Mono&family=Handjet:wght,ELSH@100..900,2&family=Raleway:ital,wght@0,100..900;1,100..900&family=Redacted+Script:wght@300;400;700&family=Share+Tech&family=Special+Elite&family=Syne+Mono&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="assets/socarg.css">
+</head>
+
+<body class="body-logs font-cutive">
+
+    <div class="cont-logs">
+        <!-- STEP 1 (Initially visible) -->
+        <div class="item-logs">
+            ok, hey! so you are back!!
+        </div>
+        <div class="choice-container">
+            <button class="choice-btn" onclick="revealNext(this)">yes</button>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="item-logs" style="display: none;">
+            so how was it???? did you find anything fun?!!
+        </div>
+        <div class="choice-container" style="display: none;">
+            <button class="choice-btn" onclick="revealNext(this)">y- y- yeah....</button>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="item-logs" style="display: none;">
+            wait, i forgot that it is a quiz!!! let me guess... ummm... did you get the host?!
+        </div>
+        <div class="choice-container" style="display: none;">
+            <button class="choice-btn" onclick="revealNext(this)">the host?</button>
+        </div>
+
+        <!-- STEP 4 -->
+        <div class="item-logs" style="display: none;">
+            wait, silly me! i am the host!!! hhahahahahaha
+        </div>
+        <div class="choice-container" style="display: none;">
+            <button class="choice-btn" onclick="revealNext(this)">okay....</button>
+        </div>
+
+        <!-- STEP 5 -->
+        <div class="item-logs" style="display: none;">
+            well, now you are asking; where should i go now? which key should i click?!
+        </div>
+        <div class="choice-container" style="display: none;">
+            <button class="choice-btn" onclick="revealNext(this)">wait, i almost forgot about that</button>
+        </div>
+
+        <!-- STEP 6 -->
+        <div class="item-logs" style="display: none;">
+            you should click the letter O!!!
+            <br>
+            but if you want to retry the quiz and maybe get to another path, you can do it!!! the option is yours!!!
+        </div>
+        <div class="choice-container" style="display: none;">
+            <button class="choice-btn" onclick="revealNext(this)">fine by me i guess</button>
+        </div>
+
+        <!-- STEP 7 -->
+        <div class="item-logs" style="display: none;">
+            this is all from me now!!
+            until we meet again!!!
+        </div>
+        <div class="choice-container" style="display: none;">
+            <button class="choice-btn" onclick="revealNext(this)">thanks... host person... </button>
+        </div>
+    </div>
+
+    <!-- Final continue block (hidden until all logs are read) -->
+    <div class="story-end" id="story-end-block" style="display: none;">
+        <button class="story-end-button" id="letter-check-button" type="button"
+            onclick="window.location.href='passages/experimentPassage2.html'" style="margin: 12px 20px;">
+            retake the quiz please
+        </button>
+        <button class="story-end-button" id="letter-check-button" type="button"
+            onclick="window.location.href='stages/some_hypothesis_and_some_results.html'" style="margin: 12px 20px;">
+            back to the orbs we go
+        </button>
+    </div>
+
+    <script>
+        function revealNext(button) {
+            // 1. Locate and hide the clicked button's choice-container wrapper
+            const currentContainer = button.closest('.choice-container');
+            if (currentContainer) {
+                currentContainer.style.display = 'none';
+            }
+
+            // 2. Target the next item-logs div in DOM order
+            const nextLog = currentContainer.nextElementSibling;
+
+            // 3. Reveal next log div & its button container, or show the end block
+            if (nextLog && nextLog.classList.contains('item-logs')) {
+                nextLog.style.display = 'block';
+
+                const nextChoiceContainer = nextLog.nextElementSibling;
+                if (nextChoiceContainer && nextChoiceContainer.classList.contains('choice-container')) {
+                    nextChoiceContainer.style.display = 'flex';
+                }
+
+                setTimeout(() => {
+                    nextLog.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 50);
+            } else {
+                const storyEnd = document.getElementById('story-end-block');
+                if (storyEnd) {
+                    storyEnd.style.display = 'flex';
+                    setTimeout(() => {
+                        storyEnd.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 50);
+                }
+            }
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stages of Change ARG</title>
+    <base href="../">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Cutive+Mono&family=Handjet:wght,ELSH@100..900,2&family=Raleway:ital,wght@0,100..900;1,100..900&family=Redacted+Script:wght@300;400;700&family=Share+Tech&family=Special+Elite&family=Syne+Mono&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="assets/socarg.css">
+</head>
+
+<body class="body-logs font-cutive">
+
+    <div class="cont-logs">
+        <!-- STEP 1 (Initially visible) -->
+        <div class="item-logs">
+            ok, hey! so you finally made it here!!
+        </div>
+        <div class="choice-container">
+            <button class="choice-btn" onclick="revealNext(this)">huh, what? where am i? who are you?</button>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="item-logs" style="display: none;">
+            woah woah woah, hold it steady my dear. you are fine now here. don't worry. As for the name, let's keep it a
+            secret for now
+        </div>
+        <div class="choice-container" style="display: none;">
+            <button class="choice-btn" onclick="revealNext(this)">am i still in the arg? what stage is this?!</button>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="item-logs" style="display: none;">
+            ouh, i forgot to tell you! we at the experiment stage!!! the next stage after depression
+        </div>
+        <div class="choice-container" style="display: none;">
+            <button class="choice-btn" onclick="revealNext(this)">experimenting? shouldn't it be acceptance?</button>
+        </div>
+
+        <!-- STEP 4 -->
+        <div class="item-logs" style="display: none;">
+            wait, so you are expecting for acceptence?...<br>
+            hummm i see i see <br>
+            let me check on why note book here <br>
+            wait a second <br>
+        </div>
+        <div class="choice-container" style="display: none;">
+            <button class="choice-btn" onclick="revealNext(this)">okay....</button>
+        </div>
+
+        <!-- STEP 5 -->
+        <div class="item-logs" style="display: none;">
+            UH HUH! HERE IT IS!<br>
+            well acceptence is normally the vanilla version of the normal stages of grief's stages, iqbal take a different route!<br>
+            SO HERE WE ARE!!! in the Experiment Stage!!!-<br>
+            or phase-<br>
+            or level.....<br>
+            well, either way; people experience griefs, changes, sadness or heck, even life differently<br>
+        </div>
+        <div class="choice-container" style="display: none;">
+            <button class="choice-btn" onclick="revealNext(this)">so, what's the deal for this stage?</button>
+        </div>
+
+        <!-- STEP 6 -->
+        <div class="item-logs" style="display: none;">
+            Oh i am so glad you asked!<br>
+            so, at this stage, you will be experimenting with the stuff iqbal might do differently!<br>
+            or, maybe, you know, anything that i make you go through<br>
+            BUT HEY!<br>
+            this will be such a blast!!!<br>
+        </div>
+        <div class="choice-container" style="display: none;">
+            <button class="choice-btn" onclick="revealNext(this)">fine by me i guess</button>
+        </div>
+
+        <!-- STEP 7 -->
+        <div class="item-logs" style="display: none;">
+            but first, we need to determine what you are to be exact<br>
+            TIME FOR YOU TO TAKE A PERSONALITY QUIZ!!!!<br>
+        </div>
+        <div class="choice-container" style="display: none;">
+            <button class="choice-btn" onclick="revealNext(this)">Personality what now? wait, I DON'T HAVE THE TIME TO STUDY FOR THIS!!!</button>
+        </div>
+    </div>
+
+    <!-- Final continue block (hidden until all logs are read) -->
+    <div class="story-end" id="story-end-block" style="display: none;">
+        <button class="story-end-button" id="letter-check-button" type="button" onclick="window.location.href='passages/experimentPassage2.html'">continue</button>
+    </div>
+
+    <script>
+        function revealNext(button) {
+            // 1. Locate and hide the clicked button's choice-container wrapper
+            const currentContainer = button.closest('.choice-container');
+            if (currentContainer) {
+                currentContainer.style.display = 'none';
+            }
+
+            // 2. Target the next item-logs div in DOM order
+            const nextLog = currentContainer.nextElementSibling;
+
+            // 3. Reveal next log div & its button container, or show the end block
+            if (nextLog && nextLog.classList.contains('item-logs')) {
+                nextLog.style.display = 'block';
+
+                const nextChoiceContainer = nextLog.nextElementSibling;
+                if (nextChoiceContainer && nextChoiceContainer.classList.contains('choice-container')) {
+                    nextChoiceContainer.style.display = 'flex';
+                }
+
+                setTimeout(() => {
+                    nextLog.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 50);
+            } else {
+                const storyEnd = document.getElementById('story-end-block');
+                if (storyEnd) {
+                    storyEnd.style.display = 'flex';
+                    setTimeout(() => {
+                        storyEnd.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 50);
+                }
+            }
+        }
+    </script>
+
+</body>
+
+</html>

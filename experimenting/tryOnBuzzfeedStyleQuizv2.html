@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Which D&D Class Are You?</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            fantasy: ['Cinzel', 'serif'],
+          },
+          colors: {
+            dnd: {
+              slate: '#0f172a',
+              card: '#1e293b',
+              accent: '#38bdf8',
+              hover: '#0284c7',
+              gold: '#f59e0b',
+              emerald: '#34d399',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #0f172a;
+      color: #f8fafc;
+    }
+    .fantasy-title {
+      font-family: 'Cinzel', serif;
+    }
+    .question-card {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .option-btn {
+      transition: all 0.2s ease-in-out;
+    }
+    .option-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.15);
+    }
+    .option-btn.selected {
+      background-color: #0369a1 !important;
+      border-color: #38bdf8 !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+    }
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+  </style>
+</head>
+<body class="min-h-screen pb-16 pt-6 px-4 sm:px-6">
+
+  <!-- Top Navigation & Header -->
+  <header class="max-w-3xl mx-auto text-center mb-8">
+    <div class="inline-flex items-center gap-3 bg-slate-800/80 border border-slate-700 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider text-sky-400 mb-4 shadow-lg backdrop-blur">
+      <i class="fa-solid fa-dice-d20 text-sky-400 text-sm animate-spin-slow"></i>
+      5e Multi-Point Character Quiz
+    </div>
+    <h1 class="fantasy-title text-3xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-cyan-300 to-indigo-300 mb-3">
+      Which D&amp;D Class Are You?
+    </h1>
+    <p class="text-slate-400 text-sm sm:text-base max-w-xl mx-auto">
+      Every decision is complex. Your choices award weighted affinities across all 12 core classes to discover your true adventurer archetype.
+    </p>
+  </header>
+
+  <!-- Sticky Progress Bar -->
+  <div class="sticky top-4 z-40 max-w-3xl mx-auto mb-8 bg-slate-800/90 backdrop-blur-md border border-slate-700 p-4 rounded-xl shadow-2xl">
+    <div class="flex justify-between items-center mb-2">
+      <span class="text-xs font-bold uppercase tracking-wider text-slate-300" id="progressText">Progress: 0 / 10 Questions</span>
+      <span class="text-xs font-bold text-sky-400" id="progressPercent">0%</span>
+    </div>
+    <div class="w-full bg-slate-900 h-2.5 rounded-full overflow-hidden border border-slate-700/50">
+      <div id="progressBar" class="bg-gradient-to-r from-sky-500 to-cyan-400 h-full w-0 transition-all duration-300"></div>
+    </div>
+  </div>
+
+  <!-- Quiz Questions Container -->
+  <main class="max-w-3xl mx-auto space-y-6" id="questionsContainer">
+
+    <!-- Q1 -->
+    <div class="question-card bg-slate-800 border border-slate-700/80 p-5 sm:p-6 rounded-2xl shadow-xl" id="q1">
+      <div class="flex items-start gap-3 mb-4">
+        <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-sm border border-sky-500/30">1</span>
+        <p class="text-lg font-medium text-slate-100 pt-0.5">How do you handle a sudden conflict?</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pl-0 sm:pl-11">
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(1, { barbarian: 5, fighter: 3, paladin: 2 }, this)">
+          <span>Charge directly into it with raw fury</span>
+          <i class="fa-solid fa-hand-fist text-slate-400 text-xs"></i>
+        </button>
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(1, { wizard: 5, rogue: 2, ranger: 2 }, this)">
+          <span>Analyze the situation and exploit structural flaws</span>
+          <i class="fa-solid fa-brain text-slate-400 text-xs"></i>
+        </button>
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(1, { rogue: 5, monk: 3, ranger: 2, warlock: 1 }, this)">
+          <span>Slip into shadows and wait for the precise strike</span>
+          <i class="fa-solid fa-user-ninja text-slate-400 text-xs"></i>
+        </button>
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(1, { bard: 5, sorcerer: 3, cleric: 1, paladin: 1 }, this)">
+          <span>De-escalate or charm your way out of it</span>
+          <i class="fa-solid fa-comments text-slate-400 text-xs"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-card bg-slate-800 border border-slate-700/80 p-5 sm:p-6 rounded-2xl shadow-xl" id="q2">
+      <div class="flex items-start gap-3 mb-4">
+        <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-sm border border-sky-500/30">2</span>
+        <p class="text-lg font-medium text-slate-100 pt-0.5">What is your primary source of power or strength?</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pl-0 sm:pl-11">
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(2, { wizard: 5, cleric: 2, warlock: 2 }, this)">
+          <span>Rigorous academic study and arcane formulas</span>
+          <i class="fa-solid fa-book-skull text-slate-400 text-xs"></i>
+        </button>
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(2, { sorcerer: 5, bard: 2, druid: 2 }, this)">
+          <span>An innate, chaotic magic tied directly to my bloodline</span>
+          <i class="fa-solid fa-wand-magic-sparkles text-slate-400 text-xs"></i>
+        </button>
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(2, { cleric: 4, paladin: 4, monk: 2, druid: 1 }, this)">
+          <span>Sacred oaths, divine devotion, or spiritual discipline</span>
+          <i class="fa-solid fa-sun text-slate-400 text-xs"></i>
+        </button>
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(2, { fighter: 4, barbarian: 4, monk: 3, ranger: 1 }, this)">
+          <span>Relentless physical training, reflexes, and grit</span>
+          <i class="fa-solid fa-dumbbell text-slate-400 text-xs"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-card bg-slate-800 border border-slate-700/80 p-5 sm:p-6 rounded-2xl shadow-xl" id="q3">
+      <div class="flex items-start gap-3 mb-4">
+        <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-sm border border-sky-500/30">3</span>
+        <p class="text-lg font-medium text-slate-100 pt-0.5">You encounter a locked dungeon door guarded by glowing runes. You...</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pl-0 sm:pl-11">
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(3, { rogue: 5, ranger: 2, bard: 2 }, this)">
+          <span>Pick the physical lock while safely bypassing the mechanism</span>
+          <i class="fa-solid fa-key text-slate-400 text-xs"></i>
+        </button>
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(3, { wizard: 5, warlock: 3, sorcerer: 1 }, this)">
+          <span>Decipher the magical script and cast a counter-spell</span>
+          <i class="fa-solid fa-scroll text-slate-400 text-xs"></i>
+        </button>
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(3, { barbarian: 5, fighter: 3, paladin: 1 }, this)">
+          <span>Smash it off its hinges; locked doors are merely structural suggestions</span>
+          <i class="fa-solid fa-hammer text-slate-400 text-xs"></i>
+        </button>
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(3, { druid: 4, cleric: 4, monk: 2 }, this)">
+          <span>Commune with nature/spirits to reveal an overlooked secret path</span>
+          <i class="fa-solid fa-tree text-slate-400 text-xs"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-card bg-slate-800 border border-slate-700/80 p-5 sm:p-6 rounded-2xl shadow-xl" id="q4">
+      <div class="flex items-start gap-3 mb-4">
+        <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-sm border border-sky-500/30">4</span>
+        <p class="text-lg font-medium text-slate-100 pt-0.5">What is your ideal role during a high-stakes group project?</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pl-0 sm:pl-11">
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(4, { paladin: 4, fighter: 4, barbarian: 3, cleric: 1 }, this)">
+          <span>The frontline shield absorbing pressure and keeping everyone safe</span>
+          <i class="fa-solid fa-shield-halved text-slate-400 text-xs"></i>
+        </button>
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(4, { bard: 5, paladin: 2, sorcerer: 2, warlock: 2 }, this)">
+          <span>The charismatic lead who manages morale and presents to stakeholders</span>
+          <i class="fa-solid fa-bullhorn text-slate-400 text-xs"></i>
+        </button>
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(4, { wizard: 4, rogue: 3, druid: 2, ranger: 2 }, this)">
+          <span>The strategist conducting deep research and optimizing logistics</span>
+          <i class="fa-solid fa-chess text-slate-400 text-xs"></i>
+        </button>
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(4, { rogue: 4, ranger: 4, monk: 3, warlock: 2 }, this)">
+          <span>The independent operative delivering targeted, clutch solutions</span>
+          <i class="fa-solid fa-crosshairs text-slate-400 text-xs"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-card bg-slate-800 border border-slate-700/80 p-5 sm:p-6 rounded-2xl shadow-xl" id="q5">
+      <div class="flex items-start gap-3 mb-4">
+        <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-sm border border-sky-500/30">5</span>
+        <p class="text-lg font-medium text-slate-100 pt-0.5">Which item would you insist on keeping in your personal pack?</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pl-0 sm:pl-11">
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(5, { fighter: 4, barbarian: 3, paladin: 3 }, this)">
+          <span>A finely honed whetstone and heavy maintenance kit</span>
+          <i class="fa-solid fa-screwdriver-wrench text-slate-400 text-xs"></i>
+        </button>
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(5, { ranger: 5, druid: 4, rogue: 1 }, this)">
+          <span>A reliable compass, herbal pouch, and weather guide</span>
+          <i class="fa-solid fa-compass text-slate-400 text-xs"></i>
+        </button>
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(5, { wizard: 5, warlock: 2, cleric: 2 }, this)">
+          <span>A thick leather-bound journal full of arcane notes</span>
+          <i class="fa-solid fa-book-open text-slate-400 text-xs"></i>
+        </button>
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(5, { bard: 5, rogue: 2, sorcerer: 2 }, this)">
+          <span>A finely crafted musical instrument or ornate deck of cards</span>
+          <i class="fa-solid fa-guitar text-slate-400 text-xs"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-card bg-slate-800 border border-slate-700/80 p-5 sm:p-6 rounded-2xl shadow-xl" id="q6">
+      <div class="flex items-start gap-3 mb-4">
+        <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-sm border border-sky-500/30">6</span>
+        <p class="text-lg font-medium text-slate-100 pt-0.5">How do you prefer to spend a rare, restful weekend?</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pl-0 sm:pl-11">
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(6, { monk: 5, cleric: 2, fighter: 2 }, this)">
+          <span>Meditation, physical training, and honing mind-body focus</span>
+          <i class="fa-solid fa-yin-yang text-slate-400 text-xs"></i>
+        </button>
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(6, { druid: 5, ranger: 3, monk: 1 }, this)">
+          <span>Wandering deep forests or camping under silent stars</span>
+          <i class="fa-solid fa-campground text-slate-400 text-xs"></i>
+        </button>
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(6, { bard: 5, rogue: 2, sorcerer: 2, warlock: 1 }, this)">
+          <span>Exploring vibrant taverns, parties, or live performances</span>
+          <i class="fa-solid fa-beer-mug-empty text-slate-400 text-xs"></i>
+        </button>
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(6, { warlock: 5, wizard: 3, sorcerer: 2 }, this)">
+          <span>Delving into obscure mysteries or esoteric online rabbit holes</span>
+          <i class="fa-solid fa-eye text-slate-400 text-xs"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-card bg-slate-800 border border-slate-700/80 p-5 sm:p-6 rounded-2xl shadow-xl" id="q7">
+      <div class="flex items-start gap-3 mb-4">
+        <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-sm border border-sky-500/30">7</span>
+        <p class="text-lg font-medium text-slate-100 pt-0.5">What is your core personal motivation?</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pl-0 sm:pl-11">
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(7, { wizard: 4, warlock: 4, monk: 3 }, this)">
+          <span>Unlocking hidden truths and mastering complex arts</span>
+          <i class="fa-solid fa-lightbulb text-slate-400 text-xs"></i>
+        </button>
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(7, { rogue: 4, ranger: 3, barbarian: 3, bard: 2 }, this)">
+          <span>Absolute personal freedom and living on my own terms</span>
+          <i class="fa-solid fa-feather text-slate-400 text-xs"></i>
+        </button>
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(7, { paladin: 5, cleric: 4, fighter: 2 }, this)">
+          <span>Protecting the vulnerable and standing for honor & justice</span>
+          <i class="fa-solid fa-scale-balanced text-slate-400 text-xs"></i>
+        </button>
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(7, { bard: 4, sorcerer: 4, barbarian: 2 }, this)">
+          <span>Expressing passion, creativity, and leaving an unforgettable mark</span>
+          <i class="fa-solid fa-fire-flame-curved text-slate-400 text-xs"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="question-card bg-slate-800 border border-slate-700/80 p-5 sm:p-6 rounded-2xl shadow-xl" id="q8">
+      <div class="flex items-start gap-3 mb-4">
+        <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-sm border border-sky-500/30">8</span>
+        <p class="text-lg font-medium text-slate-100 pt-0.5">How do you react to a strict rule you strongly disagree with?</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pl-0 sm:pl-11">
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(8, { paladin: 4, barbarian: 4, fighter: 2 }, this)">
+          <span>Confront authority head-on to demand change</span>
+          <i class="fa-solid fa-flag text-slate-400 text-xs"></i>
+        </button>
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(8, { wizard: 4, bard: 3, rogue: 2 }, this)">
+          <span>Exploit precise technical loopholes within the written text</span>
+          <i class="fa-solid fa-magnifying-glass text-slate-400 text-xs"></i>
+        </button>
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(8, { rogue: 5, warlock: 3, ranger: 2 }, this)">
+          <span>Bypass it silently without getting caught</span>
+          <i class="fa-solid fa-ghost text-slate-400 text-xs"></i>
+        </button>
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(8, { druid: 4, monk: 4, cleric: 2 }, this)">
+          <span>Rise above the drama and stick to your internal moral compass</span>
+          <i class="fa-solid fa-om text-slate-400 text-xs"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Q9 -->
+    <div class="question-card bg-slate-800 border border-slate-700/80 p-5 sm:p-6 rounded-2xl shadow-xl" id="q9">
+      <div class="flex items-start gap-3 mb-4">
+        <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-sm border border-sky-500/30">9</span>
+        <p class="text-lg font-medium text-slate-100 pt-0.5">Surrounded in a tough battle against overwhelming odds, you...</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pl-0 sm:pl-11">
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(9, { barbarian: 5, fighter: 3, paladin: 2 }, this)">
+          <span>Tap into adrenaline and fight fiercely to the last stand</span>
+          <i class="fa-solid fa-skull-crossbones text-slate-400 text-xs"></i>
+        </button>
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(9, { sorcerer: 4, wizard: 4, warlock: 3 }, this)">
+          <span>Unleash high-impact area magic to clear the battlefield</span>
+          <i class="fa-solid fa-burst text-slate-400 text-xs"></i>
+        </button>
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(9, { cleric: 5, paladin: 3, druid: 2 }, this)">
+          <span>Channel protective shields and healing rays to bolster your team</span>
+          <i class="fa-solid fa-hand-holding-medical text-slate-400 text-xs"></i>
+        </button>
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(9, { rogue: 4, monk: 4, ranger: 3 }, this)">
+          <span>Use swift movement and smoke to reposition and hit back</span>
+          <i class="fa-solid fa-wind text-slate-400 text-xs"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="question-card bg-slate-800 border border-slate-700/80 p-5 sm:p-6 rounded-2xl shadow-xl" id="q10">
+      <div class="flex items-start gap-3 mb-4">
+        <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-sm border border-sky-500/30">10</span>
+        <p class="text-lg font-medium text-slate-100 pt-0.5">What reward appeals most to you after a long, grueling journey?</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pl-0 sm:pl-11">
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(10, { bard: 5, sorcerer: 3, paladin: 2 }, this)">
+          <span>Renown, ballads sung in your honor, and legendary status</span>
+          <i class="fa-solid fa-crown text-slate-400 text-xs"></i>
+        </button>
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(10, { wizard: 4, warlock: 4, cleric: 2 }, this)">
+          <span>Rare artifacts and forgotten secrets of the universe</span>
+          <i class="fa-solid fa-gem text-slate-400 text-xs"></i>
+        </button>
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(10, { rogue: 5, fighter: 2, ranger: 2 }, this)">
+          <span>A stash of gold, autonomy, and no lingering obligations</span>
+          <i class="fa-solid fa-sack-dollar text-slate-400 text-xs"></i>
+        </button>
+        <button class="option-btn bg-slate-700/60 hover:bg-sky-600/80 text-slate-200 border border-slate-600/80 p-3.5 rounded-xl font-medium text-sm text-left flex items-center justify-between"
+          onclick="selectOption(10, { monk: 5, druid: 4, cleric: 2 }, this)">
+          <span>Inner peace, spiritual growth, and harmony with nature</span>
+          <i class="fa-solid fa-mountain-sun text-slate-400 text-xs"></i>
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Result Section -->
+  <section id="result" class="hidden max-w-3xl mx-auto mt-10 bg-slate-800 border-2 border-emerald-400/80 p-6 sm:p-8 rounded-2xl shadow-2xl relative overflow-hidden transition-all duration-500">
+    <div class="absolute -right-12 -bottom-12 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -left-12 -top-12 w-48 h-48 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="text-center mb-8">
+      <span class="inline-block px-3 py-1 bg-emerald-500/20 text-emerald-300 text-xs font-extrabold uppercase tracking-widest rounded-full mb-3 border border-emerald-500/30">
+        Quiz Complete!
+      </span>
+      <h2 id="resultTitle" class="fantasy-title text-3xl sm:text-4xl font-extrabold text-slate-100 mb-2"></h2>
+      <p id="resultSub" class="text-sky-400 font-medium text-sm sm:text-base"></p>
+    </div>
+
+    <!-- Primary Class Card -->
+    <div class="bg-slate-900/80 border border-slate-700 rounded-xl p-5 mb-8 flex flex-col sm:flex-row items-center sm:items-start gap-5">
+      <div id="classIconBox" class="w-20 h-20 rounded-2xl bg-gradient-to-br from-sky-500 to-indigo-600 flex items-center justify-center text-3xl text-white shadow-lg flex-shrink-0">
+        <i class="fa-solid fa-dice-d20"></i>
+      </div>
+      <div class="flex-grow text-center sm:text-left">
+        <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-2" id="classBadges">
+          <!-- Stat Badges inserted here -->
+        </div>
+        <p id="resultDescription" class="text-slate-300 text-sm sm:text-base leading-relaxed mb-4"></p>
+        <div class="bg-slate-800/80 border border-slate-700/60 p-3 rounded-lg text-xs text-slate-400 italic" id="classQuote"></div>
+      </div>
+    </div>
+
+    <!-- Breakdown Section -->
+    <div class="mb-8">
+      <h3 class="fantasy-title text-lg font-bold text-slate-200 mb-4 flex items-center gap-2">
+        <i class="fa-solid fa-chart-simple text-sky-400"></i> Your Full Class Affinity Breakdown
+      </h3>
+      <div class="space-y-3" id="classBreakdown">
+        <!-- Bars dynamically generated -->
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex flex-col sm:flex-row gap-3 justify-center items-center">
+      <button onclick="retakeQuiz()" class="w-full sm:w-auto px-6 py-3 bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold rounded-xl transition flex items-center justify-center gap-2">
+        <i class="fa-solid fa-rotate-right"></i> Retake Quiz
+      </button>
+      <button onclick="copyResults()" class="w-full sm:w-auto px-6 py-3 bg-sky-600 hover:bg-sky-500 text-white font-bold rounded-xl transition shadow-lg shadow-sky-600/30 flex items-center justify-center gap-2">
+        <i class="fa-solid fa-share-nodes"></i> Share / Copy Result
+      </button>
+    </div>
+  </section>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 bg-slate-800 border border-sky-400 text-slate-100 px-4 py-3 rounded-xl shadow-2xl hidden transition-all duration-300 flex items-center gap-3">
+    <i class="fa-solid fa-circle-check text-sky-400"></i>
+    <span id="toastMsg" class="text-sm font-medium">Results copied to clipboard!</span>
+  </div>
+
+  <script>
+    // Master Class Scores Tracking
+    const scores = {
+      barbarian: 0,
+      bard: 0,
+      cleric: 0,
+      druid: 0,
+      fighter: 0,
+      monk: 0,
+      paladin: 0,
+      ranger: 0,
+      rogue: 0,
+      sorcerer: 0,
+      warlock: 0,
+      wizard: 0
+    };
+
+    // Keep track of previous points awarded per question so users can change options smoothly
+    const userSelections = {}; 
+    const totalQuestions = 10;
+
+    // Detailed D&D 5e Class Information Database
+    const classInfo = {
+      barbarian: {
+        name: "Barbarian",
+        title: "Primal Warrior of Raw Instinct",
+        icon: "fa-hand-fist",
+        hitDie: "d12",
+        primaryStat: "Strength",
+        quote: '"For some, rage is a flame. For me, it is the mountain that crushes everything."',
+        description: "You are a powerhouse of pure emotion and instinct. You face danger head-on without hesitation, relying on raw strength, unstoppable momentum, and unyielding bodily resilience."
+      },
+      bard: {
+        name: "Bard",
+        title: "Master of Song, Wit & Charisma",
+        icon: "fa-guitar",
+        hitDie: "d8",
+        primaryStat: "Charisma",
+        quote: '"Words carry power. A sharp verse can shatter armor faster than any blade."',
+        description: "You are charismatic, versatile, and endlessly inspiring. You manipulate the room with charm, social instinct, and flair, blending spellcasting with creative expertise."
+      },
+      cleric: {
+        name: "Cleric",
+        title: "Divine Champion of Faith & Healing",
+        icon: "fa-hands-praying",
+        hitDie: "d8",
+        primaryStat: "Wisdom",
+        quote: '"In darkness, we are the light. In weakness, we are the unbreakable shield."',
+        description: "You channel divine force directly from higher ideals or gods. You balance armor and weapons with miraculous healing and protective magic to shield those in need."
+      },
+      druid: {
+        name: "Druid",
+        title: "Guardian of the Primordial Elements",
+        icon: "fa-tree",
+        hitDie: "d8",
+        primaryStat: "Wisdom",
+        quote: '"Nature does not negotiate. It endures, adapts, and reclaims all."',
+        description: "You are deeply attuned to nature and the cosmos. You wield wild elemental magic, master beast-form shapeshifting, and prioritize balance above earthly squabbles."
+      },
+      fighter: {
+        name: "Fighter",
+        title: "Tactical Combat Specialist",
+        icon: "fa-shield-halved",
+        hitDie: "d10",
+        primaryStat: "Strength or Dexterity",
+        quote: '"Victory is not luck. It is discipline, preparation, and executing the plan."',
+        description: "You are the consummate master of martial skill. Through discipline, athletic prowess, and tactical analysis, you adapt to any combat scenario with deadly efficiency."
+      },
+      monk: {
+        name: "Monk",
+        title: "Ascetic Master of Ki & Mind",
+        icon: "fa-yin-yang",
+        hitDie: "d8",
+        primaryStat: "Dexterity & Wisdom",
+        quote: '"A quiet mind perceives every flaw. A disciplined fist strikes through it."',
+        description: "You harness the internal cosmic energy known as Ki. Unmatched in agility and focus, you turn your very body and mind into the ultimate weapon."
+      },
+      paladin: {
+        name: "Paladin",
+        title: "Holy Avenger of Sacred Oaths",
+        icon: "fa-sun",
+        hitDie: "d10",
+        primaryStat: "Strength & Charisma",
+        quote: '"My oath is my armor, my zeal is my blade. Evil will find no quarter here."',
+        description: "You are bound by a sacred oath that burns within your soul. Combining heavy armor, martial prowess, and divine smites, you stand as an unshakeable beacon."
+      },
+      ranger: {
+        name: "Ranger",
+        title: "Wilderness Hunter & Tracker",
+        icon: "fa-compass",
+        hitDie: "d10",
+        primaryStat: "Dexterity & Wisdom",
+        quote: '"The wild is unforgiving to fools. I am the predator that haunts the fringe."',
+        description: "You are an expert scout and survivalist. Operating on the fringes of civilization, you combine swift martial strikes, archery, and wilderness instinct."
+      },
+      rogue: {
+        name: "Rogue",
+        title: "Cunning Shadow & Opportunist",
+        icon: "fa-user-ninja",
+        hitDie: "d8",
+        primaryStat: "Dexterity",
+        quote: '"Work smarter, not harder. Why hit a shield when you can hit a vital?"',
+        description: "You are sharp, resourceful, and pragmatic. You excel at stealth, lockpicking, finding technical loopholes, and landing precise, devastating sneak attacks."
+      },
+      sorcerer: {
+        name: "Sorcerer",
+        title: "Innate Conduit of Arcane Energy",
+        icon: "fa-wand-magic-sparkles",
+        hitDie: "d6",
+        primaryStat: "Charisma",
+        quote: '"Magic isn\'t something I learned in a book. It is my breath, my blood, my birthright."',
+        description: "Arcane power runs directly through your bloodline or soul. Rather than studying magic, you bend raw, untamed magic through sheer force of willpower."
+      },
+      warlock: {
+        name: "Warlock",
+        title: "Seeker of Eldritch Secrets",
+        icon: "fa-eye",
+        hitDie: "d8",
+        primaryStat: "Charisma",
+        quote: '"Knowledge has a price. I was simply bold enough to sign the contract."',
+        description: "Driven by curiosity, you formed a bargain with an otherworldly entity. You wield explosive eldritch magic and esoteric dark knowledge."
+      },
+      wizard: {
+        name: "Wizard",
+        title: "Master Scholar of the Arcane Arts",
+        icon: "fa-book-skull",
+        hitDie: "d6",
+        primaryStat: "Intelligence",
+        quote: '"There is no problem in this universe that cannot be solved with sufficient study."',
+        description: "You are a master of intellectual discipline and arcane theory. Armed with your spellbook, you meticulously analyze problems and control reality itself."
+      }
+    };
+
+    /**
+     * Handles option selection with weighted points.
+     * Subtracts previous scores if the user changes their answer on the same question.
+     */
+    function selectOption(qIdx, pointMapping, btnElement) {
+      // If user previously selected an option for this question, subtract old points
+      if (userSelections[qIdx]) {
+        const oldMapping = userSelections[qIdx].mapping;
+        for (const [cls, pts] of Object.entries(oldMapping)) {
+          scores[cls] = Math.max(0, (scores[cls] || 0) - pts);
+        }
+        // Remove 'selected' style from previous button in this question
+        if (userSelections[qIdx].button) {
+          userSelections[qIdx].button.classList.remove('selected');
+        }
+      }
+
+      // Save new selection
+      userSelections[qIdx] = {
+        mapping: pointMapping,
+        button: btnElement
+      };
+
+      // Add new points
+      for (const [cls, pts] of Object.entries(pointMapping)) {
+        scores[cls] = (scores[cls] || 0) + pts;
+      }
+
+      // Highlight clicked button
+      btnElement.classList.add('selected');
+
+      // Update sticky progress bar
+      updateProgress();
+
+      // Check if all questions are answered
+      const answeredCount = Object.keys(userSelections).length;
+      if (answeredCount === totalQuestions) {
+        showResult();
+      }
+    }
+
+    /**
+     * Updates UI progress bar and text counter.
+     */
+    function updateProgress() {
+      const count = Object.keys(userSelections).length;
+      const percentage = Math.round((count / totalQuestions) * 100);
+      
+      document.getElementById('progressText').innerText = `Progress: ${count} / ${totalQuestions} Questions`;
+      document.getElementById('progressPercent').innerText = `${percentage}%`;
+      document.getElementById('progressBar').style.width = `${percentage}%`;
+    }
+
+    /**
+     * Calculates winner and secondary archetypes, then updates results section.
+     */
+    function showResult() {
+      // Sort classes by total score descending
+      const sortedClasses = Object.keys(scores).sort((a, b) => scores[b] - scores[a]);
+      const primaryKey = sortedClasses[0];
+      const secondaryKey = sortedClasses[1];
+      const primaryData = classInfo[primaryKey];
+      const secondaryData = classInfo[secondaryKey];
+
+      // Total points calculated
+      const totalPoints = Object.values(scores).reduce((sum, val) => sum + val, 0) || 1;
+
+      // Update Result Title & Subtitle
+      document.getElementById('resultTitle').innerText = `You are a ${primaryData.name.toUpperCase()}!`;
+      document.getElementById('resultSub').innerText = `${primaryData.title} (Multiclass Affinity: ${secondaryData.name})`;
+
+      // Update Primary Class Card
+      document.getElementById('classIconBox').innerHTML = `<i class="fa-solid ${primaryData.icon}"></i>`;
+      document.getElementById('resultDescription').innerText = primaryData.description;
+      document.getElementById('classQuote').innerText = primaryData.quote;
+
+      // Badges
+      const badgesContainer = document.getElementById('classBadges');
+      badgesContainer.innerHTML = `
+        <span class="px-2.5 py-1 bg-sky-500/20 text-sky-300 border border-sky-500/30 rounded-md font-semibold text-xs">Primary Stat: ${primaryData.primaryStat}</span>
+        <span class="px-2.5 py-1 bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 rounded-md font-semibold text-xs">Hit Die: ${primaryData.hitDie}</span>
+      `;
+
+      // Render Bar Breakdown for top classes
+      const breakdownContainer = document.getElementById('classBreakdown');
+      breakdownContainer.innerHTML = '';
+
+      sortedClasses.forEach((clsKey, index) => {
+        const clsScore = scores[clsKey];
+        if (clsScore === 0 && index > 4) return; // Hide zero scores outside top 5
+
+        const percentage = Math.round((clsScore / totalPoints) * 100);
+        const data = classInfo[clsKey];
+
+        const barWrapper = document.createElement('div');
+        barWrapper.className = 'space-y-1';
+        barWrapper.innerHTML = `
+          <div class="flex justify-between text-xs font-semibold text-slate-300">
+            <span class="flex items-center gap-2">
+              <i class="fa-solid ${data.icon} text-sky-400 w-4 text-center"></i>
+              ${data.name}
+            </span>
+            <span class="text-slate-400">${clsScore} pts (${percentage}%)</span>
+          </div>
+          <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-slate-700/60">
+            <div class="h-full bg-gradient-to-r ${index === 0 ? 'from-emerald-400 to-sky-400' : 'from-sky-600 to-indigo-600'} transition-all duration-500" style="width: ${percentage}%"></div>
+          </div>
+        `;
+        breakdownContainer.appendChild(barWrapper);
+      });
+
+      // Show Result Section smoothly
+      const resultDiv = document.getElementById('result');
+      resultDiv.classList.remove('hidden');
+      resultDiv.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    /**
+     * Resets quiz state and resets selections.
+     */
+    function retakeQuiz() {
+      // Reset scores
+      for (const key in scores) {
+        scores[key] = 0;
+      }
+      
+      // Clear selections
+      for (const qIdx in userSelections) {
+        if (userSelections[qIdx].button) {
+          userSelections[qIdx].button.classList.remove('selected');
+        }
+        delete userSelections[qIdx];
+      }
+
+      // Reset UI progress
+      updateProgress();
+
+      // Hide Result
+      document.getElementById('result').classList.add('hidden');
+
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /**
+     * Copy shareable summary to clipboard with standard fallbacks.
+     */
+    function copyResults() {
+      const sortedClasses = Object.keys(scores).sort((a, b) => scores[b] - scores[a]);
+      const primary = classInfo[sortedClasses[0]].name;
+      const secondary = classInfo[sortedClasses[1]].name;
+
+      const summaryText = `I took the D&D 5e Character Quiz!\n🛡 Primary Archetype: ${primary}\n✨ Secondary Affinity: ${secondary}\nFind your D&D class alignment!`;
+
+      // Fallback clipboard method
+      const tempInput = document.createElement("textarea");
+      tempInput.value = summaryText;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      try {
+        document.execCommand("copy");
+        showToast("Results copied to clipboard!");
+      } catch (err) {
+        showToast("Could not auto-copy. Primary result: " + primary);
+      }
+      document.body.removeChild(tempInput);
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').innerText = msg;
+      toast.classList.remove('hidden');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

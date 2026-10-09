@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARG Decision Terminal</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #0b0e14;
+            color: #d1d5db;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        /* Log groups */
+        .log-group {
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .log-group.active-group {
+            display: flex;
+        }
+
+        /* Branch container */
+        .branch-group {
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .branch-group.active-branch {
+            display: flex;
+        }
+
+        /* Card Styling */
+        .card {
+            background-color: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 10px;
+            padding: 22px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            display: none; /* Hidden by default */
+            opacity: 0;
+        }
+
+        .card.revealed {
+            display: block;
+            animation: slideDown 0.4s ease-out forwards;
+        }
+
+        .card-header {
+            font-size: 0.75rem;
+            color: #10b981;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sender {
+            font-weight: bold;
+            color: #60a5fa;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        p {
+            line-height: 1.6;
+            margin-bottom: 18px;
+            color: #9ca3af;
+        }
+
+        /* Choice container */
+        .choice-container {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* Buttons */
+        .btn {
+            background-color: #2563eb;
+            color: #ffffff;
+            border: none;
+            padding: 10px 16px;
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-choice {
+            background-color: #1e293b;
+            color: #38bdf8;
+            border: 1px solid #334155;
+        }
+
+        .btn-choice:hover {
+            background-color: #334155;
+            color: #7dd3fc;
+        }
+
+        .completed-tag {
+            display: inline-block;
+            color: #10b981;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .error-card {
+            border-color: #991b1b;
+            background-color: #180c0c;
+        }
+
+        .error-card .card-header {
+            color: #f87171;
+        }
+
+        code {
+            background-color: #1f2937;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #f59e0b;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- ==================== MAIN THREAD: KEY1 ==================== -->
+        <div class="log-group" data-key="key1">
+
+            <!-- Card 1 -->
+            <div class="card revealed">
+                <div class="card-header">Transmission #01 • Initial Contact</div>
+                <div class="sender">[OPERATOR_09]:</div>
+                <p>Bal, we detected a rogue signal from deep frequency 52Hz. It bypasses our standard firewall routines.</p>
+                <div class="action-area">
+                    <button class="btn" onclick="revealNextLog(this)">Acknowledge Signal</button>
+                </div>
+            </div>
+
+            <!-- Card 2: Decision Point -->
+            <div class="card" id="decision-card-key1">
+                <div class="card-header">Transmission #02 • Tactical Decision</div>
+                <div class="sender">[SYSTEM PROMPT]:</div>
+                <p>Anomalous packet detected. Choose your operational directive:</p>
+                <div class="action-area choice-container">
+                    <button class="btn btn-choice" onclick="selectChoice('investigate')">Option A: Investigate Signal</button>
+                    <button class="btn btn-choice" onclick="selectChoice('contain')">Option B: Contain & Firewall</button>
+                </div>
+            </div>
+
+            <!-- BRANCH A: Investigate -->
+            <div class="branch-group" data-choice="investigate">
+                <div class="card">
+                    <div class="card-header">Branch: Investigate • Log 1/2</div>
+                    <div class="sender">[OPERATOR_09]:</div>
+                    <p>Good call. Opening data pipeline... The signal contains acoustic whale harmonics wrapped in encrypted ASCII.</p>
+                    <div class="action-area">
+                        <button class="btn" onclick="revealNextLog(this)">Decode ASCII Payload</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Branch: Investigate • Log 2/2</div>
+                    <div class="sender">[SYSTEM NOTICE]:</div>
+                    <p>Decryption success! Next target URL unlocked: <code>?key=key2</code>.</p>
+                </div>
+            </div>
+
+            <!-- BRANCH B: Contain -->
+            <div class="branch-group" data-choice="contain">
+                <div class="card">
+                    <div class="card-header">Branch: Contain • Log 1/2</div>
+                    <div class="sender">[SYSTEM_DEFENSE]:</div>
+                    <p>Initiating lockdown... Defense protocols active. Signal isolated in sandbox sector 7.</p>
+                    <div class="action-area">
+                        <button class="btn" onclick="revealNextLog(this)">Inspect Sandbox</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Branch: Contain • Log 2/2</div>
+                    <div class="sender">[OPERATOR_09]:</div>
+                    <p>The signal was trapped, but it left a cryptographic key behind in the logs: <code>KEY_CONTAINED_99</code>.</p>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- ==================== FALLBACK GROUP ==================== -->
+        <div class="log-group" id="fallback-group">
+            <div class="card error-card revealed">
+                <div class="card-header">Transmission Error • 404</div>
+                <div class="sender">[SYSTEM_WARNING]:</div>
+                <p>No active frequency found. Try appending a parameter like: <code>?key=key1</code></p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let currentKey = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Read URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            currentKey = urlParams.get('key');
+            const currentChoice = urlParams.get('choice');
+
+            // 2. Find log group matching ?key=...
+            const logGroups = document.querySelectorAll('.log-group[data-key]');
+            const fallbackGroup = document.getElementById('fallback-group');
+            let matchedGroup = null;
+
+            if (currentKey) {
+                logGroups.forEach(group => {
+                    if (group.dataset.key.toLowerCase() === currentKey.toLowerCase()) {
+                        group.classList.add('active-group');
+                        matchedGroup = group;
+                    }
+                });
+            }
+
+            if (!matchedGroup && fallbackGroup) {
+                fallbackGroup.classList.add('active-group');
+                return;
+            }
+
+            // 3. If URL already contains ?choice=..., automatically unlock up to that choice!
+            if (currentChoice && matchedGroup) {
+                // Reveal the decision card if it isn't already
+                const decisionCard = matchedGroup.querySelector('#decision-card-key1');
+                if (decisionCard) decisionCard.classList.add('revealed');
+
+                // Trigger choice logic directly
+                selectChoice(currentChoice, false); // false = don't rewrite URL history again
+            }
+        });
+
+        // Reveals sequential cards within the same group or branch
+        function revealNextLog(buttonElement) {
+            const currentCard = buttonElement.closest('.card');
+            const nextCard = currentCard.nextElementSibling;
+
+            // Freeze button action
+            const actionArea = currentCard.querySelector('.action-area');
+            if (actionArea) {
+                actionArea.innerHTML = `<span class="completed-tag">✓ Transmission Logged</span>`;
+            }
+
+            if (nextCard && nextCard.classList.contains('card')) {
+                nextCard.classList.add('revealed');
+                setTimeout(() => {
+                    nextCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 100);
+            }
+        }
+
+        // Choice selection handler
+        function selectChoice(choiceId, updateUrl = true) {
+            const activeGroup = document.querySelector('.log-group.active-group');
+            if (!activeGroup) return;
+
+            // 1. Mark decision card as chosen
+            const decisionCard = activeGroup.querySelector('#decision-card-key1');
+            if (decisionCard) {
+                decisionCard.classList.add('revealed');
+                const actionArea = decisionCard.querySelector('.action-area');
+                if (actionArea) {
+                    actionArea.innerHTML = `<span class="completed-tag">✓ Directive Selected: [${choiceId.toUpperCase()}]</span>`;
+                }
+            }
+
+            // 2. Activate target branch group
+            const targetBranch = activeGroup.querySelector(`.branch-group[data-choice="${choiceId}"]`);
+            if (targetBranch) {
+                targetBranch.classList.add('active-branch');
+                
+                // Reveal first card inside the chosen branch
+                const firstBranchCard = targetBranch.querySelector('.card');
+                if (firstBranchCard) {
+                    firstBranchCard.classList.add('revealed');
+                    setTimeout(() => {
+                        firstBranchCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 100);
+                }
+            }
+
+            // 3. Update browser address bar query string without page reload
+            if (updateUrl && currentKey) {
+                const newUrl = `${window.location.pathname}?key=${currentKey}&choice=${choiceId}`;
+                window.history.pushState({ path: newUrl }, '', newUrl);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stages of Change ARG</title>
+    <base href="../">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Cutive+Mono&family=Handjet:wght,ELSH@100..900,2&family=Raleway:ital,wght@0,100..900;1,100..900&family=Redacted+Script:wght@300;400;700&family=Share+Tech&family=Special+Elite&family=Syne+Mono&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="assets/socarg.css">
+    <script src="assets/landingPage.js" defer></script>
+    <style>
+        /* Hide all blocks by default */
+        .block {
+            display: none;
+        }
+
+        /* Show block when active class is added */
+        .block.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body class="landing-page-body">
+
+    <div class="block" data-key="experiment">
+        <h1 class="font-tech landing-page-h1">here is the key<br />[experiment]</h1>
+        <h3 class="font-tech landing-page-h3">
+            09 06<br/>
+            00 25<br/>
+            15 21<br/>
+            00 03<br/>
+        </h3>
+    </div>
+
+    <div class="block" data-key="decision">
+        <h1 class="font-tech landing-page-h1">here is the key<br />[decision]</h1>
+        <h3 class="font-tech landing-page-h3">
+            01 14<br/>
+            14 15<br/>
+            20 00<br/>
+            13 01<br/>
+        </h3>
+    </div>
+
+    <div class="block" data-key="integration">
+        <h1 class="font-tech landing-page-h1">here is the key<br />[integration]</h1>
+        <h3 class="font-tech landing-page-h3">
+            11 05<br/>
+            00 09<br/>
+            20 00<br/>
+            02 05<br/>
+        </h3>
+    </div>
+
+    <div class="block" data-key="shock">
+        <h1 class="font-tech landing-page-h1">here is the key<br />[shock]</h1>
+        <h3 class="font-tech landing-page-h3">
+            20 20<br/>
+            05 18<br/>
+            00 04<br/>
+            15 00<br/>
+        </h3>
+    </div>
+
+    <div class="block" data-key="denial">
+        <h1 class="font-tech landing-page-h1">here is the key<br />[denial]</h1>
+        <h3 class="font-tech landing-page-h3">
+            14 15<br/>
+            20 00<br/>
+            13 01<br/>
+            11 05<br/>
+        </h3>
+    </div>
+
+    <div class="block" data-key="anger">
+        <h1 class="font-tech landing-page-h1">here is the key<br />[anger]</h1>
+        <h3 class="font-tech landing-page-h3">
+            00 09<br/>
+            20 00<br/>
+            23 15<br/>
+            18 19<br/>
+        </h3>
+    </div>
+
+    <div class="block" data-key="depression">
+        <h1 class="font-tech landing-page-h1">here is the key<br />[depression]</h1>
+        <h3 class="font-tech landing-page-h3">
+            05 00<br/>
+            04 21<br/>
+            04 05<br/>
+            00 00<br/>
+        </h3>
+    </div>
+
+    <div class="block" id="fallback-block">
+        <h1 class="font-tech landing-page-h1">what are you doing here?</h1>
+        <div class="anyTextMiddle">
+            are you..... lost or something?
+        </div>
+    </div>
+
+    <div class="justButton-container">
+        <a class="justButton" href="stages/some_hypothesis_and_some_results.html">
+            go back
+        </a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Read query parameters from window.location.search
+            const urlParams = new URLSearchParams(window.location.search);
+
+            // 2. Retrieve value of 'key' (e.g. ?key=key1)
+            const targetKey = urlParams.get('key');
+
+            // 3. Select all blocks with 'data-key'
+            const blocks = document.querySelectorAll('.block[data-key]');
+            const fallbackBlock = document.getElementById('fallback-block');
+
+            let matchFound = false;
+
+            if (targetKey) {
+                blocks.forEach(block => {
+                    // Check if dataset key matches the URL key (case-insensitive option)
+                    if (block.dataset.key.toLowerCase() === targetKey.toLowerCase()) {
+                        block.classList.add('active');
+                        matchFound = true;
+                    }
+                });
+            }
+
+            // 4. If no valid key matched, show fallback block
+            if (!matchFound && fallbackBlock) {
+                fallbackBlock.classList.add('active');
+            }
+        });
+    </script>
+</body>
+
+</html>
